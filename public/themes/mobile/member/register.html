@@ -1,0 +1,255 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="viewport" content="width=device-width, minimum-scale=1, maximum-scale=1">
+<title>{$common.title} - {$sys.copyright}</title>
+<meta name="keywords" content="{$common.keywords}" />
+<meta name="description" content="{$common.description}" />
+<!--#include file="common/mobile/api.html"-->
+</head>
+<body>
+<div id="main_body">
+	<!--#include file="common/mobile/head_nav.html"-->
+    <div class="main_member_body"> 
+        <form class="layui-form">
+        <table class="layui-table" lay-even="" lay-skin="nob">
+        <!--if:{$step==1}-->
+            <tr>
+            <td width="60">昵称花名</td>
+            <td><input name="nicename" lay-verify="title" autocomplete="off" placeholder="请输入您的昵称，日后可更换" class="layui-input" type="text"></td>
+            </tr>
+            <tr>
+            <td>登陆账号</td>
+            <td><input name="username" lay-verify="title" autocomplete="off" placeholder="请输入您的账号，日后不可更换" class="layui-input" type="text"></td>
+            </tr>
+            <tr>
+            <td>电子邮箱</td>
+            <td><input name="email" lay-verify="email" autocomplete="off" placeholder="请输入您的Email，用于账号保护" class="layui-input" type="email"></td>
+            </tr>
+            <tr>
+            <td>登陆密码</td>
+            <td><input name="password" lay-verify="pass" placeholder="请输入登陆密码" autocomplete="off" class="layui-input" type="password"></td>
+            </tr>
+            <tr>
+            <td>重复密码</td>
+            <td><input name="repassword" lay-verify="pass" placeholder="请输入重复密码" autocomplete="off" class="layui-input" type="password"></td>
+            </tr>
+            <tr><td colspan="2" align="center"><input name="step" value="1" type="hidden"><button class="layui-btn layui-btn-normal" lay-submit="" lay-filter="btn_submit" id="btn_submit">下一步</button></td></tr>
+            <?php }elseif ($step==2){?>
+            <tr>
+            <td>真实姓名</td>
+            <td><input name="realname" lay-verify="title" autocomplete="off" placeholder="请输入您的姓名" class="layui-input" type="text"></td>
+            </tr>
+            <tr>
+            <td>性&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;别</td>
+            <td><input name="sex" value="1" title="男" checked="" type="radio"><input name="sex" value="2" title="女" type="radio"></td>
+            </tr>
+            <tr>
+            <td>民&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;族</td>
+            <td>
+              <select name="nation" lay-filter="aihao">
+              <option value="1">汉族</option>
+              <option value="2">蒙古族</option>
+              <option value="3">回族</option>
+              <option value="4">藏族</option>
+              <option value="5">维吾尔族</option>
+              <option value="6">苗族</option>
+              <option value="7">彝族</option>
+              <option value="8">壮族</option>
+              <option value="9">布依族</option>
+              <option value="10">朝鲜族</option>
+              <option value="11">满族</option>
+              <option value="12">侗族</option>
+              <option value="13">瑶族</option>
+              <option value="14">白族</option>
+              <option value="15">土家族</option>
+              <option value="16">哈尼族</option>
+              <option value="17">哈萨克族</option>
+              <option value="18">傣族</option>
+              <option value="19">黎族</option>
+              <option value="20">僳僳族</option>
+              <option value="21">佤族</option>
+              <option value="22">畲族</option>
+              <option value="23">高山族</option>
+              <option value="24">拉祜族</option>
+              <option value="25">水族</option>
+              <option value="26">东乡族</option>
+              <option value="27">纳西族</option>
+              <option value="28">景颇族</option>
+              <option value="29">柯尔克孜族</option>
+              <option value="30">土族</option>
+              <option value="31">达斡尔族</option>
+              <option value="32">仫佬族</option>
+              <option value="33">羌族</option>
+              <option value="34">布朗族</option>
+              <option value="35">撒拉族</option>
+              <option value="36">毛南族</option>
+              <option value="37">仡佬族</option>
+              <option value="38">锡伯族</option>
+              <option value="39">阿昌族</option>
+              <option value="40">普米族</option>
+              <option value="41">塔吉克族</option>
+              <option value="42">怒族</option>
+              <option value="43">乌孜别克族</option>
+              <option value="44">俄罗斯族</option>
+              <option value="45">鄂温克族</option>
+              <option value="46">德昂族</option>
+              <option value="47">保安族</option>
+              <option value="48">裕固族</option>
+              <option value="49">京族</option>
+              <option value="50">塔塔尔族</option>
+              <option value="51">独龙族</option>
+              <option value="52">鄂伦春族</option>
+              <option value="53">赫哲族</option>
+              <option value="54">门巴族</option>
+              <option value="55">珞巴族</option>
+              <option value="56">基诺族</option>
+              <option value="57">其他</option>
+              </select>
+            </td>
+            </tr>
+            <tr>
+            <td class="center">政治面貌</td>
+            <td class="center">
+              <select name="politics" lay-filter="politics">
+              <option value="1">群众</option>
+              <option value="2">团员</option>
+              <option value="3">党员</option>
+              <option value="4">其他党派人士</option>
+              </select>
+            </td>
+            </tr>
+            <tr>
+            <td class="center">身份证号</td>
+            <td class="center"><input name="idcard" lay-verify="identity" autocomplete="off" placeholder="请输入您的身份证号" class="layui-input" type="text"></td>
+            </tr>
+            <tr>
+            <td>所学专业</td>
+            <td><input name="major" placeholder="小、初、高学生请填学生" autocomplete="off" class="layui-input" type="text"></td>
+            </tr>
+            <tr>
+            <td>最高学历</td>
+            <td class="center">
+              <select name="eduback" lay-filter="eduback">
+              <option value="1">小学</option>
+              <option value="2">初中</option>
+              <option value="3">高中</option>
+              <option value="4">中专</option>
+              <option value="5">大专</option>
+              <option value="6">本科</option>
+              <option value="7">硕士</option>
+              <option value="8">博士</option>
+              <option value="9">其他</option>
+              </select>
+            </td>
+            </tr>
+            <tr>
+            <td>当前职业</td>
+            <td><input name="job" placeholder="小、初、高学生请填学生" autocomplete="off" class="layui-input" type="text"></td>
+            </tr>
+            <tr>
+            <td>所在单位</td>
+            <td><input name="organization" placeholder="学生请填学校" autocomplete="off" class="layui-input" type="text"></td>
+            </tr>
+            <tr>
+            <td>手机号码</td>
+            <td><input name="mobile" placeholder="请输入手机号码" lay-verify="phone" autocomplete="off" class="layui-input" type="tel"></td>
+            </tr>
+            <tr>
+            <td>QQ号码</td>
+            <td><input name="qq" placeholder="选填" autocomplete="off" class="layui-input" type="tel"></td>
+            </tr>
+            <tr>
+            <td>微信账号</td>
+            <td><input name="weixin" placeholder="选填" autocomplete="off" class="layui-input" type="text"></td>
+            </tr>
+            <tr>
+            <td>固定电话</td>
+            <td><input name="tel" placeholder="选填"  autocomplete="off" class="layui-input" type="tel"></td>
+            </tr>
+            <tr>
+            <td>联系地址</td>
+            <td><input name="address" placeholder="请填写联系地址"  autocomplete="off" class="layui-input" type="text"></td>
+            </tr>
+            <tr>
+            <td>志愿经历</td>
+            <td class="center">
+              <select name="experience" lay-filter="experience">
+              <option value="1">以前参与过</option>
+              <option value="2">以前没有参与过</option>
+              </select>
+            </td>
+            </tr>
+            <tr>
+            <td>组织能力</td>
+            <td class="center">
+              <select name="ability" lay-filter="ability">
+              <option value="1">没有组织或负责过活动项目</option>
+              <option value="2">协助他人组织或负责过活动项目</option>
+              <option value="3">独立组织或负责过活动项目</option>
+              </select>
+            </td>
+            </tr>
+            <tr>
+            <td>参与时间</td>
+            <td class="center">
+              <select name="bspace" lay-filter="ability">
+                <option value="1">平常周一有时间</option>
+                <option value="2">平常周二有时间</option>
+                <option value="3">平常周三有时间</option>
+                <option value="4">平常周四有时间</option>
+                <option value="5">平常周五有时间</option>
+                <option value="6">平常周六有时间</option>
+                <option value="7">平常周日有时间</option>
+                <option value="8">周六、周日有时间</option>
+                <option value="9">平常周末晚上有时间</option>
+                <option value="10">只有晚上有时间</option>
+                <option value="11">周一至周五都有时间</option>
+                <option value="12">工作轮休制不能确</option>
+                <option value="13">任何时候都可以</option>
+              </select>
+            </td>
+            </tr>
+            <tr>
+            <td>特长技能</td>
+            <td><textarea name="about" rows="8" class="layui-textarea" placeholder="选填"></textarea></td>
+            </tr>
+            <tr><td colspan="2" align="center"><input name="step" value="2" type="hidden"><button class="layui-btn layui-btn-normal" lay-submit="" lay-filter="btn_submit" id="btn_submit">提交保存</button></td></tr>
+            <!--{else}-->
+            <tr><td colspan="2"><h2>欢迎新成员，{$info.realname}！</h2><br>以下是您的账号信息：</td></tr>
+            <tr><td>昵称花名</td><td>{$info.nicename}<br><small>此昵称用户互动显示并不用于登录</small></td></tr>
+            <tr><td>登陆账号</td><td>{$info.user}<br><small>此帐号用于登陆</small></td></tr>
+            <tr><td>密保邮箱</td><td>{$info.email}<br><small>帐号安全保护必备，如密码重置</small></td></tr>
+            <tr><td>认证状态</td><td><!--if:{$info['status']==1}--><font color="#006600">已认证<!--{else}--><font color="#FF0000">待认证<!--{/if}--></font><br><small>未认证用户只可参加不限制认证类活动</small></td></tr>
+            <tr><td colspan="2" align="center"><a href="__URL__/login.html"  class="layui-btn layui-btn-big layui-btn-danger layui-btn-radius" >立刻登陆</a></td></tr>
+            <!--{/if}-->
+            </table>
+          </form>
+    </div>
+	<!--#include file="common/mobile/foot.html"-->			
+</div>
+<script>
+layui.use(['form','element'], function(){
+  var form = layui.form();
+  var $ = layui.jquery,element = layui.element();
+  //监听提交
+  form.on('submit(btn_submit)', function(post){
+		$.post("{$sys.siteurl}/member/register.html",{data:post.field},function(data){
+			var status=data.status;
+			if (status==false){
+				layer.msg('操作失败！ '+data.message, {icon: 5});
+			}else{
+				location.href = '{$sys.siteurl}'+data.message;
+			};
+		},'json');	  
+    //layer.msg(JSON.stringify(data.field));
+    return false;
+  });
+});
+</script>
+</body>
+</html>

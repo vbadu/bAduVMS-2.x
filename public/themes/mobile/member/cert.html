@@ -1,0 +1,35 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="viewport" content="width=device-width, minimum-scale=1, maximum-scale=1">
+<title>{$common.title} - {$sys.copyright}</title>
+<meta name="keywords" content="{$common.keywords}" />
+<meta name="description" content="{$common.description}" />
+<!--#include file="common/mobile/api.html"-->
+</head>
+<body>
+<div id="main_body">
+	<!--#include file="common/mobile/head_nav.html"-->
+    <div class="main_member_body"> 
+        <fieldset class="layui-elem-field">
+            <legend>志愿者 <span class="f-red"> {$user.realname} </span>近期的情况</legend>
+            <div class="layui-field-box">
+            	累计时数：<?php echo intval($user['vtime'])?> 小时<BR>
+            	志愿星级：<?php echo vipstar($user['vtime'])?><BR>
+            </div>
+        </fieldset>
+ 
+        <div class="cert">
+            <!--if:{$info[msg]}-->
+            <blockquote class="layui-elem-quote layui-quote-nm"><h3>{$info.msg}</h3></blockquote>
+            <!--{else}-->
+            <img src="{$info.cert}">
+            <blockquote class="layui-elem-quote layui-quote-nm">请通过PC版打印证书,或者长按图片保存至手机（该功能需要手机浏览器支持）。</blockquote>
+            <!--{/if}-->
+        </div>
+    </div>
+	<!--#include file="common/mobile/foot.html"-->			
+</div>
+</body>
+</html>

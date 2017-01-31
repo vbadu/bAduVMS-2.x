@@ -1,0 +1,82 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>{$common.title} - {$sys.copyright}</title>
+<meta name="keywords" content="{$common.keywords}" />
+<meta name="description" content="{$common.description}" />
+<!--#include file="common/api.html"-->
+<link type="text/css" rel="stylesheet" href="__PUBLIC__/css/style_member.css" />
+</head>
+<body>
+<!--头部-->
+<!--#include file="common/head.html"-->
+<!--END-->
+<div id="main">
+	<div id="position" class="graybg">
+		<div class="fl"><!--#include file="member/nav.html"-->{$common.title}</div>
+		<!--#include file="common/api_search.html"-->
+	</div>
+    <div class="listpage">
+        <div class="fl col-sub box">
+            <div class="top"><h2><span>{$common.title}</span></h2></div>
+            <div class="mainbody">
+                <ul class="leftnav">
+                	<!--#include file="member/left.html"-->
+                 </ul>
+            </div>
+            <div class="bt"></div>
+        </div>
+        <div class="fr col-main">
+            <div class="m-padding"></div>
+                <form class="sui-form form-horizontal sui-validate" id="badu" onSubmit="return false;">
+                <div class="control-group">
+                    <label class="control-label">原密码：</label>
+                    <div class="controls"><input id="oldpassword" name="oldpassword" placeholder="请输入原密码" type="password" class="input-large"></div>
+                </div>
+                <div class="control-group">
+                    <label class="control-label">新密码：</label>
+                    <div class="controls"><input id="password" name="password" placeholder="密码" type="password" class="input-large"></div>
+                </div>
+                <div class="control-group">
+                    <label for="inputRepassword" class="control-label">重复新密码：</label>
+                    <div class="controls"><input id="repassword" name="repassword" placeholder="重复密码" type="password" class="input-large"></div>
+                </div>
+                <div class="control-group">
+                    <label for="inputEmail" class="control-label">密保邮箱：</label>
+                    <div class="controls"><input id="email" name="email" placeholder="请输入您的邮箱" data-rules="required|email" value="{$info.email}" type="text" class="input-large"> 用于账号安全保护，不更换请勿修改。</div>
+                </div>
+
+                <div class="control-group">
+                    <label class="control-label"></label>
+                    <div class="controls">
+                        <input name="step" value="2" type="hidden">
+                        <button type="submit" class="sui-btn btn-primary" id="btn_submit">提交保存</button>
+                    </div>
+                </div>
+                </form>
+        </div>
+	</div>
+</div>
+<div class="claer"></div>
+<!--END-->
+<script language="javascript">
+$(function(){ 
+	$('#btn_submit').click(function(){
+		$.post("__URL__/repwd.html",$('#badu').serialize(),function(data){
+			var status=data.status;
+			if (status==false){
+				layer.msg('操作失败！ '+data.message, {icon: 5});
+			}else{
+				layer.msg(data.message, {icon: 1});
+			};
+		},'json');
+	});
+}); 
+</script>
+<!--底部-->
+<!--#include file="common/foot.html"-->
+<!--END-->
+</div>
+</body>
+</html>

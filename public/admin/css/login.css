@@ -1,0 +1,23 @@
+html, body { background-image: url(../images/login_bg.jpg); background-repeat: repeat; color: #666; font-family: "微软雅黑" }
+h1 { font-size: 26px; height: 50px; font-weight: bold }
+.login { height: auto; width: 350px; margin-top: -170px; margin-left: -175px; position: absolute; left: 50%; top: 50%; }
+.login .main { height: 180px; padding-left: 20px; padding-right: 20px; background-color: #FFF; border-top-width: 1px; border-right-width: 1px; border-left-width: 1px; border-top-style: solid; border-right-style: solid; border-left-style: solid; border-top-color: #c4c4c4; border-right-color: #c4c4c4; border-left-color: #c4c4c4; }
+.login .main .tip { padding-top: 20px; }
+.login .main .text { padding-top: 10px; }
+.login .main .text input { border: 1px solid #c4c4c4; height: 30px; line-height: 30px; padding: 0; margin: 0; width: 100% }
+.login .main .text .user { background-image: url(../images/login_user.jpg); background-repeat: no-repeat; background-position: 275px center; }
+.login .main .text .password { background-image: url(../images/password.jpg); background-repeat: no-repeat; background-position: 275px center; }
+.login .button { height: 45px; background-color: #f5f5f5; padding-left: 20px; padding-right: 20px; text-align: right; padding-top: 10px; border-right-width: 1px; border-bottom-width: 1px; border-left-width: 1px; border-right-style: solid; border-bottom-style: solid; border-left-style: solid; border-right-color: #c4c4c4; border-bottom-color: #c4c4c4; border-left-color: #c4c4c4; border-top-width: 1px; border-top-style: solid; border-top-color: #e5e5e5; }
+.login .button button { background-image: url(../images/button.png); background-repeat: repeat-x; background-position: center top; height: 30px; padding-right: 20px; padding-left: 20px; border: 1px solid #4288d0; color: #FFF; cursor: pointer; margin-left: 10px; }
+.login .button button:hover { background-position: center -30px; }
+.login .copyright { line-height: 35px; text-align: center; color: #999 }
+
+/*手机版*/
+.loginBox{width:350px;height:340px;margin:0 auto;font-family:Tahoma,"微软雅黑","宋体";font-size:14px;}
+.loginBox .logininput,.loginBox .h1 {padding:0 4px 10px 2px;}
+.loginBox li{list-style:none;margin:10px 0 10px 20px}
+.loginBox li.username input{ime-mode:disabled;*margin-bottom:-11px;width:267px;display:inline-block;background:url(../images/login_user.jpg) 7px center no-repeat #FFF;border: 1px solid #c4c4c4;line-height:39px;padding-left:25px;} 
+.loginBox li.userpass input{ime-mode:disabled;*margin-bottom:-11px;width:267px;display:inline-block;background:url(../images/password.jpg) 7px center no-repeat #FFF;border: 1px solid #c4c4c4;line-height:39px;padding-left:25px;} 
+.loginBox .button{margin:10px 0 10px 20px}
+.loginBox .button button { background-image: url(../images/button.png); background-repeat: repeat-x; background-position: center top; height: 30px; padding-right: 20px; padding-left: 20px; border: 1px solid #4288d0; color: #FFF; cursor: pointer; margin-left: 10px; }
+.loginBox .button button:hover { background-position: center -30px; }

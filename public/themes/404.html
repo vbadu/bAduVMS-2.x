@@ -1,0 +1,51 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>{$common.title} - {$sys.copyright}</title>
+<meta name="keywords" content="{$common.keywords}" />
+<meta name="description" content="{$common.description}" />
+<!--#include file="common/api.html"-->
+<style>h4{font-size:1.3em; padding:5px}</style>
+</head>
+<body>
+<!--头部-->
+<!--#include file="common/head.html"-->
+<!--END-->
+<div id="main">
+	<div id="position" class="graybg">
+		<div class="fl">您的位置：<a href="{$sys.siteurl}" target="_top">首页</a> >> {$common.title} </div>
+		<!--#include file="common/api_search.html"-->
+	</div>
+	<div class="detailpage">
+       <div class="col-main">
+        	<div class="mainbody">
+            	<div class="hd">
+                	<h2><img src="__PUBLIC__/images/msg.gif" width="48" height="48"><font color="#FF0000">Error 404 Page not found {$common.title}</font></h2>
+                </div>
+                <div class="txt">
+                <h4>当前网页无法打开，可能是因为：</h4>
+                <blockquote class="layui-elem-quote layui-quote-nm"  style="line-height:35px">
+            <li>{$msg}</li>
+            <li>该网页已下架；</li>
+            <li>该网页已删除；</li>
+            <li>该网页不存在；</li>
+            <li>程序发生错误；</li>
+            <li>错误的连接访问至此。</li></blockquote>
+                
+                
+            <br>
+            <a href="{$sys.siteurl}" target="_top" 	class="layui-btn layui-btn-danger">返回首页</a>
+				</div>
+            </div>
+        </div>
+	</div>
+</div>
+<div class="claer"></div>
+<!--END-->
+<!--底部-->
+<!--#include file="common/foot.html"-->
+<!--END-->
+</div>
+</body>
+</html>

@@ -1,0 +1,62 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="viewport" content="width=device-width, minimum-scale=1, maximum-scale=1">
+<title>{$common.title} - {$sys.copyright}</title>
+<meta name="keywords" content="{$common.keywords}" />
+<meta name="description" content="{$common.description}" />
+<!--#include file="common/mobile/api.html"-->
+</head>
+<body>
+<div id="main_body">
+	<!--#include file="common/mobile/head_nav.html"-->
+    <div class="main_member_body"> 
+        <form class="layui-form" onSubmit="return false;">
+        <table class="layui-table" lay-even="" lay-skin="nob">
+            <tr>
+            <tr><td><h2>欢迎回来！</h2></td></tr>
+            </tr>
+            <tr>
+            <td><input name="id" id="id" lay-verify="title" autocomplete="off" placeholder="可用义工卡号、帐号或手机号码登录" class="layui-input" type="text"></td>
+            </tr>
+            <tr>
+            <td><input name="pd" id="pd" lay-verify="pass" placeholder="请输入登陆密码" autocomplete="off" class="layui-input" type="password"></td>
+            </tr>
+            <tr><td align="center"><button class="layui-btn layui-btn-big layui-btn-danger layui-btn-radius" lay-submit="" lay-filter="btn_submit" id="btn_submit"> 登 录 </button></td></tr>
+            <tr><td align="center">
+                <a class="layui-btn layui-btn-normal" href="__URL__/register.html">注册义工</a>
+                <a class="layui-btn layui-btn-warm" href="__URL__/repass.html">密码重置</a>            
+            </td></tr>
+            </table>
+          </form>
+    </div>
+	<!--#include file="common/mobile/foot.html"-->			
+</div>
+<script>
+layui.use(['form','element'], function(){
+  var form = layui.form();
+  var $ = layui.jquery,element = layui.element();
+  //监听提交
+  form.on('submit(btn_submit)', function(post){
+		if (2>$("#id").val().length) return layer.msg('登录失败,用户名不能少于3位！', {icon: 5});
+		if (5>$("#pd").val().length) return layer.msg('登录失败,密码不能少于6位！', {icon: 5});
+
+		$.post("__URL__/login.html",{data:post.field},function(data){
+			var status=data.status;
+			if (status==false){
+				layer.msg('登录失败！ '+data.message, {icon: 5});
+			}else{
+				layer.msg('登录成功'+data.message, {icon: 1});
+				location.href = "__URL__";
+			};
+		},'json');	  
+    return false;
+  });
+});
+</script>
+</body>
+</html>

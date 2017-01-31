@@ -1,0 +1,84 @@
+<html>
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=9; IE=8; IE=7; IE=EDGE">
+<title>{$config.sitename}管理系统</title>
+{$css}
+    <script src="__PUBLIC__/ueditor/third-party/jquery-1.10.2.js"></script>
+    <script src="__PUBLIC__/ueditor/ueditor.config.js"></script>
+    <script src="__PUBLIC__/ueditor/ueditor.all.min.js"></script>
+    <script src="__PUBLIC__/ueditor/third-party/webuploader/webuploader.min.js"></script>
+    <script src="__PUBLIC__/ueditor/third-party/webuploader/webuploader.custom.diy.js"></script>
+    <link rel="stylesheet" type="text/css" href="__PUBLIC__/ueditor/third-party/webuploader/webuploader.css">
+</head>
+<body>
+<!--
+<div id="uploader" class="wu-example">
+    <div class="queueList">
+        <div id="dndArea" class="placeholder">
+            <div id="filePicker"></div>
+            <p>或将照片拖到这里，单次最多可选300张</p>
+        </div>
+    </div>
+    <div class="statusBar" style="display:none;">
+        <div class="progress">
+            <span class="text">0%</span>
+            <span class="percentage"></span>
+        </div><div class="info"></div>
+        <div class="btns">
+            <div id="filePicker2"></div><div class="uploadBtn">开始上传</div>
+        </div>
+    </div>
+
+</div>
+-->
+<script type="text/plain" id="upload_ue"></script>
+    <script>
+	var _editor = UE.getEditor('upload_ue');
+	var UPLOAD_API_URL=_editor.getOpt('serverUrl')+'?action=uploadfile';  
+	//alert(UPLOAD_API_URL);
+      //实例化编辑器 style="height:5px;display:none;" 
+    //重新实例化一个编辑器，防止在上面的editor编辑器中显示上传的图片或者文件
+
+	var _editor = UE.getEditor('upload_ue');
+	var UPLOAD_API_URL=_editor.getOpt('serverUrl')+'?action=uploadfile';    
+    _editor.ready(function () {
+        //设置编辑器不可用
+        //_editor.setDisabled();
+        //隐藏编辑器，因为不会用到这个编辑器实例，所以要隐藏
+        _editor.hide();
+        //侦听图片上传
+        _editor.addListener('beforeInsertImage', function (t, arg) {
+            //将地址赋值给相应的input
+            $("#picture").attr("value", arg[0].src);
+            //图片预览
+            $("#preview").attr("src", arg[0].src);
+        })
+        //侦听文件上传
+        _editor.addListener('insertfile', function (t, arg) {
+            $("#file").attr("value", _editor.options.filePath + arg[0].url);
+        })
+    });
+       
+      //弹出图片上传的对话框
+      function upImage()
+      {
+        var myImage = _editor.getDialog("insertimage");
+        myImage.open();
+      }
+      //弹出文件上传的对话框
+      function upFiles()
+      {
+        var myFiles = _editor.getDialog("attachment");
+        myFiles.open();
+      } 
+    </script>
+    <button type="button" onClick="upImage()">调用上传图片模块</button>
+    <button type="button" onClick="upFiles()">调用上传文件模块</button>
+
+
+<!--body-->
+<div class="fn_clear"></div>
+{include file="index/count"}
+</body>
+</html>

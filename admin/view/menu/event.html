@@ -1,0 +1,48 @@
+<div class="title"><a href="javascript:void(0)">活动管理</a></div>
+<ul id="tree" class="ztree load">
+	<!--hook-->
+    <?php module('common')->plus_hook('menu','event_tpl');  ?>
+	<!--hook end-->
+</ul>
+<div class="title"><a href="javascript:void(0)">活动设置</a></div>
+<ul class="load menu">
+      <!--foreach:{$list $vo}-->
+      <li><a href="__APP__/{$vo.module}">{$vo.name}</a></li>
+      <!--{/foreach}-->
+</ul>
+<script>
+var zTree;
+var setting = {
+    view: {
+        showLine: true,
+        selectedMulti: false
+    },
+    data: {
+        simpleData: {
+            enable: true,
+            idKey: "cid",
+            pIdKey: "pid",
+            rootPId: ""
+        }
+    },
+	callback: {
+		onClick: onClick
+	}
+};
+var zNodes = [
+ <?php echo $class_tree; ?>
+];
+
+function onClick(e,treeId, treeNode) {
+	var zTree = $.fn.zTree.getZTreeObj("tree");
+	if(treeNode.url==null){
+	zTree.expandNode(treeNode);
+	}
+	
+}
+$(document).ready(function() {
+    var t = $("#tree");
+    t = $.fn.zTree.init(t, setting, zNodes);
+    ajaxload('__APP__/event');
+});
+</script>    

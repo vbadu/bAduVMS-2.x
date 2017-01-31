@@ -1,0 +1,48 @@
+<div class="page_function">
+  <div class="info">
+    <h3>推荐位{$action_name}</h3>
+    <small>使用以下功能进行推荐位{$action_name}操作</small> 
+  </div>
+</div>
+<div class="tab" id="tab">
+
+ <a class="selected" href="#">{$action_name}推荐位</a> 
+ <?php if(model('user_group')->model_power('position','visit')){ ?>
+ <a href="javascript:menuload('__URL__')">推荐位列表</a>
+ <?php } ?></div>
+<div class="page_form">
+<form action="__URL__/{$action}_save/time-<?php echo time() ?>-ajax-true" method="post" id="form">
+<div class="page_table form_table">
+    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+      
+      <tr>
+        <td width="100" align="right">推荐位名称</td>
+        <td width="300">
+        <input name="name" type="text" class="text_value" id="name" value="{$info.name}" reg="\S" msg="名称不能为空" />
+        </td>
+        <td></td>
+      </tr>
+      <tr>
+        <td width="100" align="right">推荐位顺序</td>
+        <td>
+        <input name="sequence" type="text" class="text_value" id="sequence" value="{$info.sequence isset="0"}" reg="^[0-9]*$" msg="只能是数字" /> 
+        </td>
+        <td>针对后台的显示顺序(顺序排列)</td>
+      </tr>     
+      
+    </table>
+</div>
+<!--普通提交-->
+<div class="form_submit">
+<?php if(model('user_group')->model_power('position','add')||model('user_group')->model_power('position','edit')){ ?>
+<input name="id" type="hidden" value="{$info.id}" />
+<button type="submit" class="button">保存</button> 
+<?php } ?>
+</div>
+</form>
+</div>
+</div>
+<script type="text/javascript">
+//提交表单
+savelistform({addurl:"__URL__/add",listurl:"__URL__"});
+</script>

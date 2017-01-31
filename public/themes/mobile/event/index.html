@@ -1,0 +1,32 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="viewport" content="width=device-width, minimum-scale=1, maximum-scale=1">
+<title>{$common.title} - {$sys.copyright}</title>
+<meta name="keywords" content="{$common.keywords}" />
+<meta name="description" content="{$common.description}" />
+<!--#include file="common/mobile/api.html"-->
+</head>
+<body>
+<div id="main_body">
+	<!--#include file="common/mobile/head.html"-->
+    <section class="s_moreread">
+        <div class="list_box">
+            <!--foreach:{$event $vo}-->
+            <dl><?php if (empty($vo['image'])) $vo['image']='/public/images/noimage.jpg'?>
+                <a href="{$sys.siteurl}/event/{$vo.id}.html">
+                <dt><img src="{$vo.image}" alt="{$vo.title}"></dt>
+                <dd><h3>{$vo.title len="45"}</h3></dd>
+                <dd><span>招募：{$vo.zmrs}人 报名：{$vo.bmrs}人 </span></dd>
+                <dd><span>活动时间：{$vo.stime time="Y-m-d h:i:s"}</span></dd>
+                </a>
+            </dl>
+            <!--/foreach-->
+        </div>
+        <div class="pagination"><ul>{$page}</ul></div>
+	</section>
+	<!--#include file="common/mobile/foot.html"-->			
+</div>
+</body>
+</html>

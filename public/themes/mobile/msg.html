@@ -1,0 +1,37 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="viewport" content="width=device-width, minimum-scale=1, maximum-scale=1">
+<title>{$common.title} - {$sys.copyright}</title>
+<meta name="keywords" content="{$common.keywords}" />
+<meta name="description" content="{$common.description}" />
+<!--#include file="common/mobile/api.html"-->
+</head>
+<body>
+<div id="main_body">
+	<!--#include file="common/mobile/head_nav.html"-->
+<link href="__PUBLIC__/css/base.css" rel="stylesheet" type="text/css">
+<style>
+a { text-decoration: none }
+.head { background: #f9f9f9; background-repeat: no-repeat; background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#ffffff), color-stop(25%, #ffffff), to(#f4f4f4)); background-image: -webkit-linear-gradient(#ffffff, #ffffff 25%, #f4f4f4); background-image: -moz-linear-gradient(top, #ffffff, #ffffff 25%, #f4f4f4); background-image: -ms-linear-gradient(#ffffff, #ffffff 25%, #f4f4f4); background-image: -o-linear-gradient(#ffffff, #ffffff 25%, #f4f4f4); background-image: linear-gradient(#ffffff, #ffffff 25%, #f4f4f4); filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffff', endColorstr='#f4f4f4', GradientType=0);
+border-bottom: 1px solid #dfdfdf; font: bold 14px/40px Arial; height: 40px; padding: 0 20px; color: #666; }
+.content { padding: 20px;line-height: 1.8; min-height:16em}
+.content img { vertical-align:middle; margin-right:10px;}
+.content .button { padding: 10px 0 0 0; }
+.content .button a { line-height: 25px; font-size: 12px; height: 25px; padding-left: 20px; padding-right: 20px; border: 1px solid #cccccc; color: #666; display: inline-block; margin-right: 10px; cursor: pointer; vertical-align: middle; }
+</style>
+</head>
+<body>
+<div class="main">
+  <div class="head">操作提示</div>
+  <div class="content">
+    <div class="left"></div>
+    <div class="right">
+      <div class="msg"><img src="__PUBLIC__/images/msg.gif" width="48" height="48">{$message}</div>
+      <div class="button"> <a href="{$url}">返回</a> </div>
+    </div>
+  </div>
+</div>
+</body>
+</html>

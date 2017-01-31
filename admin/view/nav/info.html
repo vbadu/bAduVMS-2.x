@@ -1,0 +1,83 @@
+<div class="page_function">
+  <div class="info">
+    <h3>{$action_name}导航菜单</h3>
+    <small>使用以下功能进行栏目{$action_name}操作</small> 
+  </div>
+</div>
+<div class="tab" id="tab"> <a class="selected" href="#">{$action_name}导航菜单</a> 
+<?php if(model('user_group')->model_power('nav',1)){ ?>
+<a  href="javascript:menuload('__APP__/nav')">返回列表</a>
+<?php } ?>
+</div>
+<div class="page_form">
+<form action="__URL__/{$action}_save/time-<?php echo time(); ?>-ajax-true" method="post" id="form">
+<div class="page_table form_table">
+    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+      <tr>
+        <td width="100" align="right">上级导航菜单</td>
+        <td width="300">
+        <select name="pid" id="pid">
+            <option value="0">=====顶级导航菜单=====</option>
+            <!--foreach:{$nav_list $vo}-->
+            <option <!--if:{$vo['cid']==$info['pid']}-->selected="selected"<!--{/if}--> value="{$vo.cid}">{$vo.title}</option>
+            <!--{/foreach}-->
+        </select>
+        </td>
+        <td></td>
+      </tr>
+      <tr>
+        <td width="100" align="right">导航菜单名称</td>
+        <td width="300">
+        <input name="title" type="text" class="text_value" id="title" value="{$info.title}" reg="\S" msg="导航菜单名称不能为空" />
+        </td>
+        <td></td>
+      </tr>
+      <tr>
+        <td width="100" align="right">导航菜单连接</td>
+        <td><input name="url" type="text" class="text_value" id="url" value="{$info.url}" reg="\S" msg="导航菜单连接不能为空">
+        </td>
+      </tr>
+      <tr>
+        <td width="100" align="right">导航菜单归属</td>
+        <td width="300">
+        <?php if(!isset($info['radio'])){ $info['radio']=1; } ?>
+        <input name="type" type="radio" value="0" <!--if:{$info['type']==0}-->checked="checked"<!--{/if}--> />
+        顶部导航
+        &nbsp;&nbsp;
+        <input name="type" type="radio" value="1" <!--if:{$info['type']==1}-->checked="checked"<!--{/if}--> />
+        底部导航
+        </td>
+        <td>请选择对应业务模型类型</td>
+      </tr>
+      <tr>
+        <td width="100" align="right">导航菜单显示</td>
+        <td width="300">
+        <?php if(!isset($info['show'])){ $info['show']=1; } ?>
+        <input name="show" type="radio" value="1" <!--if:{$info['show']==1}-->checked="checked"<!--{/if}--> />
+        显示
+        &nbsp;&nbsp;
+        <input name="show" type="radio" value="0" <!--if:{$info['show']==0}-->checked="checked"<!--{/if}--> />
+        隐藏
+        </td>
+        <td>控制导航菜单调用的显示与隐藏</td>
+      </tr>
+      <tr>
+        <td width="100" align="right">导航菜单顺序</td>
+        <td width="300">
+        <input name="sort" type="text" class="text_value" id="sort" value="{$info.sort isset="0"}" />
+        </td>
+        <td>数字越大越在前面</td>
+      </tr>
+    </table>
+</div>
+<?php if(model('user_group')->model_power('nav','add')||model('user_group')->model_power('nav','edit')){ ?>
+<!--普通提交-->
+<div class="form_submit">
+<input name="cid" type="hidden" value="{$info.cid}" />
+<button type="submit" class="button">保存</button> 
+</div>
+<?php } ?>
+</form>
+</div>
+</div>
+{include file="nav/common"}

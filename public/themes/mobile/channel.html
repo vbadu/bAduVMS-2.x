@@ -1,0 +1,37 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="viewport" content="width=device-width, minimum-scale=1, maximum-scale=1">
+<title>{$common.title} - {$sys.copyright}</title>
+<meta name="keywords" content="{$common.keywords}" />
+<meta name="description" content="{$common.description}" />
+<!--#include file="common/mobile/api.html"-->
+</head>
+<body>
+<div id="main_body">
+	<!--#include file="common/mobile/head.html"-->
+    <section class="s_moreread">
+    	<!--foreach:{$get_category $list}-->
+		<div class="module-t">
+			<h3><a href="{$sys.siteurl}{$list.curl}">{$list.name}</a></h3>
+			<a href="{$sys.siteurl}{$list.curl}" class="more">更多»</a>
+		</div>
+        
+        <div class="list_box">
+            <!--vo:{table="content" cid="<$list.cid>" order="updatetime desc" limit="6"}-->
+            <dl><?php if (empty($vo['image'])) $vo['image']='/public/images/noimage.jpg'?>
+                <a href="{$sys.siteurl}{$vo.aurl}">
+                <dd><h2>{$vo.title}</h2></dd>
+                <!--<dd>{$vo.description len="60"}</dd> -->
+                <dd><span>阅读：{$vo.views}</span>日期：{$vo.updatetime time="Y-m-d"}</dd>
+                </a>
+            </dl>
+            <!--/list-->
+        </div>
+        <!--/foreach-->
+	</section>
+	<!--#include file="common/mobile/foot.html"-->			
+</div>
+</body>
+</html>

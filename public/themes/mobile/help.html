@@ -1,0 +1,36 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="viewport" content="width=device-width, minimum-scale=1, maximum-scale=1">
+<title>{$common.title} - {$sys.copyright}</title>
+<meta name="keywords" content="{$common.keywords}" />
+<meta name="description" content="{$common.description}" />
+<!--#include file="common/mobile/api.html"-->
+</head>
+<body>
+<div id="main_body">
+	<!--#include file="common/mobile/head.html"-->
+    <section class="s_moreread">
+        <fieldset class="layui-elem-field" style="text-align:center;padding:5px 0">
+          <a class="layui-btn" href="__URL__">互助中心</a>
+          <a class="layui-btn layui-btn-normal" href="__URL__/need.html">我要求助</a>
+          <a class="layui-btn layui-btn-warm" href="__URL__/donate.html">我要捐赠</a>
+        </fieldset>
+        <div class="list_box">
+            <!--foreach:{$list $vo}-->
+            <dl><?php if (empty($vo['image'])) $vo['image']='/public/images/noimage.jpg'?>
+                <a href="{$sys.siteurl}{$vo.aurl}">
+                <dd><h2>{$vo.title}</h2></dd>
+                <!--<dd>{$vo.description len="60"}</dd> -->
+                <dd><span>阅读：{$vo.views}</span>日期：{$vo.updatetime time="Y-m-d"}</dd>
+                </a>
+            </dl>
+            <!--/foreach-->
+        </div>
+        <div class="pagination"><ul>{$page}</ul></div>
+	</section>
+	<!--#include file="common/mobile/foot.html"-->			
+</div>
+</body>
+</html>

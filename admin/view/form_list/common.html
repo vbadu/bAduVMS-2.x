@@ -1,0 +1,77 @@
+<script type="text/javascript">
+//tab菜单
+$("#tab").idTabs();
+$('#tags').tagsInput({
+    autocomplete_url: "__URL__/auto_user/",
+    autocomplete:{DataType:'json',minChars: 0,maxChars: 12, scrollHeight: 300, matchContains: true, selectFirst:true,width:'100px',autoFill:true}
+});
+//提交表单
+savelistform({addurl:"__URL__/add/",listurl:"javascript:history.go(-1)"});
+$('.corol_button').soColorPacker({
+	textChange:false, 
+callback:function(c){
+	$('#name').css("color", c.color);
+	$('#font_color').val(c.color);
+	}
+});
+//高级模式
+function advanced(){
+	$('.advanced').toggle();
+}
+function get_remote_image(){
+	ajaxpost_w({
+		url:'__APP__/editor/get_remote_image',
+		data:{content:editor_content.html()},
+		tip:2,
+		success:function(msg){
+			editor_content.html(msg);
+		},
+		failure:function(){
+		},
+		msg:'远程抓图执行完毕'
+	});
+}
+function fontbold()
+{
+	if($('#font_bold').val()==0){
+		$('#name').css("font-weight",'bold');
+		$('#font_bold').val(1);
+		}else{
+		$('#name').css("font-weight",'normal');	
+		$('#font_bold').val(0);
+	}
+}
+
+//内容来源列表
+function befrom_list(id){
+	var list = [ 
+	<!--foreach:{$befrom_list $vo}-->
+	{
+		href: "javascript:;\" onclick=\"befrom_val('"+id+"','{$vo}');\"",
+		text: "{$vo}"
+	},
+	<!--{/foreach}-->
+	{
+		text: "请选择内容来源"
+	}];
+	return list;
+	
+}
+//来源赋值
+function befrom_val(id,val){
+	$('#'+id).val(val);
+	$.powerFloat.hide();
+	return false;
+}
+//页面执行
+$(document).ready(function() {
+	//来源选择
+	$("#copyfrom").powerFloat({
+		width: 302,
+		eventType: "click",
+		edgeAdjust:false,
+		target:befrom_list('copyfrom'),
+		targetMode: "list"
+	});
+});
+</script>

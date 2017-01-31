@@ -1,0 +1,50 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>{$common.title} - {$sys.copyright}</title>
+<meta name="keywords" content="{$common.keywords}" />
+<meta name="description" content="{$common.description}" />
+<!--#include file="common/api.html"-->
+</head>
+<body>
+<!--头部-->
+<!--#include file="common/head.html"-->
+<!--END-->
+<div id="main">
+	<div id="position" class="graybg">
+		<div class="fl">您的位置：<a href="{$sys.siteurl}" target="_top">首页</a> <!--foreach:{$nav $list}--> >> <a href="{$sys.siteurl}{$list.curl}" >{$list.name}</a> <!--/list--> >> 正文 </div>
+		<!--#include file="common/api_search.html"-->
+	</div>
+	<div class="detailpage">
+       <div class="col-main">
+        	<div class="mainbody">
+            	<div class="hd">
+                	<h2><font color="#FF0000">{$info.title}</font></h2>
+                    <p>
+						<span>来源：{$info.copyfrom}</span>
+						<span>日期：{$info.updatetime time="Y-m-d h:i"}</span>
+						<span>关注：{$info.views}人</span>
+					</p>
+                </div>
+                <div class="txt">
+                	{$info.content}
+				</div>
+            </div>
+            <div class="txt">
+					<div class="next">
+                        <dd>上一篇：<!--if:{empty($prev)}-->暂无<!--{else}--><a href="{$sys.siteurl}{$prev.aurl}" target="_top">{$prev.title}</a><!--/if--></dd>
+                        <dd>下一篇：<!--if:{empty($next)}-->暂无<!--{else}--><a href="{$sys.siteurl}{$next.aurl}" target="_top">{$next.title}</a><!--/if--></dd>
+                    </div>
+            </div>
+        </div>
+	</div>
+</div>
+<div class="claer"></div>
+<!--END-->
+<!--底部-->
+<!--#include file="common/foot.html"-->
+<!--END-->
+</div>
+</body>
+</html>

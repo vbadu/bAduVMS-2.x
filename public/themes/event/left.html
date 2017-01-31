@@ -1,0 +1,5 @@
+<!--foreach:{$category_left $vo}-->
+<li <?php if ($vo['cid']==$common['cid']) {?>class="curr"<!--{/if}-->>
+<a href="__URL__/index/id-{$vo.cid}{$config.URL_HTML_SUFFIX}">{$vo.name}</a>
+</li>
+<!--/foreach-->

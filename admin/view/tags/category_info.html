@@ -1,0 +1,48 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+{$css}
+{$js}
+</head>
+<body scroll="no">
+<div class="page_function">
+  <div class="info">
+    <h3>TAG组{$action_name}</h3>
+    <small>使用以下功能进行TAG组{$action_name}操作</small> </div>
+</div>
+<div class="page_form">
+<form autocomplete="off" action="__URL__/category_{$action}_save/time-<?php echo time(); ?>-ajax-true" method="post" id="form">
+<div class="page_table form_table">
+    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+      <tr>
+        <td width="120" align="right">分组名称</td>
+        <td><input name="name" type="text"  class="text_value" id="name" value="{$info.name}" />
+        </td>
+       </tr>
+    </table>
+</div>
+<!--普通提交-->
+<?php if(model('user_group')->model_power('tags','class_config')){ ?>
+<div class="form_submit">
+<input name="cid" type="hidden" value="{$info.cid}">
+<button type="submit" class="button">保存</button> 
+</div>
+<?php } ?>
+</form>
+</div>
+</div>
+<script type="text/javascript">
+//提交表单
+var win = art.dialog.open.origin;
+saveform({
+	success:function(){
+		win.location.reload();
+    art.dialog.close();
+	},
+	failure:function(msg){
+		tip({msg:msg});
+	}}
+);
+</script>
+</body>

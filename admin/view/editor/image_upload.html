@@ -1,0 +1,107 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+{$css}
+{$js}
+<script src="__PUBLICURL__/upload/jquery.uploadify.js" type="text/javascript"></script>
+<link href="__PUBLICURL__/upload/uploadify.css" rel="stylesheet" type="text/css"  >
+<style type="text/css">
+body, html { overflow: hidden; height: 240px; }
+.page_form { }
+</style>
+</head><body scroll="no">
+<div class="page_function">
+  <div class="info">
+    <h3>单图片上传</h3>
+    <small>  单个图片大小为{$size}MB</small> </div>
+</div>
+<div class="page_form">
+  <div class="page_table form_table">
+    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+      <tr>
+        <td colspan="2">添加水印 
+          <input id="wateradd" type="checkbox" name="wateradd" <?php if($config['WATERMARK_SWITCH']){ ?> checked="checked" <?php } ?> value="1">
+          &nbsp;&nbsp;水印位置 
+          <select id="waterpor" name="waterpor">
+            <option <?php if($config['WATERMARK_PLACE']==0){ ?> selected="selected" <?php } ?> value="0">随机</option>
+            <option <?php if($config['WATERMARK_PLACE']==1){ ?> selected="selected" <?php } ?> value="1">左上</option>
+            <option <?php if($config['WATERMARK_PLACE']==2){ ?> selected="selected" <?php } ?> value="2">中上</option>
+            <option <?php if($config['WATERMARK_PLACE']==3){ ?> selected="selected" <?php } ?> value="3">右上</option>
+            <option <?php if($config['WATERMARK_PLACE']==4){ ?> selected="selected" <?php } ?> value="4">左中</option>
+            <option <?php if($config['WATERMARK_PLACE']==5){ ?> selected="selected" <?php } ?> value="5">正中</option>
+            <option <?php if($config['WATERMARK_PLACE']==6){ ?> selected="selected" <?php } ?> value="6">右中</option>
+            <option <?php if($config['WATERMARK_PLACE']==7){ ?> selected="selected" <?php } ?> value="7">左下</option>
+            <option <?php if($config['WATERMARK_PLACE']==8){ ?> selected="selected" <?php } ?> value="8">中下</option>
+            <option <?php if($config['WATERMARK_PLACE']==9){ ?> selected="selected" <?php } ?> value="9">右下</option>
+          </select>
+          &nbsp;&nbsp;是否缩图  
+          <input id="thumb" type="checkbox" name="thumb"  <?php if($config['THUMBNAIL_SWIHCH']){ ?> checked="checked" <?php } ?> value="1">
+          &nbsp;&nbsp;宽度 
+          <input id="thumbwidth" class="ke-input-text ke-input-number" type="text" maxlength="3" value="{$config['THUMBNAIL_MAXWIDTH']}" name="thumbwidth">
+          &nbsp;&nbsp;高度 
+          <input id="thumbheight" class="ke-input-text ke-input-number" type="text" maxlength="3" value="{$config['THUMBNAIL_MAXHIGHT']}" name="thumbheight">
+          &nbsp;&nbsp;<select id="thumb_cutout" name="thumb_cutout">
+            <option <?php if($config['WATERMARK_CUTOUT']==1){ ?> selected="selected" <?php } ?> value="1">裁剪</option>
+            <option <?php if($config['WATERMARK_CUTOUT']==0){ ?> selected="selected" <?php } ?> value="0">按比例</option>
+          </select></td>
+      </tr>
+	  <tr>
+        <td colspan="2" style="height:auto; padding:0px;"><div id="file_list" class="uploadify-queue" style="height: auto; overflow:hidden;"></td>
+      </tr>
+      <tr>
+        <td><input id="file_upload" name="file_upload" type="file" multiple="true"></td>
+        <td align="right">
+  <button type="button" class="button" onclick="upload()">上传</button>
+  <button type="button" class="button" onclick="art.dialog.close();">取消</button>
+		</td>
+      </tr>
+      
+    </table>
+  </div>
+</div>
+
+<script type="text/javascript">
+function upload(){
+	$('#file_upload').uploadify('settings','formData',{
+		'wateradd' : $('#wateradd:checked').val(),
+		'waterpor' : $('#waterpor').val(),
+		'thumb' : $('#thumb:checked').val(),
+		'thumbwidth' : $('#thumbwidth').val(),
+		'thumbheight' : $('#thumbheight').val(),
+		'thumb_cutout' : $('#thumb_cutout').val()
+	});
+	$('#file_upload').uploadify('upload','*');
+}
+var win = art.dialog.open.origin;
+		$(function() {
+			$('#file_upload').uploadify({
+				auto:false,
+				removeCompleted:false,
+				'fileTypeDesc' : '只能上传这些文件',
+				'fileTypeExts' : '*.jpg;*.jpeg;*.bmp;*.gif;*.png;',
+				'queueSizeLimit' : '1',
+				'fileSizeLimit' : '{$size}MB',
+				'width':60,
+				'queueID':'file_list',
+				'buttonText':'选择文件',
+				'resetObject':true,
+				'multi':false,
+				'swf': '__PUBLICURL__/upload/uploadify.swf',
+				'uploader':"__APP__/editor/upload_data?key=<?php echo urlencode($this->config['SPOT'].$this->config['DB_NAME']) ?>",
+				'onFallback':function(){
+				tip({msg:'您未安装FLASH控件，请安装FLASH控件后再试。'});
+                },
+				'onUploadSuccess' : function(file, json) { 
+					var data=eval('(' + json + ')');
+					$('#{$id}',win.document).val(data.file);
+					$('#file_id',win.document).val($('#file_id',win.document).val()+data.id+',');
+					<?php if($editor){ ?>
+					win.{$editor}.insertHtml('<img src="'+data.original+'" title="'+data.title+'" alt="'+data.title+'" />');
+					<?php } ?>
+					art.dialog.close();
+				}
+			});
+		});
+	</script>
+</body>

@@ -1,0 +1,16 @@
+<header class="s_header">
+    <nav>
+        <span class="navt qq"><a href="/"><h2>{$sys.copyright}</h2></a></span>
+        <span class="userspan"><a href="/member"><img src="{$php(model('badu')->get_photo($user['id']))}?ver=<?php echo time();?>"/></a></span>
+    </nav>
+</header>
+<nav class="s_nav">
+    <div class="nav">
+        <ul>
+        <li><a href="{$sys.siteurl}">首页</a></li>
+        <!--foreach:{$common_headnav $k $vo}-->
+        <li><a href="{$sys.siteurl}/{$vo.url}"<?php if ($a=='news' || $a=='newspage'){?> class="active" <?php } ?>>{$vo.title}</a></li>
+        <!--{/foreach}-->
+        </ul>
+    </div>
+</nav>

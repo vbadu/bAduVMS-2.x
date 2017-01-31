@@ -1,0 +1,146 @@
+<div class="page_function">
+  <div class="info">
+    <h3>表单{$action_name}</h3>
+    <small>使用以下功能进行表单{$action_name}操作</small>  
+  </div>
+</div>
+<div class="tab" id="tab"> <a class="selected" href="#">{$action_name}表单</a> 
+<?php if(model('user_group')->model_power('form','visit')){ ?>
+<a  href="javascript:menuload('__URL__')">返回表单列表</a>
+<?php } ?>
+</div>
+<div class="page_form">
+<form action="__URL__/{$action}_save/time-<?php echo time(); ?>-ajax-true" method="post" id="form">
+<div class="page_table form_table">
+    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+      
+      <tr>
+        <td width="100" align="right">表单名称</td>
+        <td width="300">
+        <input name="name" type="text" class="text_value" id="name" value="{$info.name}" reg="\S" msg="表单名称不能为空" />
+        </td>
+        <td></td>
+      </tr>
+      <tr>
+        <td width="100" align="right">表单名</td>
+        <td>
+        <input name="table" type="text" class="text_value" id="table" value="{$info.table}" reg="[a-zA-Z0-9_]" msg="表单名只能为英文数字和下划线" />
+        </td>
+        <td>数据表名</td>
+      </tr>
+      
+      
+      <tr>
+        <td width="100" align="right">内容排序</td>
+        <td>
+        <input name="order" type="text" class="text_value" id="order" value="{$info.order isset="id desc"}" reg="\S" />
+        </td>
+        <td></td>
+      </tr>
+      
+      <tr>
+        <td width="100" align="right">前台表单</td>
+        <td>
+        <?php if(!isset($info['display'])){ $info['display']=1; } ?>
+        <input name="display" type="radio" onclick="reception(1)" value="1" <!--if:{$info['display']==1}--> checked="checked" <!--{/if}--> />
+        是
+        &nbsp;&nbsp;
+        <input name="display" type="radio" onclick="reception(0)" value="0" <!--if:{$info['display']==0}--> checked="checked" <!--{/if}--> />
+        否
+        </td>
+        <td>是否在前台显示此表单的分页列表内容</td>
+      </tr>
+
+      <tr class="reception">
+        <td width="100" align="right">前台提交返回</td>
+        <td>
+        <?php if(!isset($info['return_type'])){ $info['return_type']=0; } ?>
+        <input name="return_type" type="radio" value="0" <!--if:{$info['return_type']==0}--> checked="checked" <!--{/if}--> />
+        JS消息框
+        &nbsp;&nbsp;
+        <input name="return_type" type="radio" value="1" <!--if:{$info['return_type']==1}--> checked="checked" <!--{/if}--> />
+        JSON
+        </td>
+        <td>前台表单提交后的动作</td>
+      </tr>
+
+      <tr class="reception">
+        <td width="100" align="right">提交成功后消息</td>
+        <td>
+        <input name="return_msg" type="text" class="text_value" id="return_msg" value="{$info.return_msg isset="表单提交成功"}" reg="\S" msg="提交成功消息不能为空" />
+        </td>
+        <td>表单提交成功后返回的消息</td>
+      </tr>
+      
+      <tr class="reception">
+        <td width="100" align="right">成功后返回地址</td>
+        <td>
+        <input name="return_url" type="text" class="text_value" id="return_url" value="{$info.return_url isset=""}"  />
+        </td>
+        <td>表单提交成功后返回的消息(留空返回当前表单)</td>
+      </tr>
+      
+      <tr class="reception">
+        <td width="100" align="right">前台分页数</td>
+        <td>
+        <input name="page" type="text" class="text_value" id="page" value="{$info.page isset="10"}" reg="[0-9]" msg="分页数只能为数字" />
+        </td>
+        <td>前台列表显示的分页数</td>
+      </tr>
+      
+      <tr class="reception">
+        <td width="100" align="right">前台列表条件</td>
+        <td>
+        <input name="where" type="text" class="text_value" id="where" value="{$info.where}" />
+        </td>
+        <td></td>
+      </tr>
+      
+      <tr class="reception">
+        <td width="100" align="right">独立模板</td>
+        <td>
+        <?php if(!isset($info['alone_tpl'])){ $info['alone_tpl']=1; } ?>
+        <input name="alone_tpl" type="radio" value="1" <!--if:{$info['alone_tpl']==1}--> checked="checked" <!--{/if}--> />
+        是
+        &nbsp;&nbsp;
+        <input name="alone_tpl" type="radio" value="0" <!--if:{$info['alone_tpl']==0}--> checked="checked" <!--{/if}--> />
+        否
+        </td>
+        <td>否的话外部调用公共模板(common.html)</td>
+      </tr>
+      
+      
+      <tr class="reception">
+        <td width="100" align="right">前台模板</td>
+        <td>
+        <input name="tpl" type="text" class="text_value" id="tpl" value="{$info.tpl}" />
+        </td>
+        <td></td>
+      </tr>
+
+
+     
+    </table>
+</div>
+<?php if(model('user_group')->model_power('form','add')||model('user_group')->model_power('form','edit')){ ?>
+<!--普通提交-->
+<div class="form_submit">
+<input name="id" type="hidden" value="{$info.id}" />
+<button type="submit" class="button">保存</button> 
+</div>
+<?php } ?>
+</form>
+</div>
+</div>
+<script type="text/javascript">
+reception({$info.display});
+function reception(type){
+	if(type){
+		$('.reception').show();
+	}else{
+		$('.reception').hide();
+	}
+}
+//提交表单
+savelistform({addurl:"__URL__/add",listurl:"__URL__"});
+</script>

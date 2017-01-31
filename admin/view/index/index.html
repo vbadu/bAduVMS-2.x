@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=9; IE=8; IE=7; IE=EDGE">
+<title>{$config.sitename}工作管理平台</title>
+{$css}
+{$js}
+<link href="__PUBLICURL__/ztree/css/zTreeStyle.css" rel="stylesheet" type="text/css" />
+<script src="__PUBLICURL__/ztree/jquery.ztree.js"></script>
+<script src="__PUBLICURL__/ztree/jquery.ztree.exhide.js"></script>
+<style>
+html, body { width: 100%; height: 100%; overflow: hidden; margin: 0; }
+.html { _height: auto; _padding: 50px 0 0px; }
+html { _height: auto; _padding:0px; }
+</style>
+</head>
+<body>
+<!--头部-->
+<div id="head">
+  <div id="logo"><img src="__PUBLICURL__/images/logo.gif" width="180" height="50" /></div>
+  <div class="top_nav">
+    <ul>
+     	<!--foreach:{$menu_list $vo}-->
+        <li><a href="{$vo.url}">{$vo.name}</a></li>
+		<!--{/foreach}-->
+      <!--hook-->
+      <?php module('common')->plus_hook('index','nav_tpl');  ?>
+      <!--hook end-->
+    </ul>
+  </div>
+  <div id="tool"> <a href="__APP__/user/edit_info/" target="main" title="修改密码">欢迎回来,{$user.nicename}&nbsp;[修改]</a>&nbsp; <a href="#" onclick="logout()">[退出]</a>&nbsp;&nbsp;&nbsp;<a href="__ROOTURL__/" target="_blank" id="cmd" class="menu" >网站首页</a> </div>
+</div>
+<!--左边-->
+<div id="nav" class="scroll-pane"></div>
+
+<!--右边-->
+<div id="main_right">
+  <div class="loading" id="content_loading" style="display:none"></div>
+  <iframe id="main" name="main" src="" frameborder="0"></iframe>
+</div>
+<div id="foot"><a href="http://www.vbadu.com" target="_blank" title="技术支持：上饶市八度印象科技有限公司 (Mob:18679366609 QQ：858964320)">技术支持：上饶市八度印象科技有限公司</a></div>
+</body>
+<script>
+var myLayout;
+var pane;
+var root='__ROOT__';
+$(document).ready(function() {
+	
+	//主框架
+	function frameheight() {
+		var mainheight = $(window).height()-30;   
+		$('.scroll-pane').height(mainheight); 
+	};
+	frameheight();
+	$(window).resize(frameheight);
+	//绑定顶级菜单
+	navload();
+	
+	//绑定超链接
+	hrftload();
+	
+	//加载第一页面
+	$.get($(".top_nav a:first").attr("href"), function(result){
+		$("#nav").html(result);
+	});
+	
+	function frameheight() {
+	var mainheight = $(window).height()-70;   
+    $('#nav').height(mainheight);
+	};
+	frameheight();
+	$(window).resize(frameheight);
+	
+	//清除缓存
+	$("#cmd").powerFloat({
+    width: 80,
+	eventType: "hover",
+    target: [
+        {
+            href: "javascript:cmd()",
+            text: "更新缓存"	
+        }
+    ],
+    targetMode: "list"
+    });
+	
+});
+//AJAX访问
+function main_load(url){
+	$('#content_loading').fadeIn(0);
+	$("#main").attr("src", url);
+	$("#main").load(function(){
+    $('#content_loading').fadeOut(1);
+	});
+}
+
+//退出
+function logout(){
+	dialog({
+		title: '退出确认',
+		content: '是否退出工作管理系统？ ',
+		button: [{
+			name: '退出',
+			callback: function() {
+				$.ajax({
+					type: 'POST',
+					url: '__APP__/login/logout',
+					data: {
+						'out':'true' 
+					},
+					dataType: 'json',
+					success: function(json) {
+						window.location.reload();
+					}
+
+				});
+
+			}
+		},
+		{
+			name: '取消'
+		}]
+		
+	});
+}
+function cmd(){
+	var url="__APP__/cache/clear_all";
+	$.get(url, function(json){
+		tip({msg:json.message});
+		$.powerFloat.hide();
+  	},'json');
+}
+
+</script>
+</html>

@@ -1,0 +1,98 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="viewport" content="width=device-width, minimum-scale=1, maximum-scale=1">
+<title>{$common.title} - {$sys.copyright}</title>
+<meta name="keywords" content="{$common.keywords}" />
+<meta name="description" content="{$common.description}" />
+<!--#include file="common/mobile/api.html"-->
+</head>
+<body>
+<div id="main_body">
+	<!--#include file="common/mobile/head.html"-->
+    <section class="s_moreread">
+      <fieldset class="layui-elem-field" style="text-align:center;padding:5px 0">
+          <a class="layui-btn" href="__URL__">互助中心</a>
+          <a class="layui-btn layui-btn-normal" href="__URL__/need.html">我要求助</a>
+          <a class="layui-btn layui-btn-warm" href="__URL__/donate.html">我要捐赠</a>
+        </fieldset>
+            <table class="layui-table">
+              <tbody>
+                <tr>
+                  <td colspan="4">{$info.title}</td>
+                </tr>
+                <tr>
+                  <td>联络人：</td>
+                  <td class="left">{$info.name}</td>
+                  <td class="center">联系电话：</td>
+                  <td class="left">{$info.tel}</td>
+                </tr>
+                  <tr>
+                  <td width="80">是否核实：</td>
+                  <td class="left"><!--if:{$info['status']==1}--><font color="#FF0000">真实性已核实<!--{else}--><font color="#006600">真实性待核实<!--{/if}--></font></td>
+                  <td width="80" class="center">帮扶状态：</td>
+                  <td class="left"><!--if:{$info['helps']==1}--><font color="#FF0000">已对接帮扶<!--{else}--><font color="#006600">急需志愿者帮扶<!--{/if}--></font></td>
+                </tr>
+              <tr>
+                  <td>发布人IP：</td>
+                  <td class="left">{$info.ip}</td>
+                  <td class="center">发布时间：</td>
+                  <td class="left">{$info.dtime time="Y-m-d H:i"}</td>
+                </tr>
+                <tr>
+                  <td>求助内容：</td>
+                  <td colspan="3" class="left">{$info.content html}</td>
+                </tr>
+                <tr>
+                  <td>帮扶提示：</td>
+                  <td colspan="3" class="left">如果您确认帮助"{$info.name}",请您通过电话{$sys.helponline}或者QQ群、微信等方式向我们反馈您的帮助情况，以便其他志愿者了解求助人是否得到帮助。</td>
+                </tr>
+                </tbody>
+            </table>
+        <!-- Baidu Button BEGIN -->
+      <div id="share_label" style="border-bottom: none"><span>分享到 : </span></div>
+        <div class="bdsharebuttonbox" data-tag="share_1">
+            <a class="bds_qzone" data-cmd="qzone" href="#"></a>
+            <a class="bds_tsina" data-cmd="tsina"></a>
+            <a class="bds_sqq" data-cmd="sqq"></a>
+            <a class="bds_tieba" data-cmd="tieba"></a>
+            <a class="bds_more" data-cmd="more">更多</a>
+            <a class="bds_count" data-cmd="count"></a>
+        </div>
+		<script>
+            window._bd_share_config = {
+                common : {
+                    bdText : '{$info.title}',	
+                    bdDesc : '{$info.description}',	
+                    bdUrl : '{$sys.siteurl}{$info.aurl}', 	
+                    bdPic : '{$info.image}',
+                    bdSign : 'on',
+                },
+                share : [{
+                    "bdSize" : 32
+                }],
+                slide : [{	   
+                    bdImg : 0,
+                    bdPos : 'right',
+                    bdTop : 100
+                }],
+                image : [{
+                    viewType : 'list',
+                    viewPos : 'top',
+                    viewColor : 'black',
+                    viewSize : '16',
+                    viewList : ['qzone','tsina','huaban','tqq','weixin']
+                }],
+                selectShare : [{
+                    "bdselectMiniList" : ['qzone','tqq','tsina','weixin','bdxc']
+                }]
+            }
+            with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?cdnversion='+~(-new Date()/36e5)];
+        </script>
+        <!-- Baidu Button END -->
+	</section>
+	<!--#include file="common/mobile/foot.html"-->			
+</div>
+</body>
+</html>

@@ -1,0 +1,125 @@
+<style>
+#dbck span{ height:30px; line-height:30px; padding:0px 10px; width:240px; display:block; float:left}
+</style>
+<div class="page_function">
+  <div class="info">
+    <h3>数据备份管理</h3>
+    <small>用来备份管理数据</small> </div>
+</div>
+
+<div class="page_main">
+  <div class="page_table table_list">  
+<form action="__URL__/back/time-time()" id="form" name="form" method="post">
+<div class="dbss">
+    <table width="100%" border="0" cellspacing="0" cellpadding="0" id="list">
+      <tr>
+        <td width="12%"><input name="back" type="radio" value="1" onclick="hide()" checked="checked" /> 全部备份</td>
+        <td width="88%">备份数据库所有表</td>
+      </tr>
+      <tr>
+        <td><input id="zdy" name="back" type="radio" value="2" onclick="show()"/> 自定义备份</td>
+        <td>根据需要自行选择备份数据表</td>
+      </tr>
+      <tr>
+        <td colspan="2" id="dbinfo">
+        <input id="allck" name="" type="checkbox" value="" style="margin-left:10px;" /> 全选
+        <div id="dbck">
+        <!--foreach:{$tableArry $vo}-->
+        <span><input name="db[]" type="checkbox" value="{$vo}" />{$vo}</span>
+        <!--/tableArry-->
+        </div>
+		</td>
+      </tr>
+      <tr>
+      <td>备份名称</td>
+      <td><input class="text_value" style="width:100px;" id="back_name" name="back_name" type="text" value="" reg="\S" msg="备份名称不能为空"/></td>
+      </tr>
+      <tr>
+        <td>分卷大小</td>
+        <td><input class="text_value" style="width:60px;" id="dbsize" name="dbsize" type="text" value="0"/>  分卷大小，以KB为单位，为0表示不分卷</td>
+      </tr>
+    </table>
+<li><div class="form_submit">
+    <button type="submit" class="button">备份</button>
+</div></li>
+</div>
+</form>  
+  
+ <h1>服务器上的备份文件</h1> 
+ <table width="100%" border="0" cellpadding="0" cellspacing="0">
+  <tr>
+    <td width="101">ID</td>
+    <td width="477" style="width:200px;">备份名称</td>
+    <td width="146">备份时间</td>
+    <td width="146">数据版本</td>
+    <td width="134">管理操作</td>
+    <td width="107">&nbsp;</td>
+  </tr>
+  <!--foreach:{$filelist $vo}-->
+  <tr>
+    <td>{$i}</td>
+    <td>{$vo.back_name}</td>
+    <td>{$vo.back_time}</td>
+    <td>{$vo.back_ver}</td>
+    <td><a href="javascript:void(0);" onclick="del('{$vo.file_name}',this)">删除</a>  |  <a href="javascript:void(0);" onclick="daor('{$vo.file_name}',this)">导入</a></td>
+    <td>&nbsp;</td>
+  </tr>
+  <!--/filelist-->
+ </table>
+
+  </div>
+</div>
+
+
+
+
+
+
+<script type="text/javascript">
+//提交表单
+savelistform({addurl:"__URL__/",listurl:"__URL__/"});
+
+
+function show()
+{
+	$("#dbinfo").show();
+}
+function hide()
+{
+	$("#dbinfo").hide();
+}
+
+   $("#allck").bind('click',function () {
+	 if($('#allck').attr("checked")){
+	 $("#dbck input:checkbox").attr("checked",true);}
+	 else{$("#dbck input:checkbox").attr("checked",false);}
+   });
+$("#dbinfo").hide();
+
+//删除
+function del(id,obj) {
+  var obj;
+  ajaxpost({
+    name:'删除此字段将删除字段下的内容！ ',
+    url:"__URL__/del",
+    data:{filename: id},
+    tip:1,
+    success:function(){
+      window.location.href="__URL__/";             
+    }
+  });
+}
+//导入
+function daor(id,obj) {
+  var obj;
+  ajaxpost({
+    name:'确定导入数据！ ',
+    url:"__URL__/daor",
+    data:{file: id},
+    tip:1,
+    success:function(){
+      window.location.href="__URL__/";             
+    }
+  });
+}
+</script>

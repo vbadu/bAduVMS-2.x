@@ -1,0 +1,57 @@
+<link type="text/css" rel="stylesheet" href="__PUBLIC__/layui/css/layui.css">
+<link type="text/css" rel="stylesheet" href="__PUBLIC__/css/style.css?<?php echo time();?>" />
+<script src="__PUBLIC__/js/jquery.v1.7.2.js"></script>
+<script type="text/javascript" src="__PUBLIC__/layui/layui.js"></script>
+<script type="text/javascript" src="__PUBLIC__/layer/layer.js"></script>
+<script src="__PUBLIC__/js/time.js?ver=1"></script>
+<script language="javascript">
+function AddFavorite(sURL, sTitle)
+{
+     try
+     {
+         window.external.addFavorite(sURL, sTitle);
+     }
+     catch (e)
+     {
+         try
+         {
+             window.sidebar.addPanel(sTitle, sURL, "");
+         }
+         catch (e)
+         {
+             alert("加入收藏失败，有劳您手动添加。");
+         }
+     }
+}
+</script>
+<script language="JavaScript" type="text/JavaScript">
+function f_check_ZhOrNumOrLett(obj){    //判断是否是汉字、字母、数字组成
+    if(checkFormTxtItem(obj)==false)
+    {
+      alert("请输入关键词！");
+    }
+    else{
+    var regu = "^[0-9a-zA-Z\u4e00-\u9fa5]+$";       
+    var re = new RegExp(regu);    
+    if (re.test( obj.value )) {    
+       document.form1.submit();    
+    } else{   
+     alert("只能输入汉字、字母或数字！");    
+     //return false;    
+ }
+}
+} 
+function checkFormTxtItem(objT){//text不能为空
+	if(AllTrim(objT.value) == "") return false;
+    else return true;
+}
+
+function AllTrim(str){
+	if(str.charAt(0) == " "){
+  		str = str.slice(1);
+  		str = AllTrim(str);
+ 	}
+ 	return str;
+}
+</script>
+

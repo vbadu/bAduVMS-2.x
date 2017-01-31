@@ -1,0 +1,79 @@
+<div class="page_function">
+  <div class="info">
+    <h3>{$info.name} - 字段管理</h3>
+    <small>使用以下功能进行字段编辑操作</small> </div>
+  <div class="exercise"> 
+   <a href="javascript:menuload('__URL__/index')">返回模型列表</a>
+   <a href="javascript:;" onclick="add()">添加字段</a>
+   </div>
+</div>
+<div class="page_main">
+  <div class="page_table table_list">
+    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+      <tr>
+        <th width="15%"><center>排序</center></th>
+        <th width="15%">字段名称</th>
+        <th width="20%">字段</th>
+        <th width="20%">显示方式</th>
+        <th width="10%"><center>必填</center></th>
+        <th width="20%"><center>操作</center></th>
+      </tr>
+      <!--foreach:{$list $vo}-->
+      <tr>
+        <td align="center"><center>{$vo.sequence}</center></td>
+        <td align="left">{$vo.name}</td>
+        <td align="left">{$vo.field}</td>
+        <td align="left">{$vo.type} ({$vo.property})</td>
+        <td align="center">
+        <!--if:{$vo['must']==1}-->
+        <font color=green><b>√</b></font>
+        <!--{else}-->
+        <font color=red><b>×</b></font>
+        <!--{/if}-->
+        </td>
+        <td><center>
+       <a href="javascript:;" onclick="edit({$vo['fid']})" >修改</a>&nbsp;&nbsp;
+         <!--if:{$vo['primary']==0}-->
+         <a href="javascript:void(0);" onclick="del('{$vo.fid}',this)">删除</a>
+         <!--{else}-->
+         <font color="#CCCCCC">删除</font>
+         <!--{/if}-->
+         </center></td>
+      </tr>
+      <!--{/foreach}-->
+    </table>
+  </div>
+</div>
+
+<div class="page_tool">
+  <div class="page"></div>
+</div>
+<script>
+//添加
+function add() {
+	urldialog({
+	title:'字段添加',
+	url:'__URL__/field_add/mid-{$info.mid}'
+	});
+};
+//修改
+function edit(mid) {
+	urldialog({
+	title:'字段编辑',
+	url:'__URL__/field_edit/fid-'+mid
+	});
+};
+//删除
+function del(fid,obj) {
+	var obj;
+	ajaxpost({
+		name:'删除此字段会删除字段下的内容！',
+		url:"__URL__/field_del",
+		data:{fid: fid,mid: '{$info.mid}'},
+		tip:1,
+		success:function(){
+			$(obj).parent().parent().parent().remove();
+		}
+	});
+}
+</script>

@@ -1,0 +1,122 @@
+<div class="page_function">
+  <div class="info">
+    <h3>TAG管理</h3>
+    <small>管理内容关键词分离的TAG标签</small> </div>
+  <div class="exercise">
+   <a href="javascript:menuload('__URL__/index')">TAG列表</a> 
+  <?php if(model('user_group')->model_power('tags','class_config')){ ?>
+  <a href="javascript:menuload('__URL__/category')">TAG分组管理</a>
+  <a  href="javascript:;" onclick="add()">添加TAG组</a> 
+  <?php } ?>
+  </div>
+</div>
+<div class="page_main">
+  <div class="page_menu"> 排序：
+    <select id="sequence" onchange="javascript:location.href=this.value;">
+	  <option value="__URL__/index/sequence-0" <?php if($_GET['sequence']==0){ ?> selected="selected" <?php } ?> >默认</option>
+      <option value="__URL__/index/sequence-1" <?php if($_GET['sequence']==1){ ?> selected="selected" <?php } ?> >点击率 高->低</option>
+      <option value="__URL__/index/sequence-2" <?php if($_GET['sequence']==2){ ?> selected="selected" <?php } ?> >点击率 低->高</option>
+    </select>
+    &nbsp;&nbsp;
+    分组筛选：
+    <select id="catcory" onchange="javascript:location.href=this.value;">
+      <option value="__URL__/index" >全部</option>
+      <option value="__URL__/index/cid-0" <?php if(isset($_GET['cid'])&&$_GET['cid']==0){ ?> selected="selected" <?php } ?> >未分组</option>
+      <!--foreach:{$category_list $vo}--> 
+  	  <option value="__URL__/index/cid-{$vo.cid}"  <?php if($_GET['cid']==$vo['cid']){ ?> selected="selected" <?php } ?> >{$vo.name}</option>
+      <!--{/foreach}-->
+    </select>
+    &nbsp;&nbsp;
+    搜索：
+    <input style="width:100px" name="search" type="text" class="text_value" id="search" value="<?php echo urldecode($_GET['search']) ?>" />
+    &nbsp;&nbsp;
+    <input type="button"  class="button_small" onclick="javascript:location.href='__URL__/index/search-'+$('#search').val();" value="搜索" />
+  </div>
+  <div class="page_table table_list">
+    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+      <tr>
+        <th width="100"><center>
+            选择
+          </center></th>
+        <th width="100">ID</th>
+        <th>名称</th>
+        <th width="150">分组</th>
+        <th width="150"><center>
+            点击数
+          </center></th>
+      </tr>
+      <!--foreach:{$list $vo}-->
+      <tr>
+        <td align="center"><center>
+          <input name="id[]" type="checkbox" id="id[]" value="{$vo['id']}" ></td>
+        <td>{$vo.id}</td>
+        <td>{$vo.name}</td>
+        <td>{$vo.cname}</td>
+        <td><center>
+            {$vo.click}
+          </center></td>
+      </tr>
+      <!--{/foreach}-->
+    </table>
+  </div>
+</div>
+<div class="page_tool">
+  <div class="function">
+  <input type="button" onclick="javascript:selectall('id[]');" class="button_small" value="全选" />
+  <?php if(model('user_group')->model_power('tags','del')){ ?>
+  <input type="button" onclick="javascript:audit(1);" class="button_small" value="删除" />
+  <?php } ?>
+  <?php if(model('user_group')->model_power('tags','class')){ ?>
+  <input type="button" onclick="javascript:$('#mobile').toggle();" class="button_small" value="分组" />
+  <span id="mobile" style="display:none">
+  			<select name="cid"  id="cid" >
+              <option value="0">选择分组</option>
+              <!--foreach:{$category_list $vo}--> 
+              <option value="{$vo['cid']}">
+                  {$vo['name']}
+              </option>
+              <!--{/foreach}-->
+            </select>
+            <input type="button" onclick="javascript:audit(2);" class="button_small" value="确认" />
+  </span>
+  <?php } ?>
+  </div>
+  <div class="page" >{$page}</div>
+</div>
+<script>
+function add() {
+	urldialog({
+	title:'字段添加',
+	url:'__URL__/category_add'
+	});
+};
+//选择
+function selectall(name){   
+    $("[name='"+name+"']").each(function(){//反选   
+    if($(this).attr("checked")){   
+          $(this).removeAttr("checked");   
+    }else{   
+          $(this).attr("checked",'true');   
+    }   
+    })  
+}
+//批量操作
+function audit(status){
+	var str="";
+	$("[name='id[]']").each(function(){//反选   
+    if($(this).attr("checked")){
+		  str+=$(this).val()+","; 
+    }
+    })
+	
+	ajaxpost({
+		name:'您确认要继续进行操作吗？操作将无法撤销！',
+		url:"__URL__/batch",
+		data:{status: status, id:str, cid:$('#cid').val()},
+		tip:1,
+		success:function(){
+			window.location.reload();	
+		}
+	});
+}
+</script>

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<config>
+<name>站点地图</name>
+<file>sitemap</file>
+<ver>1</ver>
+<author>jacochan</author>
+<info>站点地图提供了百度和谷歌的XML生成利于搜索引擎抓取。</info>
+<prefix>dc_</prefix>
+</config>

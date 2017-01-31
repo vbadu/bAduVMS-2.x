@@ -1,0 +1,75 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>{$common.title} - {$sys.copyright}</title>
+<meta name="keywords" content="{$common.keywords}" />
+<meta name="description" content="{$common.description}" />
+<!--#include file="common/api.html"-->
+<link type="text/css" rel="stylesheet" href="__PUBLIC__/css/style_member.css" />
+</head>
+<body>
+<!--头部-->
+<!--#include file="common/head.html"-->
+<!--END-->
+<div id="main">
+	<div id="position" class="graybg">
+		<div class="fl"><!--#include file="member/nav.html"-->{$common.title}</div>
+   		<!--#include file="common/api_search.html"-->
+	</div>
+    <div class="listpage">
+        <div class="fl col-sub box">
+            <div class="top"><h2><span>{$common.title}</span></h2></div>
+            <div class="mainbody">
+                <ul class="leftnav">
+                	<!--#include file="member/left.html"-->
+                 </ul>
+            </div>
+            <div class="bt"></div>
+        </div>
+        <div class="fr col-main">
+            <div class="nopad">
+                <h1 style="font-size:3em">{$common.title}</h1>
+            </div>
+			<form method="post" class="sui-form form-horizontal sui-validate login_area" id="badu" onSubmit="return false;">
+                <div class="control-group">
+                    <label for="inputEmail" class="control-label">身份校验：</label>
+                    <div class="controls">
+                    	<input id="idkey" placeholder="请输入密保邮箱或身份证号" type="text" name="idkey" maxlength="60" class="input-xfat input-large" data-rules="required">
+                    </div>
+                </div>
+                <div class="control-group">
+               		<label class="control-label"></label>
+                	<div class="controls btn">
+                        <button type="submit" class="sui-btn btn-large btn-danger" id="btn_submit">
+                            <i class="sui-icon icon-touch-right-rect"></i> 下一步
+                        </button>
+                	</div>
+                </div>
+            </form>
+        </div>
+	</div>
+</div>
+<div class="claer"></div>
+<script language="javascript">
+$(function(){ 
+	$('#btn_submit').click(function(){
+		if (3>$("#idkey").val().length) return;
+		$.post("__URL__/repass.html",$('#badu').serialize(),function(data){
+			var status=data.status;
+			if (status==false){
+				layer.msg('重置失败'+data.message, {icon: 5});
+			}else{
+				$('#badu').html(data.message);
+			};
+		},'json');
+	});
+}); 
+</script>
+<!--END-->
+<!--底部-->
+<!--#include file="common/foot.html"-->
+<!--END-->
+</div>
+</body>
+</html>

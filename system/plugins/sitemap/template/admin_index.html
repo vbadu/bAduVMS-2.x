@@ -1,0 +1,56 @@
+<div class="page_function">
+  <div class="info">
+    <h3>站点地图</h3>
+    <small>用来生成网站的sitemap</small> </div>
+  <div class="exercise"> <a href="javascript:;" onclick="baidu()">生成百度收录索引</a> <a href="javascript:;" onclick="google()">生成标准收录索引</a>	<a href="javascript:;" onclick="html()">生成HTML地图</a>  </div>
+</div>
+<form action="__URL__/config_save/time-time()" id="form" name="form" method="post">
+<div class="page_main">
+  <div class="page_table form_table"> 
+    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+      <tr>
+        <td width="120">自动生成</td>
+        <td width="300"><?php if($info['config']){ ?>
+          <input type="radio" name="status" value="1"  checked="checked" />
+          开启
+          <input type="radio" name="status" value="0"  />
+          关闭
+          <?php }else{?>
+          <input type="radio"  name="status" value="1" />
+          开启
+          <input type="radio"  name="status" value="0"  checked="checked"  />
+          关闭
+          <?php }?></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td colspan="3">本插件利用系统接口，内容、栏目删除添加时会自动重新生成地图，也可以手动进行生成。</td>
+      </tr>
+      <tr>
+        <td colspan="3"><a href="http://www.baidu.com/search/url_submit.html" target="_blank">百度网站提交入口</a>&nbsp;&nbsp;&nbsp;<a href="http://www.google.com/addurl/" target="_blank">谷歌网站提交入口</a> </td>
+      </tr>
+    </table>
+  </div>
+</div>
+
+<div class="form_submit">
+    <button type="submit" class="button">保存</button>
+</div>
+</form>
+<script type="text/javascript">
+//提交表单
+saveform({success:function(msg){tip({msg:msg})}});
+
+function baidu(){
+	ajaxpost_w({url:'__URL__/baidu',tip:1});
+}
+function google(){
+	ajaxpost_w({url:'__URL__/google',tip:1});
+}
+function robots(){
+	ajaxpost_w({url:'__URL__/robots',tip:1});
+}
+function html(){
+	ajaxpost_w({url:'__URL__/html_sitemap',tip:1});
+}
+</script>

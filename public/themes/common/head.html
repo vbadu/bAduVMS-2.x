@@ -1,0 +1,25 @@
+<div id="header">
+	<div id="toolbar">
+    	<div class="wrap">
+            <ul>
+                <li class="slogan">秉持志愿精神，以传播志愿文化为使命！</li>
+				<li class="date"><script language="javascript">showTime()</script></li>
+                <li class="home"><a href="{$sys.siteurl}/">首页</a></li>
+                <li class="collect"><a href="#" onclick="AddFavorite('{$sys.siteurl}','{$sys.sitename}');return false;">加入收藏</a></li>
+                <li class="sethome"><a href="{$sys.siteurl}/member/register.html">义工申请</a></li>
+                <li class="sitemap nobor"><a href="{$sys.siteurl}/member.html">会员中心</a></li>
+            </ul>
+        </div>
+    </div>
+    <div id="header-main" class="w950">
+    	<div class="fl" style="margin-top:8px;"><h1 id="logo"><a href="{$sys.siteurl}/">{$sys.sitename}</a></h1></div>
+    	<div class="fr" style="margin-top:12px;_margin-top:14px;width:480px">
+            <ul id="nav">
+            	<li><a href="{$sys.siteurl}">网站首页</a></li>
+                <!--foreach:{$common_headnav $k $vo}-->
+                <li><a href="{$sys.siteurl}/{$vo.url}"<?php if ($a=='news' || $a=='newspage'){?> class="nobor" <?php } ?>>{$vo.title}</a></li>
+                <!--{/foreach}-->
+            </ul>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,77 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="viewport" content="width=device-width, minimum-scale=1, maximum-scale=1">
+<title>{$common.title} - {$sys.copyright}</title>
+<meta name="keywords" content="{$common.keywords}" />
+<meta name="description" content="{$common.description}" />
+<!--#include file="common/mobile/api.html"-->
+</head>
+<body>
+<div id="main_body">
+	<!--#include file="common/mobile/head_nav.html"-->
+    <div class="main_member_body"> 
+            <div class="member_from">
+                <div class="member_ov">
+                    <img src="{$php(model('badu')->get_photo($user['id']))}" alt="修改头像" height="200" width="200" id="avatar_show"/>
+                </div>
+                <div class="member_ov" style="line-height:2em;padding:1em 0">
+                    <a href="javascript:;" class="member_file">选择新头像<input type="file" id="photo" name="photo" value="" capture="camera" accept="image/*"/></a>
+                    <span>注：允许上传图格式为JPG、PNG、GIF、BMP。<br>文件大小不可超过500K</span>
+                </div>
+               <input id="avatar_photo" name="avatar_photo" style="display:none;width:0.1px; height:0.1px" value="" type="hidden">
+               <div class="member_ov">
+               <button class="layui-btn layui-btn-big layui-btn-danger layui-btn-radius" lay-submit="" lay-filter="btn_submit" id="btn_submit">提交保存</button>
+               </div>
+            </div>
+	</div>
+</div>
+<div class="claer"></div>
+<script src="__PUBLIC__/lrz/lrz.bundle.js"></script>
+<!--END-->
+<script language="javascript">
+layui.use(['form','element'], function(){
+  var form = layui.form();
+  var $ = layui.jquery,element = layui.element();
+	$('#photo').change(function(){
+		var old_photo=this.files[0];
+		lrz(old_photo,{width: 200,height:200,quality:0.8})
+			.then(function (rst) {
+				document.getElementById("avatar_show").src=rst.base64;
+				document.getElementById("avatar_photo").value=rst.fileLen;
+				if (rst.fileLen>2*10240){
+					layer.msg('操作失败！您选择的头像图片太大，请重新选择。 ', {icon: 5});
+				}
+			})
+			.catch(function (err) {
+				document.getElementById("avatar_show").src=old_photo;
+				document.getElementById("avatar_photo").value=old_photo;
+			})
+	});
+
+
+
+
+  //监听提交
+  form.on('submit(btn_submit)', function(post){
+        var avatar_size = document.getElementById("avatar_photo").value;
+        var avatar = document.getElementById("avatar_show").src;
+		avatars = avatar.split("/");
+		$.post("__URL__/avatar.html",{avatar:avatars,size:avatar_size},function(data){
+			var status=data.status;
+			if (status==false){
+				layer.msg('操作失败！ '+data.message, {icon: 5});
+			}else{
+				layer.msg(data.message, {icon: 1});
+			};
+		},'json');	  
+    return false;
+  });
+});	
+</script>
+<!--底部-->
+	<!--#include file="common/mobile/foot.html"-->			
+</div>
+</body>
+</html>

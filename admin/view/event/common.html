@@ -1,0 +1,76 @@
+<script type="text/javascript">
+//tab菜单
+$("#tab").idTabs();
+//提交表单
+savelistform({addurl:"__URL__/edt/",listurl:"javascript:history.go(-1)"});
+$('#stime').calendar({ id:'#stime',format:'yyyy-MM-dd'});
+$('#etime').calendar({ id:'#etime',format:'yyyy-MM-dd'});
+$('#ztime').calendar({ id:'#ztime',format:'yyyy-MM-dd'});
+$('.corol_button').soColorPacker({
+	textChange:false, 
+callback:function(c){
+	$('#title').css("color", c.color);
+	$('#font_color').val(c.color);
+	}
+});
+//高级模式
+function advanced(){
+	$('.advanced').toggle();
+}
+function get_one_pic(){
+	var content=editor_content.html();
+	var imgreg = /<img.*?(?:>|\/>)/gi;
+	var srcreg = /src=[\'\"]?([^\'\"]*)[\'\"]?/i;
+	var arr = content.match(imgreg);
+	var src = arr[0].match(srcreg);
+	$("#image").val(src[1]);
+	}
+function get_description(){
+	var content=editor_content.text();
+	content=content.substring(0,500);
+	content=content.replace(/\s+/g," ")
+	content=content.replace(/[\r\n]/g," ");
+	content = content.replace(/<\/?[^>]*>/g,'');
+	if(content.length > 250){
+	    content = content.substring(0,250);
+	}
+	$("#description").val(content);
+}
+function get_remote_image(){
+	ajaxpost_w({
+		url:'__APP__/editor/get_remote_image',
+		data:{content:editor_content.html()},
+		tip:2,
+		success:function(msg){
+			editor_content.html(msg);
+		},
+		failure:function(){
+		},
+		msg:'远程抓图执行完毕'
+	});
+}
+function fontbold()
+{
+	if($('#font_bold').val()==0){
+		$('#title').css("font-weight",'bold');
+		$('#font_bold').val(1);
+		}else{
+		$('#title').css("font-weight",'normal');	
+		$('#font_bold').val(0);
+	}
+}
+//删除
+function del(id,obj) {
+	var obj;
+	ajaxpost({
+		name:'确认要删除吗?删除无法恢复！',
+		url:"__URL__/set",
+		data:{status: 0,id: id},
+		tip:1,
+		success:function(){
+			$(obj).parent().parent().parent().remove();
+		}
+	});
+}
+
+</script>

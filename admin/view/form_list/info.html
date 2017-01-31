@@ -1,0 +1,42 @@
+<div class="page_function">
+  <div class="info">
+    <h3>{$form_info.name}{$action_name}</h3>
+    <small>使用以下功能进{$form_info.name}{$action_name}操作</small> 
+  </div>
+</div>
+<div class="tab" id="tab"> <a class="selected" href="#">{$action_name}内容</a> 
+<?php if(model('user_group')->form_power($form_info['table'],'visit')){ ?>
+<a  href="javascript:menuload('__URL__/index/id-{$form_info.id}')">返回内容列表</a>
+<?php } ?>
+</div>
+<div class="page_form">
+<form action="__URL__/{$action}_save/time-<?php echo time() ?>-ajax-true" method="post" id="form">
+<div class="page_table form_table">
+    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+    <tr style="height:0px !important">
+    <td width="100" style="height:0px !important" align="right"></td>
+    <td style="height:0px !important"></td>
+    <td style="height:0px !important"></td>
+    </tr>
+      <!--foreach:{$field_list $vo}-->
+      {$php( echo model('expand_model')->get_field_html($vo,$info[$vo['field']]))}
+      <!--{/foreach}-->
+     
+    </table>
+</div>
+<?php if(model('user_group')->form_power($form_info['table'],'add')||model('user_group')->form_power($form_info['table'],'edit')){ ?>
+<!--普通提交-->
+<div class="form_submit">
+<input name="id" type="hidden" value="{$info.id}" />
+<input name="fid" type="hidden" value="{$form_info.id}" />
+<input name="file_id" id="file_id" type="hidden" value="{$file_id}" />
+<button type="submit" class="button">保存</button> 
+</div>
+<?php } ?>
+</form>
+</div>
+</div>
+<script type="text/javascript">
+//提交表单
+savelistform({addurl:"__URL__/add/id-{$form_info.id}",listurl:"__URL__/index/id-{$form_info.id}"});
+</script>

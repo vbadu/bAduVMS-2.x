@@ -1,0 +1,75 @@
+<div class="page_function">
+  <div class="info">
+    <h3>报名详单</h3>
+    <small>报名时间:{$info.dtime time="Y-m-d H:i"}</small>
+  </div>
+</div>
+<div class="page_form">
+	<form action="__URL__/baoming/time-<?php echo time(); ?>-ajax-true" method="post" id="form" autocomplete="off">
+    <div class="page_table form_table">
+        <table width="100%" border="0" cellspacing="0" cellpadding="0">
+        <tr>
+            <td align="right">网名昵称：</td>
+            <td>{$info.uname}</td>
+            <td colspan="2" rowspan="3"><img src="{$php(model('badu')->get_photo($info['uid']))}" title="{$info.uname}" alt="{$info.uname}" width="120px" height="120px"/></td>
+          </tr>
+        <tr>
+            <td align="right">登记卡号：</td>
+            <td>{$info.vcard}</td>
+          </tr>
+        <tr>
+            <td align="right">联系电话：</td>
+            <td>{$info.tel}</td>
+          </tr>
+        <tr>
+          <td align="right">奖惩时数：</td>
+          <td>{$info.vtime}</td>
+          <td align="right">真实姓名：</td>
+          <td>{$info.realname}</td>
+          </tr>
+        <tr>
+          <td align="right">是否认证：</td>
+          <td><!--if:{$info['isvip']==1}-->已认证<!--{else}-->未认证<!--{/if}--></td>
+          <td align="right">性别：</td>
+          <td><!--if:{$info['sex']==1}-->男生
+          <?php }else if($info['sex']==1){?>女生
+          <!--{else}-->未知<!--{/if}--></td>
+          </tr>
+        <tr>
+          <td align="right">报名时IP：</td>
+          <td>{$info.ip}</td>
+          <td align="right">所在用户组：</td>
+          <td>{$info.gname}</td>
+          </tr>
+        <tr>
+          <td align="right">审批状态：</td>
+          <td>
+          <select name="status">
+              <option value="0"<!--if:{$info['status']==0}--> selected<!--{/if}--> />待审批</option>
+              <option value="1"<!--if:{$info['status']==1}--> selected<!--{/if}--> />已通过</option>
+              <option value="2"<!--if:{$info['status']==2}--> selected<!--{/if}--> />未通过</option>
+              <option value="3"<!--if:{$info['status']==3}--> selected<!--{/if}--> />请假</option>
+              <option value="4"<!--if:{$info['status']==4}--> selected<!--{/if}--> />缺席</option>
+          </select>
+          </td>
+          <td align="right">累计时数：</td>
+          <td>{$info.vtimes}</td>
+          </tr>
+          <!--foreach:{$field_list $vo}-->
+          {$php( echo model('form')->get_field_text($vo,$info[$vo['field']]))}
+          <!--{/foreach}-->
+        </table>
+        <?php if(model('user_group')->model_power('content','add')||model('user_group')->model_power('content','edit')){ ?>
+    <!--普通提交-->
+    <div class="form_submit">
+      <input name="id" type="hidden" value="{$info.id}" />
+      <input name="eid" type="hidden" value="{$info.eid}" />
+      <input name="fid" type="hidden" value="{$info.fid}" />
+      <input name="formid" type="hidden" value="{$info.bmgs}" />
+      <button type="submit" class="button">保存</button>
+    </div>
+    <?php } ?>    
+    </div>
+  </form>
+</div>
+{include file="event/common"}

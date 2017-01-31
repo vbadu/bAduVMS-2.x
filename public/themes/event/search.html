@@ -1,0 +1,26 @@
+<?php
+    $catid=intval($_GET['id']);
+    $weekday=intval($_GET['weekday']);
+    $status=intval($_GET['status']);
+    $key=urldecode(in($_GET['key']));
+?>
+<div class="padding10">
+<ul class="sui-nav nav-tabs nav-pills">
+    <li <?php if (empty($_GET['id'])) {?>class="active"<!--{/if}-->><a href="__URL__/index/id-0-weekday-{$weekday}-status-{$status}-key-{$key}{$config.URL_HTML_SUFFIX}">不限分类</a></li>
+    <!--foreach:{$category_left $vo}-->
+    <li <?php if (intval($_GET['id'])==$vo['cid']) {?>class="active"<!--{/if}-->><a href="__URL__/index/id-{$vo.cid}-weekday-{$weekday}-status-{$status}-key-{$key}{$config.URL_HTML_SUFFIX}">{$vo.name}</a></li>
+    <!--/foreach-->
+</ul>
+<ul class="sui-nav nav-tabs nav-pills">
+    <?php echo model('event')->get_set_list('weekday',1,$_GET['weekday'],'日期',$config)?>
+</ul>
+<ul class="sui-nav nav-tabs nav-pills">
+    <li <?php if ($status==0) {?>class="active"<!--{/if}-->><a href="__URL__/index/id-{$catid}-weekday-{$weekday}-status-0-key-{$key}{$config.URL_HTML_SUFFIX}">所有状态</a></li>
+    <li <?php if ($status==1) {?>class="active"<!--{/if}-->><a href="__URL__/index/id-{$catid}-weekday-{$weekday}-status-1-key-{$key}{$config.URL_HTML_SUFFIX}">活动招募中</a></li>
+    <li <?php if ($status==2) {?>class="active"<!--{/if}-->><a href="__URL__/index/id-{$catid}-weekday-{$weekday}-status-2-key-{$key}{$config.URL_HTML_SUFFIX}">正在活动中</a></li>
+    <li <?php if ($status==3) {?>class="active"<!--{/if}-->><a href="__URL__/index/id-{$catid}-weekday-{$weekday}-status-3-key-{$key}{$config.URL_HTML_SUFFIX}">活动已结束</a></li>
+	<input name="key" type="text" placeholder="关键字" class="input-medium"  id="key" value="<?php echo urldecode($_GET['key']) ?>" />
+  &nbsp;&nbsp;<button type="button" class="sui-btn" onclick="javascript:gSearch()">搜索</button>
+</ul>
+<script type="text/javascript">function gSearch(){window.location = '__URL__/index/id-{$catid}-weekday-{$weekday}-status-{$status}-key-'+encodeURI(document.getElementById('key').value)+'{$config.URL_HTML_SUFFIX}';}</script>
+</div>

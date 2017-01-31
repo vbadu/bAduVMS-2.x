@@ -1,0 +1,78 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="viewport" content="width=device-width, minimum-scale=1, maximum-scale=1">
+<title>{$common.title} - {$sys.copyright}</title>
+<meta name="keywords" content="{$common.keywords}" />
+<meta name="description" content="{$common.description}" />
+<!--#include file="common/mobile/api.html"-->
+</head>
+<body>
+<div id="main_body">
+	<!--#include file="common/mobile/head_nav.html"-->
+    <div class="main_member_body"> 
+    <!--if:{is_array($info)}-->
+    <h1>志愿者 <span class="f-red"> {$user.realname} </span> 近期情况</h1>
+        <fieldset class="layui-elem-field">
+            <legend>基本信息</legend>
+            <div class="layui-field-box">
+             	会员状态：<!--if:{$user['status']==1}--><font color="#006600">已认证<!--{else}--><font color="#FF0000">待认证<!--{/if}--></font><BR>
+           		累计时数：<?php echo intval($user['vtime'])?> 小时<BR>
+            	志愿星级：<?php echo vipstar($user['vtime'])?><BR>
+             	电子证书：<!--if:{$user['status']==1}--><a href="{$sys.siteurl}/member/cert/key-{$user.id}{$config.URL_HTML_SUFFIX}">点此查看</a><!--{else}-->-- <!--{/if}-->
+           </div>
+        </fieldset>
+        <fieldset class="layui-elem-field">
+            <legend>近期活动</legend>
+            <div class="layui-field-box">
+                <div class="list_box">
+                    <!--foreach:{$event $vo}-->
+                    <dl>
+                        <a href="{$sys.siteurl}/event/go/{$vo.id}{$config.URL_HTML_SUFFIX}">
+                        <dd><h2>{$vo.title}</h2></dd>
+                        </a>
+                    </dl>
+                    <!--{/foreach}-->
+                </div>
+           </div>
+        </fieldset> 
+        
+        <!--{else}-->
+        <form class="layui-form" onSubmit="return false;">
+        <table class="layui-table" lay-even="" lay-skin="nob">
+            <tr>
+            <tr><td><h2>注册编号:</h2></td></tr>
+            </tr>
+            <tr>
+            <td><input name="vdkey" id="vdkey" lay-verify="title" autocomplete="off" placeholder="请输入注册编号" class="layui-input" type="text"></td>
+            </tr>
+            <tr><td align="center" id="badu"><button class="layui-btn layui-btn-big layui-btn-danger layui-btn-radius" lay-submit="" lay-filter="btn_submit" id="btn_submit">下一步</button></td></tr>
+            </table>
+          </form>
+        <!--{/if}-->        
+    </div>
+	<!--#include file="common/mobile/foot.html"-->			
+</div>
+<script>
+layui.use(['form','element'], function(){
+  var form = layui.form();
+  var $ = layui.jquery,element = layui.element();
+  //监听提交
+  form.on('submit(btn_submit)', function(post){
+ 	 var vdkey=$("#vdkey").val();
+	  if (3>vdkey.length) return layer.msg('请正确输入注册编号', {icon: 5});;
+		$.post("__URL__/vtime.html",{vdkey:vdkey},function(data){
+			var status=data.status;
+			if (status==false){
+				layer.msg('查询失败 '+data.message, {icon: 5});
+			}else{
+				location.href = '__URL__/vtime/vkey-'+data.message+'.html';
+			};
+		},'json');	  
+    return false;
+  });
+});
+</script>
+</body>
+</html>

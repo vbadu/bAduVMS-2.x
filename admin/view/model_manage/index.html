@@ -1,0 +1,79 @@
+<div class="page_function">
+  <div class="info">
+    <h3>模型管理</h3>
+    <small>模型包括文章、图片、视频等发布功能</small> </div>
+  <div class="exercise"> 
+   <?php if(model('user_group')->model_power('model_manage','visit')){ ?>
+   <a href="javascript:menuload('__URL__/index')">模型列表</a>
+   <?php } ?>
+   <?php if(model('user_group')->model_power('model_manage','in')){ ?>
+   <a href="javascript:;" onclick="model_in('__URL__/in')">导入模型</a>
+   <?php } ?>
+   </div>
+</div>
+<div class="page_main">
+  <div class="page_table table_list">
+    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+      <tr>
+        <th width="10%"><center>ID</center></th>
+        <th width="30%">模型名称</th>
+        <th width="30%"><center>模型标识</center></th>
+        <th width="30%"><center>模型操作</center></th>
+      </tr>
+      <!--foreach:{$list $vo}-->
+      <tr>
+        <td><center>{$vo.mid}</center></td>
+        <td>{$vo.name}模型</td>
+        <td><center>{$vo.model}</center></td>
+        <td><center>
+        <?php if(model('user_group')->model_power('model_manage','config')){ ?>
+         <a  href="javascript:void(0);" onclick="edit('__URL__/setting/id-{$vo.mid}')">配置</a>
+         <?php } ?>
+         <?php if(model('user_group')->model_power('model_manage','out')){ ?>
+         <a href="javascript:void(0);" onclick="model_out('{$vo.mid}')">导出</a>
+         <?php } ?>
+         <?php if(model('user_group')->model_power('model_manage','del')){ ?>
+         <a href="javascript:void(0);" onclick="del('{$vo.mid}',this)">删除</a>
+         <?php } ?></center></td>
+      </tr>
+      <!--{/foreach}-->
+    </table>
+  </div>
+</div>
+
+<div class="page_tool">
+  <div class="page"></div>
+</div>
+<script>
+function edit(url) {
+	urldialog({
+	title:'模型配置',
+	url:url
+	});
+};
+function model_in(url) {
+	urldialog({
+	title:'模型导入',
+	url:url
+	});
+};
+function model_out(mid) {
+	ajaxpost({
+		name:'导出的文件将在网站目录下的"data/module"中，请自行下载！',
+		url:"__URL__/out",
+		data:{mid:mid},
+		tip:1
+	});
+};
+function del(mid,obj) {
+	ajaxpost({
+		name:'您确定要删除此模型？删除将不可恢复！',
+		url:"__URL__/del",
+		data:{mid:mid},
+		tip:1,
+		success:function(){
+		$(obj).parent().parent().parent().remove();	
+		}}
+	);
+};
+</script>

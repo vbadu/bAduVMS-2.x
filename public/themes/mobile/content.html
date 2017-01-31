@@ -1,0 +1,69 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="viewport" content="width=device-width, minimum-scale=1, maximum-scale=1">
+<title>{$common.title} - {$sys.copyright}</title>
+<meta name="keywords" content="{$common.keywords}" />
+<meta name="description" content="{$common.description}" />
+<!--#include file="common/mobile/api.html"-->
+</head>
+<body>
+<div id="main_body">
+	<!--#include file="common/mobile/head.html"-->
+	<section class="content">
+        <h1>{$info.title}</h1>
+        <blockquote>阅读:{$info.views}次 时间：{$info.updatetime time="Y-m-d h:i"}</blockquote>
+        <fieldset class="layui-elem-field">
+          <div class="layui-field-box text">
+            {$info.content}
+          </div>
+        </fieldset>
+        <!--#include file="common/mobile/share.html"-->	
+        <!-- Baidu Button BEGIN -->
+        <div id="share_label" style="border-bottom: none"><span>分享到 : </span></div>
+        <div class="bdsharebuttonbox" data-tag="share_1">
+            <a class="bds_qzone" data-cmd="qzone" href="#"></a>
+            <a class="bds_tsina" data-cmd="tsina"></a>
+            <a class="bds_sqq" data-cmd="sqq"></a>
+            <a class="bds_tieba" data-cmd="tieba"></a>
+            <a class="bds_more" data-cmd="more">更多</a>
+            <a class="bds_count" data-cmd="count"></a>
+        </div>
+		<script>
+            window._bd_share_config = {
+                common : {
+                    bdText : '{$info.title}',	
+                    bdDesc : '{$info.description}',	
+                    bdUrl : '{$sys.siteurl}{$info.aurl}', 	
+                    bdPic : '{$info.image}',
+                    bdSign : 'on',
+                },
+                share : [{
+                    "bdSize" : 32
+                }],
+                slide : [{	   
+                    bdImg : 0,
+                    bdPos : 'right',
+                    bdTop : 100
+                }],
+                image : [{
+                    viewType : 'list',
+                    viewPos : 'top',
+                    viewColor : 'black',
+                    viewSize : '16',
+                    viewList : ['qzone','tsina','huaban','tqq','weixin']
+                }],
+                selectShare : [{
+                    "bdselectMiniList" : ['qzone','tqq','tsina','weixin','bdxc']
+                }]
+            }
+            with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?cdnversion='+~(-new Date()/36e5)];
+        </script>        
+        <!-- Baidu Button END -->
+        <br style="clear: both">
+    </section>
+	<!--#include file="common/mobile/foot.html"-->			
+</div>
+</body>
+</html>

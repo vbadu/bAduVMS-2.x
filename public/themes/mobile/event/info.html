@@ -1,0 +1,207 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="viewport" content="width=device-width, minimum-scale=1, maximum-scale=1">
+<title>{$info.title} - {$sys.copyright}</title>
+<meta name="keywords" content="{$common.keywords}" />
+<meta name="description" content="{$common.description}" />
+<!--#include file="common/mobile/api.html"-->
+<script src="__PUBLIC__/layer/layer.js?ver=1"></script>
+</head>
+<body>
+<div id="main_body">
+	<!--#include file="common/mobile/head.html"-->
+	<section class="contents">
+        <h2>{$info.title}</h2>
+        <table class="layui-table sui-table">
+              <tbody>
+                <tr>
+                  <td width="70">招募对象：</td>
+                  <td class="left"><!--if:{$info['zmdx']==1}--><font color="#FF0000">注册志愿者<!--{else}--><font color="#006600">所有人<!--{/if}--></font></td>
+                </tr>
+                <tr>
+                  <td class="center">报名审核：</td>
+                  <td class="left"><!--if:{$info['zmbm']==1}--><font color="#006600">不需要审核即可参加活动<!--{else}--><font color="#FF0000">需要审核通过才能参加活动<!--{/if}--></font></td>
+                </tr>
+                <tr>
+                  <td class="center">活动费用：</td>
+                  <td class="left"><!--if:{$info['rmb']==1}-->
+                    免费
+                    <!--{else}-->
+                    <!--if:{$info['rmb']==2}-->
+                    AA制
+                    <!--{/if}-->
+                    <!--if:{$info['rmb']==3}-->
+                    自助
+                    <!--{/if}-->
+                    <!--if:{$info['rmb']==4}-->
+                    收费
+                    <!--{/if}-->
+                    <!--if:{$info['rmb']==5}-->
+                    其他
+                    <!--{/if}-->
+                    人均 {$info.rmbs} 元
+  <!--{/if}--></td>
+                </tr>
+                <tr>
+                  <td class="center">所在区域：</td>
+                  <td class="left">{$info.area}</td>
+                </tr>
+                <tr>
+                  <td class="center">活动时间：</td>
+                  <td class="left">{$info.stime time="Y-m-d H:i"} 至 {$info.etime time="Y-m-d H:i"}</td>
+                </tr>
+                <tr>
+                  <td>服务时数：</td>
+                  <td class="left">{$info.vtime} 小时</td>
+                </tr>
+                <tr>
+                  <td>招募人数：</td>
+                  <td class="left">{$info.zmrs} 人</td>
+                </tr>
+                <tr>
+                  <td>报名人数：</td>
+                  <td class="left">{$info.bmrs} 人</td>
+                </tr>
+                <tr>
+                  <td class="center">报名截止：</td>
+                  <td class="left">{$info.ztime time="Y-m-d H:i"}</td>
+                </tr>
+                <tr>
+                  <td class="center">集合地点：</td>
+                  <td class="left">{$info.zmdd}</td>
+                </tr>
+                <tr>
+                  <td>负 责 人：</td>
+                  <td class="left">{$info.zmr}</td>
+                </tr>
+                <tr>
+                  <td>联络电话：</td>
+                  <td class="left">{$info.zmtel}</td>
+                </tr>
+                </tbody>
+            </table>
+            <div class="layui-tab layui-tab-brief" lay-filter="docDemoTabBrief">
+              <ul class="layui-tab-title">
+                <li class="layui-this">活动说明</li>
+                <li>注意事项</li>
+                <li>报名条件</li>
+              </ul>
+              <div class="layui-tab-content">
+                <div class="layui-tab-item layui-show text">{$info.content html}</div>
+                <div class="layui-tab-item text">{$info.zmzy html}</div>
+                <div class="layui-tab-item text">{$info.zmtj html}</div>
+              </div>
+            </div>            
+            <div class="layui-tab layui-tab-brief" lay-filter="docDemoTabBrief">
+              <ul class="layui-tab-title">
+                <li class="layui-this">报名申请</li>
+                <li>通过名单</li>
+                <li>待审批或未通过名单</li>
+              </ul>
+              <div class="layui-tab-content">
+                <div class="layui-tab-item layui-show">
+                <!--if:{$info['status']>0}-->
+                <form class="layui-form" id="badu" onSubmit="return false;">
+                {$baoming}
+                abc
+                 <div class="layui-form-item">
+                    <div class="layui-input-block">
+						<input type="hidden" value="{$info.id}" name="eid">
+                      <button class="layui-btn" lay-submit="" lay-filter="btn_submit" id="btn_submit">提交报名</button>
+                    </div>
+                 </div>
+                </form>
+                <!--{else}-->
+                <blockquote class="layui-elem-quote">报名已截止，下次请赶早哦！</blockquote>
+                
+                <!--{/if}-->
+                </div>
+                <div class="layui-tab-item">
+                	<!--foreach:{$online $vo}-->
+                    <div class="m-hd_pic">
+                        <img src="{$php(model('badu')->get_photo($vo['uid']))}?ver=<?php echo time();?>" title="{$vo.uname}" alt="{$vo.uname}"/>
+                        {$vo.uname len="6"}
+                    </div>
+                    <!--{/foreach}--> 
+                </div>
+                <div class="layui-tab-item">
+                	<!--foreach:{$offline $vo}-->
+                    <div class="m-hd_pic">
+                        <img src="{$php(model('badu')->get_photo($vo['uid']))}?ver=<?php echo time();?>" title="{$vo.uname}" alt="{$vo.uname}"/>
+                        {$vo.uname len="6"}
+                    </div>
+                    <!--{/foreach}--> 
+                </div>
+              </div>
+            </div>            
+        <!--#include file="common/mobile/share.html"-->	
+        <!-- Baidu Button BEGIN -->
+        <div id="share_label" style="border-bottom: none"><span>分享到 : </span></div>
+        <div class="bdsharebuttonbox" data-tag="share_1">
+            <a class="bds_qzone" data-cmd="qzone" href="#"></a>
+            <a class="bds_tsina" data-cmd="tsina"></a>
+            <a class="bds_sqq" data-cmd="sqq"></a>
+            <a class="bds_tieba" data-cmd="tieba"></a>
+            <a class="bds_more" data-cmd="more">更多</a>
+            <a class="bds_count" data-cmd="count"></a>
+        </div>
+		<script>
+            window._bd_share_config = {
+                common : {
+                    bdText : '{$info.title}',	
+                    bdDesc : '{$info.description}',	
+                    bdUrl : '{$sys.siteurl}/event/{$info.id}.html', 	
+                    bdPic : '{$info.image}',
+                    bdSign : 'on',
+                },
+                share : [{
+                    "bdSize" : 32
+                }],
+                slide : [{	   
+                    bdImg : 0,
+                    bdPos : 'right',
+                    bdTop : 100
+                }],
+                image : [{
+                    viewType : 'list',
+                    viewPos : 'top',
+                    viewColor : 'black',
+                    viewSize : '16',
+                    viewList : ['qzone','tsina','huaban','tqq','weixin']
+                }],
+                selectShare : [{
+                    "bdselectMiniList" : ['qzone','tqq','tsina','weixin','bdxc']
+                }]
+            }
+            with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?cdnversion='+~(-new Date()/36e5)];
+        </script>        
+        <!-- Baidu Button END -->
+        <br style="clear: both">
+    </section>
+	<!--#include file="common/mobile/foot.html"-->			
+</div>
+<script>
+layui.use(['form','element'], function(){
+  var form = layui.form();
+  var $ = layui.jquery,element = layui.element();
+  //监听提交
+  form.on('submit(btn_submit)', function(post){
+		$.post("__URL__/baoming.html",{data:post.field},function(data){
+			var status=data.status;
+			if (status==false){
+				layer.msg('操作失败！ '+data.message, {icon: 5});
+			}else{
+				layer.msg(data.message, {icon: 1,time: 2000}, function(){
+					location.href = '__URL__/go/{$info.id}.html';
+				}); 
+			};
+		},'json');	  
+    return false;
+  });
+});
+</script>
+<!--END-->
+</body>
+</html>

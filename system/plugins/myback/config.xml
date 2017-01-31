@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<config>
+<name>数据备份</name>
+<file>myback</file>
+<ver>1</ver>
+<author>jacochan</author>
+<info>本功能提供数据库备份和原还，数据库默认备份在 data/dbback/ 下 以每次备份时间为目录,目录内有ver.xml 文件为当前数据备份信息</info>
+<prefix>dc_</prefix>
+</config>

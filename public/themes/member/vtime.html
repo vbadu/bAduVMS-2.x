@@ -1,0 +1,127 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title><!--if:{$user['realname']}-->志愿者{$user.realname}的<!--{/if}-->{$common.title} - {$sys.copyright}</title>
+<meta name="keywords" content="{$common.keywords}" />
+<meta name="description" content="{$common.description}" />
+<!--#include file="common/api.html"-->
+<link type="text/css" rel="stylesheet" href="__PUBLIC__/css/style_member.css" />
+</head>
+<body>
+<!--头部-->
+<!--#include file="common/head.html"-->
+<!--END-->
+<div id="main">
+	<div id="position" class="graybg">
+		<div class="fl"><!--#include file="member/nav.html"-->{$common.title}</div>
+   		<!--#include file="common/api_search.html"-->
+	</div>
+    <div class="listpage">
+        <div class="fl col-sub box">
+            <div class="top"><h2><span>{$common.title}</span></h2></div>
+            <div class="mainbody">
+                <ul class="leftnav">
+                	<!--#include file="member/left.html"-->
+                 </ul>
+            </div>
+            <div class="bt"></div>
+        </div>
+        <div class="fr col-main">
+        <!--if:{is_array($info)}-->
+		<div class="m-padding">
+            <div class="m-hd">
+                <div class="title">
+                    <div class="pic">
+                        <img src="#thumb{$user['image'],60,60,1}#" alt="{$user.name}"/>
+                    </div>
+                    <h3>志愿者 <span class="f-red"> {$user.realname} </span>近期的情况如下：</h3>
+              </div>
+              <div class="f-cb"></div>
+            </div>
+            <div class="clear"></div>
+            <div class="m-user-box">
+              <div class="top-box ">
+                <div class="m-tips-box">
+                  <dl>
+                    <dt>会员状态：</dt>
+                    <dd><!--if:{$user['status']==1}--><font color="#006600">已认证<!--{else}--><font color="#FF0000">待认证<!--{/if}--></font></dd>
+                  </dl>
+                  <dl>
+                    <dt>累计时数：</dt>
+                    <dd><?php echo intval($user['vtime'])?> 小时</dd>
+                  </dl>
+                  <dl>
+                    <dt>志愿星级：</dt>
+                    <dd><font color="red">#vipstar{$user.vtime}#</font></dd>
+                  </dl>
+                  <dl>
+                    <dt>电子证书：</dt>
+                    <dd><!--if:{$user['status']==1}--><a href="{$sys.siteurl}/member/cert/key-{$user.id}{$config.URL_HTML_SUFFIX}">点此查看</a><!--{else}-->-- <!--{/if}--></dd>
+                  </dl>
+                </div>
+              </div>
+              <div class="f-cb"></div>
+            </div>
+            <div class="m-hd-box">
+              <h2>{$user.name}近期关注的活动</h2>
+            </div>
+            <div class="m-lst-box m-lst-box-2">
+              <ul>
+                    <!--foreach:{$event $vo}-->
+                    <li><a href="{$sys.siteurl}/event/go/{$vo.id}{$config.URL_HTML_SUFFIX}" title="查看《 {$vo.title} 》活动介绍" target="_blank">{$vo.title len="60"}</a></li>
+                    <!--{/foreach}-->
+              </ul>
+            </div>
+            
+            
+            </div>        
+        
+        
+        <!--{else}-->
+            <div class="nopad">
+                <h1 style="font-size:3em">{$common.title}</h1>
+            </div>
+			<form method="post" class="sui-form form-horizontal sui-validate login_area" id="badu" onSubmit="return false;">
+                <div class="control-group">
+                    <label for="inputEmail" class="control-label">注册编号：</label>
+                    <div class="controls">
+                    	<input id="vdkey" placeholder="请输入注册编号" type="text" name="vdkey" maxlength="60" class="input-xfat input-large" data-rules="required">
+                    </div>
+                </div>
+                <div class="control-group">
+               		<label class="control-label"></label>
+                	<div class="controls btn">
+                        <button type="submit" class="sui-btn btn-large btn-danger" id="btn_submit">
+                            <i class="sui-icon icon-touch-right-rect"></i> 下一步
+                        </button>
+                	</div>
+                </div>
+            </form>
+        <!--{/if}-->
+        </div>
+	</div>
+</div>
+<div class="claer"></div>
+<script language="javascript">
+$(function(){ 
+	$('#btn_submit').click(function(){
+		if (3>$("#vdkey").val().length) return;
+		$.post("__URL__/vtime.html",$('#badu').serialize(),function(data){
+			var status=data.status;
+			if (status==false){
+				layer.msg('查询失败'+data.message, {icon: 5});
+			}else{
+				location.href = '__URL__/vtime/vkey-'+data.message+'.html';
+			};
+		},'json');
+	});
+}); 
+</script>
+<!--END-->
+<!--底部-->
+<!--#include file="common/foot.html"-->
+<!--END-->
+</div>
+</body>
+</html>

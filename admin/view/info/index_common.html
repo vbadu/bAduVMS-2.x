@@ -1,0 +1,52 @@
+<script>
+function quickeditor(url,title){
+	urldialog({
+	title:title,
+	url:url,
+	width:550,
+	height:570
+	});
+}
+//选择
+function selectall(name){   
+    $("[name='"+name+"']").each(function(){//反选   
+    if($(this).attr("checked")){   
+          $(this).removeAttr("checked");   
+    }else{   
+          $(this).attr("checked",'true');   
+    }   
+    })  
+}
+//批量操作
+function audit(status){
+	var str="";
+	$("[name='id[]']").each(function(){//反选   
+    if($(this).attr("checked")){
+		  str+=$(this).val()+","; 
+    }
+    })
+	
+	ajaxpost({
+		name:'您确认要继续进行操作吗？操作将无法撤销！',
+		url:"__URL__/batch",
+		data:{status: status, id:str},
+		tip:1,
+		success:function(){
+			window.location.reload();	
+		}
+	});
+}
+//删除
+function del(id,obj) {
+	var obj;
+	ajaxpost({
+		name:'确认要删除本内容吗?删除无法恢复！',
+		url:"__URL__/del",
+		data:{id: id},
+		tip:1,
+		success:function(){
+			$(obj).parent().parent().parent().remove();
+		}
+	});
+}
+</script>

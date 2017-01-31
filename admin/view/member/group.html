@@ -1,0 +1,59 @@
+<div class="page_function">
+  <div class="info">
+    <h3>{$action_name}管理</h3>
+    <small>使用以下功能进行{$action_name}管理操作</small> </div>
+  <div class="exercise"> 
+   <a href="javascript:menuload('__URL__/group')">所有列表</a>
+   <?php if(model('user_group')->model_power('user_group','add')){ ?>
+   <a href="javascript:menuload('__URL__/edit_group')">添加{$action_name}</a>
+   <?php } ?>
+   </div>
+</div>
+<div class="page_main">
+  <div class="page_table table_list">
+    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+      <tr>
+        <th width="10%"><center>ID</center></th>
+        <th width="70%"><center>会员组名称</center></th>
+        <th width="70%"><center>会员组类型</center></th>
+        <th width="70%"><center>会员组类别</center></th>
+        <th width="30%"><center>操作</center></th>
+      </tr>
+      <!--foreach:{$list $vo}-->
+      <tr>
+        <td><center>{$vo.id}</center></td>
+        <td><center>{$vo.name}</center></td>
+        <td><center><!--if:{$vo['type']==1}-->自动升级<!--{else}-->人工授权<!--{/if}--></center></td>
+        <td><center><!--if:{$vo['keep']==1}-->系统保留<!--{else}-->自定义<!--{/if}-->会员组</center></td>
+        <td><center>
+        <?php if(model('user_group')->model_power('user_group','edit')){ ?>
+        <a href="__URL__/edit_group/id-{$vo.id}">设置</a>
+        <?php } ?>
+        <?php if(model('user_group')->model_power('user_group','del') && $vo['keep']!=1){ ?>
+        &nbsp;&nbsp;<a href="javascript:void(0);" onclick="del('{$vo.id}',this)">删除</a>
+        <?php } ?>
+        </center></td>
+      </tr>
+      <!--{/foreach}-->
+    </table>
+  </div>
+</div>
+
+<div class="page_tool">
+  <div class="page"></div>
+</div>
+<script>
+//删除
+function del(id,obj) {
+	var obj;
+	ajaxpost({
+		name:'删除此用户组会删除用户组下的用户！',
+		url:"__URL__/set",
+		data:{id: id,zt:4},
+		tip:1,
+		success:function(){
+			$(obj).parent().parent().parent().remove();
+		}
+	});
+}
+</script>

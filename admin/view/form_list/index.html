@@ -1,0 +1,74 @@
+<div class="page_function">
+  <div class="info">
+    <h3>{$info.name}管理</h3>
+    <small>可以添加或者修改{$info.name}</small> </div>
+  <div class="exercise"> 
+   <a href="__URL__/index/id-{$info.id}">内容列表</a>
+   <?php if(model('user_group')->form_power($info['table'],'add')){ ?>
+   <a href="javascript:menuload('__URL__/add/id-{$info.id}')">添加内容</a>
+   <?php } ?>
+   </div>
+</div>
+<div class="page_main">
+  <div class="page_table table_list">
+    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+      <tr>
+        <th><center>编号</center></th>
+        <th><center>姓名昵称</center></th>
+        <th><center>电话</center></th>
+        <th><center>时数</center></th>
+        <!--foreach:{$field_list $vo}-->
+        <th><center>{$vo.name}</center></th>
+        <!--{/foreach}-->
+        <th><center>报名时间</center></th>
+        <th><center>审批状态</center></th>
+      </tr>
+      <!--foreach:{$list $vo}-->
+      <tr>
+        <td nowrap="nowrap"><input name="id[]" value="{$vo.id}" type="checkbox" /> <a href="javascript:;" onclick="openart('__APP__/member/edit/id-{$vo.uid}','查看{$vo.uname}资料')">{$vo.vcard len="9"}</a></td>
+        <td><center>{$vo.uname len="9"}</center></td>
+        <td><center>{$vo.tel}</center></td>
+        <td><center>{$vo.vtime}</center></td>
+        <!--foreach:{$field_list $model}-->
+        <td><center>
+        <?php
+        if($model['admin_html']<>''){
+        eval(html_out(str_replace('{content}', $vo[$model['field']] ,$model['admin_html'])));
+        }else{
+        echo model('form_list')->get_list_model($model['type'],$vo[$model['field']],$model['config']);
+        }
+        ?>
+        </center></td>
+        <!--{/foreach}-->
+        <td><center>{$vo.dtime time="Y-m-d H:i"}</center></td>
+        <td><center>
+        <!--if:{$vo['status']==0}--><font color="blge">待审批</font><!--{/if}--> 
+        <!--if:{$vo['status']==1}--><font color="blue">已通过</font><!--{/if}--> 
+        <!--if:{$vo['status']==2}--><font color="red">未通过</font><!--{/if}--> 
+        <!--if:{$vo['status']==3}--><font color="gree">已请假</font><!--{/if}--> 
+        <!--if:{$vo['status']==4}--><font color="#CC9933">已缺席</font><!--{/if}-->         
+        </center></td>
+      </tr>
+      <!--{/foreach}-->
+    </table>
+  </div>
+</div>
+
+<div class="page_tool">
+  <div class="page">{$page}</div>
+</div>
+<script>
+//删除
+function del(id,obj) {
+	var obj;
+	ajaxpost({
+		name:'确定要删除此记录？',
+		url:"__URL__/del",
+		data:{id: id,fid: {$info.id}},
+		tip:1,
+		success:function(){
+			$(obj).parent().parent().parent().remove();
+		}
+	});
+}
+</script>

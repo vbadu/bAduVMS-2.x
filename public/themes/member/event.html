@@ -1,0 +1,93 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>{$common.title} - {$sys.copyright}</title>
+<meta name="keywords" content="{$common.keywords}" />
+<meta name="description" content="{$common.description}" />
+<!--#include file="common/api.html"-->
+<link type="text/css" rel="stylesheet" href="__PUBLIC__/css/style_member.css" />
+</head>
+<body>
+<!--头部-->
+<!--#include file="common/head.html"-->
+<!--END-->
+<div id="main">
+	<div id="position" class="graybg">
+		<div class="fl"><!--#include file="member/nav.html"-->{$common.title}</div>
+		<!--#include file="common/api_search.html"-->
+	</div>
+    <div class="listpage">
+        <div class="fl col-sub box">
+            <div class="top"><h2><span>{$common.title}</span></h2></div>
+            <div class="mainbody">
+                <ul class="leftnav">
+                	<!--#include file="member/left.html"-->
+                 </ul>
+            </div>
+            <div class="bt"></div>
+        </div>
+        <div class="fr col-main">
+        	<div class="m-padding">
+                <br>
+                <ul class="sui-nav nav-tabs nav-large tab-navbar">
+                    <li<!--if:{$navzt==0}--> class="active"<!--{/if}-->><a href="__URL__/event/index{$config.URL_HTML_SUFFIX}">所有活动</a></li>
+                    <li<!--if:{$navzt==1}--> class="active"<!--{/if}-->><a href="__URL__/event/status-1{$config.URL_HTML_SUFFIX}">即将开始</a></li>
+                    <li<!--if:{$navzt==2}--> class="active"<!--{/if}-->><a href="__URL__/event/status-2{$config.URL_HTML_SUFFIX}">进行中</a></li>
+                    <li<!--if:{$navzt==3}--> class="active"<!--{/if}-->><a href="__URL__/event/status-3{$config.URL_HTML_SUFFIX}">已结束</a></li>
+                </ul>
+                <!--foreach:{$event $vo}-->
+                <table class="sui-table table-bordered">
+                  <thead>
+                    <tr>
+                      <th colspan="3"> 
+                        <label class="checkbox pull-left">
+						<?php model('event')->check_event_status($vo['eid'],$vo['zts'],$vo['zt'],$vo['status'],1,$vo['vtime'],$vo['ztime'],$vo['stime'],$vo['etime'],$vo['zmr'],$vo['zmtel']);?>
+                        </label><span class="pull-right">报名时间：{$vo.dtime time="Y-m-d H:i:s"}</span>
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>
+                        <a href="{$sys.siteurl}/event/go/{$vo.eid}{$config.URL_HTML_SUFFIX}" title="查看《 {$vo.title} 》活动介绍" target="_blank" class="block-text btn-small">{$vo.title len="60"}</a>
+                      </td>
+                      <td rowspan="2" class="center" width="50px"><p class="btn-small">#event_status{$vo['status']}#</p></td>
+                      <td rowspan="2" class="center" width="75px"><?php $status=model('event')->check_event_status($vo['eid'],$vo['zts'],$vo['zt'],$vo['status'],0,$vo['vtime'],$vo['ztime'],$vo['stime'],$vo['etime']);?>
+                        <ul class="unstyled btn-small">
+                        <!--if:{$status==true}-->
+                        <!--if:{$vo['status']==0}--><li><a href="javascript:void(0);" onclick="set({$vo.eid},6)" class="sui-btn btn-small btn-danger">取消报名</a></li><!--{/if}--><!--if:{$vo['status']==1}--><li><a href="javascript:void(0);" onclick="set({$vo.eid},3)" class="sui-btn btn-small btn-success">请假</a></li><!--{/if}--><!--if:{$vo['status']==3}--><li><a href="javascript:void(0);" onclick="set({$vo.eid},0)" class="sui-btn btn-small btn-info">重新报名</a></li><!--{/if}--><!--if:{$vo['status']==4}--><li><a href="javascript:void(0);" onclick="set({$vo.eid},0)" class="sui-btn btn-small btn-info">重新报名</a></li><!--{/if}--><!--if:{$vo['status']==6}--><li><a href="javascript:void(0);" onclick="set({$vo.eid},0)" class="sui-btn btn-small btn-info">重新报名</a></li><!--{/if}-->
+                        <!--{else}-->
+                        <li><a href="{$sys.siteurl}/event/share/{$vo.eid}{$config.URL_HTML_SUFFIX}" target="_blank" class="sui-btn btn-small">活动分享</a></li>
+                        <!--{/if}--></ul>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+                <!--{/foreach}-->
+                <div class="pagination"><ul>{$page}</ul></div>
+			</div>
+        </div>
+	</div>
+</div>
+<div class="claer"></div>
+<!--END-->
+<script>
+function set(id,status){
+	if (1>id.length) return;
+	if (1>status.length) return;
+	$.post("__URL__/event.html",{id:id,status:status},function(data){
+		var status=data.status;
+		if (status==false){
+			layer.msg('操作失败！'+data.message, {icon: 5});
+		}else{
+			layer.msg(data.message, {icon: 1});
+ 		};
+	},'json');}
+</script>
+<!--底部-->
+<!--#include file="common/foot.html"-->
+<!--END-->
+</div>
+</body>
+</html>
