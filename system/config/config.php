@@ -83,6 +83,6 @@ $config['PLUGIN_SUFFIX']='Plugin.class.php';//插件模块后缀
 $config['KEY']='XDcFdsfeERWQ';
 
 //版本
-$config['ver'] = '2.0.4'; //版本号
+$config['ver'] = '2.0.5'; //版本号
 $config['ver_name'] = 'bAduVMS'; //版本名称
 $config['ver_date'] = '20170130'; //版本时间
