@@ -1,14 +1,16 @@
 <?php
-require (dirname(__file__) . '/data.php'); //载入附加信息
+require (dirname(__file__) . '/data.php');
+require (dirname(__file__) . '/ver.php'); 
 
 //站点信息
-$config['sitename']='八度义工协会';
+$config['sitename']='八度义工协会1';
 $config['seoname']='八度义工协会';
-$config['siteurl']='http://rmb.com';
+$config['siteurl']='http://baduvms.cn';
 $config['keywords']='八度义工协会';
 $config['description']='八度义工协会';
 $config['masteremail']='admin@baduvms.cn';
 $config['copyright']='八度义工协会';
+$config['certauthority']='八度市义工协会';
 $config['helponline']='0793-8300869';
 //会员设置
 $config['VIP_AUTO']=true;//是否自动生成编号
@@ -69,20 +71,12 @@ $config['HTML_CACHE_RULE']['search']['*']=5;//缓存时间,单位：秒
 	
 //数据库设置
 $config['DB_CACHE_ON']=false;//是否开启数据库缓存，true开启，false不开启
-$config['DB_CACHE_TYPE']='FileCache';///缓存类型，FileCache或Memcache或
+$config['DB_CACHE_TYPE']='FileCache';///缓存类型，FileCache或Memcache或SaeMemcache
 
 //模板缓存
 $config['TPL_CACHE_ON']=false;//是否开启模板缓存，true开启,false不开启
-$config['TPL_CACHE_TYPE']='';//数据缓存类型，为空或Memcache或，其中为空为普通文件缓存
+$config['TPL_CACHE_TYPE']='';//数据缓存类型，为空或Memcache或SaeMemcache，其中为空为普通文件缓存
 
-//插件配置         
-$config['PLUGIN_PATH']='./system/plugins/';//插件目录         
-$config['PLUGIN_SUFFIX']='Plugin.class.php';//插件模块后缀
 
 //附加
 $config['KEY']='XDcFdsfeERWQ';
-
-//版本
-$config['ver'] = '2.0.5'; //版本号
-$config['ver_name'] = 'bAduVMS'; //版本名称
-$config['ver_date'] = '20170130'; //版本时间

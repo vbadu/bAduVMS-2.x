@@ -35,8 +35,7 @@
               </tbody>
             </table>
             <div class="panel-foot">
-            <?php model('event')->check_event_status($vo['eid'],$vo['zts'],$vo['zt'],$vo['status'],1,$vo['vtime'],$vo['ztime'],$vo['stime'],$vo['etime'],$vo['zmr'],$vo['zmtel']);?>
-            <span class="pull-right">报名时间：{$vo.dtime time="Y-m-d H:i:s"}</span>
+            <?php $status=model('event')->check_event_status($vo,1);?>
             </div>
         </div>
 		<!--{/foreach}-->

@@ -42,7 +42,7 @@
                     <tr>
                       <th colspan="3"> 
                         <label class="checkbox pull-left">
-						<?php model('event')->check_event_status($vo['eid'],$vo['zts'],$vo['zt'],$vo['status'],1,$vo['vtime'],$vo['ztime'],$vo['stime'],$vo['etime'],$vo['zmr'],$vo['zmtel']);?>
+						<?php model('event')->check_event_status($vo,1);?>
                         </label><span class="pull-right">报名时间：{$vo.dtime time="Y-m-d H:i:s"}</span>
                       </th>
                     </tr>
@@ -53,7 +53,7 @@
                         <a href="{$sys.siteurl}/event/go/{$vo.eid}{$config.URL_HTML_SUFFIX}" title="查看《 {$vo.title} 》活动介绍" target="_blank" class="block-text btn-small">{$vo.title len="60"}</a>
                       </td>
                       <td rowspan="2" class="center" width="50px"><p class="btn-small">#event_status{$vo['status']}#</p></td>
-                      <td rowspan="2" class="center" width="75px"><?php $status=model('event')->check_event_status($vo['eid'],$vo['zts'],$vo['zt'],$vo['status'],0,$vo['vtime'],$vo['ztime'],$vo['stime'],$vo['etime']);?>
+                      <td rowspan="2" class="center" width="75px"><?php $status=model('event')->check_event_status($vo,0);?>
                         <ul class="unstyled btn-small">
                         <!--if:{$status==true}-->
                         <!--if:{$vo['status']==0}--><li><a href="javascript:void(0);" onclick="set({$vo.eid},6)" class="sui-btn btn-small btn-danger">取消报名</a></li><!--{/if}--><!--if:{$vo['status']==1}--><li><a href="javascript:void(0);" onclick="set({$vo.eid},3)" class="sui-btn btn-small btn-success">请假</a></li><!--{/if}--><!--if:{$vo['status']==3}--><li><a href="javascript:void(0);" onclick="set({$vo.eid},0)" class="sui-btn btn-small btn-info">重新报名</a></li><!--{/if}--><!--if:{$vo['status']==4}--><li><a href="javascript:void(0);" onclick="set({$vo.eid},0)" class="sui-btn btn-small btn-info">重新报名</a></li><!--{/if}--><!--if:{$vo['status']==6}--><li><a href="javascript:void(0);" onclick="set({$vo.eid},0)" class="sui-btn btn-small btn-info">重新报名</a></li><!--{/if}-->
