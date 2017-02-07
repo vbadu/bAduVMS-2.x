@@ -5,7 +5,7 @@ require (dirname(__file__) . '/ver.php');
 //站点信息
 $config['sitename']='八度义工协会1';
 $config['seoname']='八度义工协会';
-$config['siteurl']='http://baduvms.cn';
+$config['siteurl']='http://rmb.com';
 $config['keywords']='八度义工协会';
 $config['description']='八度义工协会';
 $config['masteremail']='admin@baduvms.cn';
