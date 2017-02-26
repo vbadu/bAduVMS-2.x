@@ -5,10 +5,10 @@ require (dirname(__file__) . '/ver.php');
 //站点信息
 $config['sitename']='八度义工协会1';
 $config['seoname']='八度义工协会';
-$config['siteurl']='http://rmb.com';
+$config['siteurl']='http://zyzcms.net';
 $config['keywords']='八度义工协会';
 $config['description']='八度义工协会';
-$config['masteremail']='admin@baduvms.cn';
+$config['masteremail']='admin@zyzcms.net';
 $config['copyright']='八度义工协会';
 $config['certauthority']='八度市义工协会';
 $config['helponline']='0793-8300869';
@@ -27,7 +27,7 @@ $config['URL_HTML_MODEL']='2'; //伪静态样式
 
 //手机设置
 $config['MOBILE_OPEN']=true; //手机版开关
-$config['MOBILE_DOMAIN']='baduvms.cn';
+$config['MOBILE_DOMAIN']='zyzcms.net';
 
 //上传设置
 $config['ACCESSPRY_SIZE']=500; //附件大小，单位M

@@ -17,7 +17,13 @@
     <div class="main_member_body"> 
         <form class="layui-form">
         <table class="layui-table" lay-even="" lay-skin="nob">
-            <tr>
+			<!--if:{$info['status']==1}-->
+			<tr>
+            <td width="60">编号：</td>
+            <td><input value="{$info.vcard}" readonly="readonly"  class="layui-input" type="text"></td>
+            </tr>
+			<!--{/if}-->
+			<tr>
             <td width="60">昵称花名</td>
             <td><input value="{$info.nicename}" name="nicename" lay-verify="title" autocomplete="off" placeholder="请输入您的昵称，日后可更换" class="layui-input" type="text"></td>
             </tr>

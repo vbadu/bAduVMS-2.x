@@ -25,6 +25,7 @@
         <div class="m_user_re">
         	{$user.nicename}，欢迎您！<br>
             会员状态：<!--if:{$user['status']==1}-->认证义工<!--{else}-->待认证会员<!--{/if}--><br>
+			<!--if:{$user['status']==1}-->注册编号：{$user.vcard}<br><!--{/if}-->
             累计登录：{$user.loginnum} 次
         </div>
       </div>

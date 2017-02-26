@@ -240,7 +240,7 @@ member{margin: 0 auto 4.125rem auto; overflow: hidden; display: block; position:
 .user_header_bg{display:block;width:70px;height:70px; position:relative; z-index:2; }
 .user_header_bg:before{content:'';width:70px;height:70px; box-shadow: 0 0 0 5px #fff; position:absolute;left:0px;bottom:0px;right:0px;top:0px; z-index:-1;border-radius:50%; opacity:0.2}
 .user_header_bg:after{content:'';width:70px;height:70px; box-shadow: 0 0 0 10px #fff; position:absolute;left:0px;bottom:0px;right:0px;top:0px; z-index:-1;border-radius:50%; opacity:0.2}
-.member_header_info{ padding:25px 0 40px 115px;color:#fff; line-height:25px; position:absolute;left:0px;top:0px;}
+.member_header_info{ padding:15px 0 40px 115px;color:#fff; line-height:25px; position:absolute;left:0px;top:0px;}
 .m_user_name{ font-size:18px;}
 .m_user_re{ position:relative}
 .container{width:150px;}

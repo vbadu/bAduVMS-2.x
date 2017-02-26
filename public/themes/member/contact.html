@@ -7,7 +7,6 @@
 <meta name="description" content="{$common.description}" />
 <!--#include file="common/api.html"-->
 <link type="text/css" rel="stylesheet" href="__PUBLIC__/css/style_member.css" />
-<script src="__PUBLIC__/js/area.js"></script>
 </head>
 <body>
 <!--头部-->
@@ -49,16 +48,7 @@
                 </div>
                 <div class="control-group">
                     <label for="inputGender" class="control-label">联系地址：</label>
-                    <div id="treeGroup" name="area"></div>
-                    <script>
-                    $(function() {
-                      $('#treeGroup').tree({src : '__URL__/getAreaJson',placeholder : '-- 请选择 --',val : [{$info.area}], key : 'id',jsonp : true,title:'area'});
-                    })
-                    </script>
-                </div>
-                <div class="control-group">
-                    <label class="control-label"></label>
-                    <div class="controls"><input id="address" name="address" placeholder="请输入您的联系地址" data-rules="required" value="{$info.address}" type="text" class="input-xxlarge"> </div>
+                    <div class="controls">{$info.area}<input id="address" name="address" placeholder="请输入您的联系地址" data-rules="required" value="{$info.address}" type="text" class="input-xxlarge"> </div>
                 </div>
                 <div class="control-group">
                     <label class="control-label"></label>

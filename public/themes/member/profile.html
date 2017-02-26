@@ -7,6 +7,7 @@
 <meta name="description" content="{$common.description}" />
 <!--#include file="common/api.html"-->
 <link type="text/css" rel="stylesheet" href="__PUBLIC__/css/style_member.css" />
+<script src="__PUBLIC__/js/sui.min.js"></script>
 </head>
 <body>
 <!--头部-->
@@ -30,6 +31,12 @@
         <div class="fr col-main">
             <div class="m-padding"></div>
                 <form class="sui-form form-horizontal sui-validate" id="badu" onSubmit="return false;">
+				<!--if:{$info['status']==1}-->
+                <div class="control-group">
+                    <label class="control-label">编号：</label>
+                    <div class="controls"><input readonly="readonly" value="{$info.vcard}" type="text"></div>
+                </div>
+				<!--{/if}-->
                 <div class="control-group">
                     <label class="control-label">昵称：</label>
                     <div class="controls"><input id="nicename" name="nicename" placeholder="请输入您的昵称" data-rules="required" value="{$info.nicename}" type="text"></div>

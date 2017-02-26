@@ -125,37 +125,6 @@
             <?php }?></td>
           <td> 开启静态缓存后更改模板与设置请先清除缓存 </td>
         </tr>
-        <tr class="htmlcache">
-          <td width="120">首页更新时间</td>
-          <td><input name="HTML_CACHE_RULE|index|*" type="text" class="text_value" value="<?php echo $config_array['HTML_CACHE_RULE']['index']['*'] ?>" /></td>
-          <td>(单位：秒) 开启智能生成静态后有效</td>
-        </tr>
-        <tr class="htmlcache">
-          <td width="120">其他页更新时间</td>
-          <td><input name="HTML_CACHE_RULE|empty|*" type="text" class="text_value" value="<?php echo $config_array['HTML_CACHE_RULE']['empty']['*'] ?>" /></td>
-          <td>(单位：秒) 开启智能生成静态后有效</td>
-        </tr>
-        <tr class="htmlcache">
-          <td width="120">搜索更新时间</td>
-          <td><input name="HTML_CACHE_RULE|search|*" type="text" class="text_value" value="<?php echo $config_array['HTML_CACHE_RULE']['search']['*'] ?>" /></td>
-          <td>(单位：秒) 开启智能生成静态后有效</td>
-        </tr>
-        <tr>
-          <td>数据库缓存</td>
-          <td><?php if($config_array['DB_CACHE_ON']){ ?>
-            <input type="radio" name="DB_CACHE_ON" id="DB_CACHE_ON" value="true"   checked="checked"/>
-            <label>开启</label>
-            <input type="radio" name="DB_CACHE_ON" value="false" />
-            <label>关闭</label>
-            <?php }else{?>
-            <input type="radio" name="DB_CACHE_ON" value="true" />
-            <label>开启</label>
-            <input type="radio" name="DB_CACHE_ON" id="DB_CACHE_ON" value="false"  checked="checked" />
-            <label>关闭</label>
-            <?php }?></td>
-          <td>建议网站上线后开启</td>
-        </tr>
-
         <tr>
           <td>模板缓存</td>
           <td><?php if($config_array['TPL_CACHE_ON']){ ?>
@@ -186,11 +155,6 @@
             <label>关闭</label>
             <?php }?></td>
           <td> 注意：开启手机版后请自行移动手机模板</td>
-        </tr>
-        <tr class="mobile" style=" display:none">
-          <td width="120">手机版绑定域名</td>
-          <td><input name="MOBILE_DOMAIN" type="text" class="text_value" id="MOBILE_DOMAIN" value="<?php echo $config_array['MOBILE_DOMAIN'] ?>" /></td>
-          <td>开启手机版后生效，需绑定二级或者顶级域名，如：m.vbadu.com</td>
         </tr>
       </table>
     </div>
@@ -226,21 +190,6 @@
           <td width="120">TAG主页模板</td>
           <td><input name="TPL_TAGS_INDEX" type="text" class="text_value" id="TPL_TAGS_INDEX" value="{$config_array.TPL_TAGS_INDEX}" /></td>
           <td>定义网站TAG集合页的模板</td>
-        </tr>
-        <tr>
-          <td width="120">搜索结果分页数</td>
-          <td><input name="TPL_SEARCH_PAGE" type="text" class="text_value" id="TPL_SEARCH_PAGE" value="{$config_array.TPL_SEARCH_PAGE}" /></td>
-          <td>针对搜索结果的每页分页数</td>
-        </tr>
-        <tr>
-          <td width="120">TAG内容分页数</td>
-          <td><input name="TPL_TAGS_PAGE" type="text" class="text_value" id="TPL_TAGS_PAGE" value="{$config_array.TPL_TAGS_PAGE}" /></td>
-          <td>TAG内容列表每页显示数量</td>
-        </tr>
-        <tr>
-          <td width="120">TAG主页分页数</td>
-          <td><input name="TPL_TAGS_INDEX_PAGE" type="text" class="text_value" id="TPL_TAGS_INDEX_PAGE" value="{$config_array.TPL_TAGS_INDEX_PAGE}" /></td>
-          <td>TAG集合页每页显示数量</td>
         </tr>
       </table>
     </div>
