@@ -1,0 +1,90 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>{$common.title} - {$sys.copyright}</title>
+<meta name="keywords" content="{$common.keywords}" />
+<meta name="description" content="{$common.description}" />
+<!--#include file="common/api.html"-->
+<link type="text/css" rel="stylesheet" href="__PUBLIC__/css/style_member.css" />
+</head>
+<body>
+<!--头部-->
+<!--#include file="common/head.html"-->
+<!--END-->
+<div id="main">
+	<div id="position" class="graybg">
+		<div class="fl"><!--#include file="member/nav.html"-->{$common.title}</div>
+   		<!--#include file="common/api_search.html"-->
+	</div>
+    <div class="listpage">
+        <div class="fl col-sub box">
+            <div class="top"><h2><span>{$common.title}</span></h2></div>
+            <div class="mainbody">
+                <ul class="leftnav">
+                	<!--#include file="member/left.html"-->
+                 </ul>
+            </div>
+            <div class="bt"></div>
+        </div>
+        <div class="fr col-main">
+            <div class="nopad">
+                <h1 style="font-size:3em">会员中心</h1>
+            </div>
+			<form method="post" class="sui-form form-horizontal sui-validate login_area" id="badu" onSubmit="return false;">
+                <div class="control-group">
+                    <label for="inputEmail" class="control-label">帐号：</label>
+                    <div class="controls">
+                    	<input id="id" placeholder="请输入义工卡号或手机" type="text" name="id" maxlength="18" class="input-xfat" data-rules="required">
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label for="inputPassword" class="control-label">密码：</label>
+                    <div class="controls">
+                    	<input id="pd" placeholder="请输入密码" type="password" name="pd" maxlength="50" class="input-xfat" data-rules="required">
+                    </div>
+                </div>
+                <div class="control-group">
+               		<label class="control-label"></label>
+                	<div class="controls btn">
+                        <button type="submit" class="sui-btn btn-large btn-danger btn_submit" id="btn_submit">
+                            <i class="sui-icon icon-touch-right-rect"></i> 登录
+                        </button>
+                        <br><br>
+                        <a class="sui-btn btn-success" href="__URL__/register.html">
+                            <i class="sui-icon icon-touch-user-info"></i> 注册义工
+                        </a>
+                        <a class="sui-btn btn-info" href="__URL__/repass.html">
+                            <i class="sui-icon icon-touch-key"></i> 密码重置
+                        </a>
+                	</div>
+                </div>
+            </form>
+        </div>
+	</div>
+</div>
+<div class="claer"></div>
+<script language="javascript">
+$(function(){ 
+	$('.btn_submit').click(function(){
+		if (2>$("#id").val().length) return layer.msg('登录失败,用户名不能少于3位！', {icon: 5});
+		if (5>$("#pd").val().length) return layer.msg('登录失败,密码不能少于6位！', {icon: 5});
+		$.post("__URL__/login.html",$('#badu').serialize(),function(data){
+			var status=data.status;
+			if (status==false){
+				layer.msg('登录失败'+data.message, {icon: 5});
+			}else{
+				layer.msg('登录成功'+data.message, {icon: 1});
+				location.href = "__URL__";
+			};
+		},'json');
+	});
+}); 
+</script>
+<!--END-->
+<!--底部-->
+<!--#include file="common/foot.html"-->
+<!--END-->
+</div>
+</body>
+</html>

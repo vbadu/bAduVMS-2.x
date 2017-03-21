@@ -1,0 +1,255 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>{$common.title} - {$sys.copyright}</title>
+<meta name="keywords" content="{$common.keywords}" />
+<meta name="description" content="{$common.description}" />
+<!--#include file="common/api.html"-->
+<link type="text/css" rel="stylesheet" href="__PUBLIC__/css/style_member.css" />
+<script src="__PUBLIC__/js/sui.min.js"></script>
+</head>
+<body>
+<!--头部-->
+<!--#include file="common/head.html"-->
+<!--END-->
+<div id="main">
+	<div id="position" class="graybg">
+		<div class="fl"><!--#include file="member/nav.html"-->{$common.title}</div>
+		<!--#include file="common/api_search.html"-->
+	</div>
+    <div class="listpage">
+        <div class="fl col-sub box">
+            <div class="top"><h2><span>{$common.title}</span></h2></div>
+            <div class="mainbody">
+                <ul class="leftnav">
+                	<!--#include file="member/left.html"-->
+                 </ul>
+            </div>
+            <div class="bt"></div>
+        </div>
+        <div class="fr col-main">
+            <div class="m-padding"></div>
+                <form class="sui-form form-horizontal sui-validate" id="badu" onSubmit="return false;">
+				<!--if:{$info['status']==1}-->
+                <div class="control-group">
+                    <label class="control-label">编号：</label>
+                    <div class="controls"><input readonly="readonly" value="{$info.vcard}" type="text"></div>
+                </div>
+				<!--{/if}-->
+                <div class="control-group">
+                    <label class="control-label">昵称：</label>
+                    <div class="controls"><input id="nicename" name="nicename" placeholder="请输入您的昵称" data-rules="required" value="{$info.nicename}" type="text"></div>
+                </div>
+                <div class="control-group">
+                    <label for="inputGender" class="control-label">民族：</label>
+                    <div class="controls">
+                        <span class="sui-dropdown dropdown-bordered select">
+                            <span class="dropdown-inner">
+                                <a id="drop0" role="button" data-toggle="dropdown" href="#" class="dropdown-toggle">
+                                <input value="{$info.nation}" name="nation" type="hidden"><i class="caret"></i><span>{$php(model('member')->get_nation($info['nation']))}</span></a>
+                                <ul id="menu0" role="menu" aria-labelledby="drop0" class="sui-dropdown-menu">
+                                    <li role="presentation"><a role="menuitem" tabindex="-1" href="javascript:void(0);" value="1">汉族</a></li>
+                                    <li role="presentation"><a role="menuitem" tabindex="-1" href="javascript:void(0);" value="2">蒙古族</a></li>
+                                    <li role="presentation"><a role="menuitem" tabindex="-1" href="javascript:void(0);" value="3">回族</a></li>
+                                    <li role="presentation"><a role="menuitem" tabindex="-1" href="javascript:void(0);" value="4">藏族</a></li>
+                                    <li role="presentation"><a role="menuitem" tabindex="-1" href="javascript:void(0);" value="5">维吾尔族</a></li>
+                                    <li role="presentation"><a role="menuitem" tabindex="-1" href="javascript:void(0);" value="6">苗族</a></li>
+                                    <li role="presentation"><a role="menuitem" tabindex="-1" href="javascript:void(0);" value="7">彝族</a></li>
+                                    <li role="presentation"><a role="menuitem" tabindex="-1" href="javascript:void(0);" value="8">壮族</a></li>
+                                    <li role="presentation"><a role="menuitem" tabindex="-1" href="javascript:void(0);" value="9">布依族</a></li>
+                                    <li role="presentation"><a role="menuitem" tabindex="-1" href="javascript:void(0);" value="10">朝鲜族</a></li>
+                                    <li role="presentation"><a role="menuitem" tabindex="-1" href="javascript:void(0);" value="11">满族</a></li>
+                                    <li role="presentation"><a role="menuitem" tabindex="-1" href="javascript:void(0);" value="12">侗族</a></li>
+                                    <li role="presentation"><a role="menuitem" tabindex="-1" href="javascript:void(0);" value="13">瑶族</a></li>
+                                    <li role="presentation"><a role="menuitem" tabindex="-1" href="javascript:void(0);" value="14">白族</a></li>
+                                    <li role="presentation"><a role="menuitem" tabindex="-1" href="javascript:void(0);" value="15">土家族</a></li>
+                                    <li role="presentation"><a role="menuitem" tabindex="-1" href="javascript:void(0);" value="16">哈尼族</a></li>
+                                    <li role="presentation"><a role="menuitem" tabindex="-1" href="javascript:void(0);" value="17">哈萨克族</a></li>
+                                    <li role="presentation"><a role="menuitem" tabindex="-1" href="javascript:void(0);" value="18">傣族</a></li>
+                                    <li role="presentation"><a role="menuitem" tabindex="-1" href="javascript:void(0);" value="19">黎族</a></li>
+                                    <li role="presentation"><a role="menuitem" tabindex="-1" href="javascript:void(0);" value="20">僳僳族</a></li>
+                                    <li role="presentation"><a role="menuitem" tabindex="-1" href="javascript:void(0);" value="21">佤族</a></li>
+                                    <li role="presentation"><a role="menuitem" tabindex="-1" href="javascript:void(0);" value="22">畲族</a></li>
+                                    <li role="presentation"><a role="menuitem" tabindex="-1" href="javascript:void(0);" value="23">高山族</a></li>
+                                    <li role="presentation"><a role="menuitem" tabindex="-1" href="javascript:void(0);" value="24">拉祜族</a></li>
+                                    <li role="presentation"><a role="menuitem" tabindex="-1" href="javascript:void(0);" value="25">水族</a></li>
+                                    <li role="presentation"><a role="menuitem" tabindex="-1" href="javascript:void(0);" value="26">东乡族</a></li>
+                                    <li role="presentation"><a role="menuitem" tabindex="-1" href="javascript:void(0);" value="27">纳西族</a></li>
+                                    <li role="presentation"><a role="menuitem" tabindex="-1" href="javascript:void(0);" value="28">景颇族</a></li>
+                                    <li role="presentation"><a role="menuitem" tabindex="-1" href="javascript:void(0);" value="29">柯尔克孜族</a></li>
+                                    <li role="presentation"><a role="menuitem" tabindex="-1" href="javascript:void(0);" value="30">土族</a></li>
+                                    <li role="presentation"><a role="menuitem" tabindex="-1" href="javascript:void(0);" value="31">达斡尔族</a></li>
+                                    <li role="presentation"><a role="menuitem" tabindex="-1" href="javascript:void(0);" value="32">仫佬族</a></li>
+                                    <li role="presentation"><a role="menuitem" tabindex="-1" href="javascript:void(0);" value="33">羌族</a></li>
+                                    <li role="presentation"><a role="menuitem" tabindex="-1" href="javascript:void(0);" value="34">布朗族</a></li>
+                                    <li role="presentation"><a role="menuitem" tabindex="-1" href="javascript:void(0);" value="35">撒拉族</a></li>
+                                    <li role="presentation"><a role="menuitem" tabindex="-1" href="javascript:void(0);" value="36">毛南族</a></li>
+                                    <li role="presentation"><a role="menuitem" tabindex="-1" href="javascript:void(0);" value="37">仡佬族</a></li>
+                                    <li role="presentation"><a role="menuitem" tabindex="-1" href="javascript:void(0);" value="38">锡伯族</a></li>
+                                    <li role="presentation"><a role="menuitem" tabindex="-1" href="javascript:void(0);" value="39">阿昌族</a></li>
+                                    <li role="presentation"><a role="menuitem" tabindex="-1" href="javascript:void(0);" value="40">普米族</a></li>
+                                    <li role="presentation"><a role="menuitem" tabindex="-1" href="javascript:void(0);" value="41">塔吉克族</a></li>
+                                    <li role="presentation"><a role="menuitem" tabindex="-1" href="javascript:void(0);" value="42">怒族</a></li>
+                                    <li role="presentation"><a role="menuitem" tabindex="-1" href="javascript:void(0);" value="43">乌孜别克族</a></li>
+                                    <li role="presentation"><a role="menuitem" tabindex="-1" href="javascript:void(0);" value="44">俄罗斯族</a></li>
+                                    <li role="presentation"><a role="menuitem" tabindex="-1" href="javascript:void(0);" value="45">鄂温克族</a></li>
+                                    <li role="presentation"><a role="menuitem" tabindex="-1" href="javascript:void(0);" value="46">德昂族</a></li>
+                                    <li role="presentation"><a role="menuitem" tabindex="-1" href="javascript:void(0);" value="47">保安族</a></li>
+                                    <li role="presentation"><a role="menuitem" tabindex="-1" href="javascript:void(0);" value="48">裕固族</a></li>
+                                    <li role="presentation"><a role="menuitem" tabindex="-1" href="javascript:void(0);" value="49">京族</a></li>
+                                    <li role="presentation"><a role="menuitem" tabindex="-1" href="javascript:void(0);" value="50">塔塔尔族</a></li>
+                                    <li role="presentation"><a role="menuitem" tabindex="-1" href="javascript:void(0);" value="51">独龙族</a></li>
+                                    <li role="presentation"><a role="menuitem" tabindex="-1" href="javascript:void(0);" value="52">鄂伦春族</a></li>
+                                    <li role="presentation"><a role="menuitem" tabindex="-1" href="javascript:void(0);" value="53">赫哲族</a></li>
+                                    <li role="presentation"><a role="menuitem" tabindex="-1" href="javascript:void(0);" value="54">门巴族</a></li>
+                                    <li role="presentation"><a role="menuitem" tabindex="-1" href="javascript:void(0);" value="55">珞巴族</a></li>
+                                    <li role="presentation"><a role="menuitem" tabindex="-1" href="javascript:void(0);" value="56">基诺族</a></li>
+                                    <li role="presentation"><a role="menuitem" tabindex="-1" href="javascript:void(0);" value="57">其他</a></li>
+                                </ul>
+                            </span>
+                        </span>
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label for="inputGender" class="control-label">政治面貌：</label>
+                    <div class="controls">
+                        <span class="sui-dropdown dropdown-bordered select">
+                            <span class="dropdown-inner">
+                                <a id="drop1" role="button" data-toggle="dropdown" href="#" class="dropdown-toggle">
+                                <input value="{$info.politics}" name="politics" type="hidden"><i class="caret"></i><span>{$php(model('member')->get_politics($info['politics']))}</span></a>
+                                <ul id="menu1" role="menu" aria-labelledby="drop1" class="sui-dropdown-menu">
+                                <li role="presentation"><a role="menuitem" tabindex="-1" href="javascript:void(0);" value="1">群众</a></li>
+                                <li role="presentation"><a role="menuitem" tabindex="-1" href="javascript:void(0);" value="2">团员</a></li>
+                                <li role="presentation"><a role="menuitem" tabindex="-1" href="javascript:void(0);" value="3">党员</a></li>
+                                <li role="presentation"><a role="menuitem" tabindex="-1" href="javascript:void(0);" value="4">其他党派人士</a></li>
+                                </ul>
+                            </span>
+                        </span>
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label class="control-label">身份证号：</label>
+                    <div class="controls"><input id="idcard" name="idcard" placeholder="请输入您的身份证号码" data-rules="required" value="{$info.idcard}" type="text" class="input-large"> </div>
+                </div>
+                <div class="control-group">
+                    <label for="inputGender" class="control-label">专业学历：</label>
+                    <div class="controls">
+                        <span class="sui-dropdown dropdown-bordered select">
+                            <span class="dropdown-inner">
+                                <a id="drop2" role="button" data-toggle="dropdown" href="#" class="dropdown-toggle">
+                                <input value="{$info.eduback}" name="eduback" type="hidden"><i class="caret"></i><span>{$php(model('member')->get_eduback($info['eduback']))}</span></a>
+                                <ul id="menu2" role="menu" aria-labelledby="drop2" class="sui-dropdown-menu">
+                                <li role="presentation"><a role="menuitem" tabindex="-1" href="javascript:void(0);" value="1">小学</a></li>
+                                <li role="presentation"><a role="menuitem" tabindex="-1" href="javascript:void(0);" value="2">初中</a></li>
+                                <li role="presentation"><a role="menuitem" tabindex="-1" href="javascript:void(0);" value="3">高中</a></li>
+                                <li role="presentation"><a role="menuitem" tabindex="-1" href="javascript:void(0);" value="4">中专</a></li>
+                                <li role="presentation"><a role="menuitem" tabindex="-1" href="javascript:void(0);" value="5">大专</a></li>
+                                <li role="presentation"><a role="menuitem" tabindex="-1" href="javascript:void(0);" value="6">本科</a></li>
+                                <li role="presentation"><a role="menuitem" tabindex="-1" href="javascript:void(0);" value="7">硕士</a></li>
+                                <li role="presentation"><a role="menuitem" tabindex="-1" href="javascript:void(0);" value="8">博士</a></li>
+                                <li role="presentation"><a role="menuitem" tabindex="-1" href="javascript:void(0);" value="9">其他</a></li>
+                                </ul>
+                            </span>
+                        </span>
+                        <input id="major" name="major" placeholder="学生请填学生" data-rules="required" value="{$info.major}" type="text">
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label class="control-label">当前职业：</label>
+                    <div class="controls"><input id="job" name="job" placeholder="学生请填学校" data-rules="required" value="{$info.job}" type="text" class="input-large"> </div>
+                </div>
+                <div class="control-group">
+                    <label class="control-label">所在单位：</label>
+                    <div class="controls"><input id="organization" name="organization" placeholder="请输入您的所在单位，学生请填学校，无业或自由职业者请填无" data-rules="required" value="{$info.organization}" type="text" class="input-xlarge"> </div>
+                </div>
+                <div class="control-group">
+                    <label for="inputGender" class="control-label">志愿经历：</label>
+                    <div class="controls">
+                        <label data-toggle="radio" class="radio-pretty inline<!--if:{$info['experience']==1}--> checked<!--{/if}-->">
+                            <input name="experience" value="1" data-rules="required" type="radio"<!--if:{$info['experience']==1}--> checked<!--{/if}-->><span>以前参与过</span>
+                        </label>
+                        <label data-toggle="radio" class="radio-pretty inline<!--if:{$info['experience']==2}--> checked<!--{/if}-->">
+                            <input name="experience" value="2" data-rules="required" type="radio"<!--if:{$info['experience']==2}--> checked<!--{/if}-->><span>以前没有参与过</span>
+                        </label>
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label for="inputGender" class="control-label">组织能力：</label>
+                    <div class="controls">
+                        <label data-toggle="radio" class="radio-pretty inline<!--if:{$info['ability']==1}--> checked<!--{/if}-->">
+                            <input name="ability" value="1" data-rules="required" type="radio" <!--if:{$info['ability']==1}--> checked<!--{/if}-->><span>没有组织或负责过活动项目</span>
+                        </label>
+                        <label data-toggle="radio" class="radio-pretty inline<!--if:{$info['ability']==2}--> checked<!--{/if}-->">
+                            <input name="ability" value="2" data-rules="required" type="radio"<!--if:{$info['ability']==2}--> checked<!--{/if}-->><span>协助他人组织或负责过活动项目</span>
+                        </label>
+                        <label data-toggle="radio" class="radio-pretty inline<!--if:{$info['ability']==3}--> checked<!--{/if}-->">
+                            <input name="ability" value="3" data-rules="required" type="radio"<!--if:{$info['ability']==3}--> checked<!--{/if}-->><span>独立组织或负责过活动项目</span>
+                        </label>
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label for="inputGender" class="control-label">可参与时间：</label>
+                    <div class="controls">
+                        <span class="sui-dropup dropdown-bordered select">
+                            <span class="dropdown-inner">
+                                <a id="drop3" role="button" data-toggle="dropdown" href="#" class="dropdown-toggle">
+                                <input value="{$info.bspace}" name="bspace" type="hidden"><i class="caret"></i><span>{$php(model('member')->get_bspace($info['bspace']))}</span></a>
+                                <ul id="menu3" role="menu" aria-labelledby="drop3" class="sui-dropdown-menu">
+                                <li role="presentation"><a role="menuitem" tabindex="-1" href="javascript:void(0);" value="1">平常周一有时间</a></li>
+                                <li role="presentation"><a role="menuitem" tabindex="-1" href="javascript:void(0);" value="2">平常周二有时间</a></li>
+                                <li role="presentation"><a role="menuitem" tabindex="-1" href="javascript:void(0);" value="3">平常周三有时间</a></li>
+                                <li role="presentation"><a role="menuitem" tabindex="-1" href="javascript:void(0);" value="4">平常周四有时间</a></li>
+                                <li role="presentation"><a role="menuitem" tabindex="-1" href="javascript:void(0);" value="5">平常周五有时间</a></li>
+                                <li role="presentation"><a role="menuitem" tabindex="-1" href="javascript:void(0);" value="6">平常周六有时间</a></li>
+                                <li role="presentation"><a role="menuitem" tabindex="-1" href="javascript:void(0);" value="7">平常周日有时间</a></li>
+                                <li role="presentation"><a role="menuitem" tabindex="-1" href="javascript:void(0);" value="8">周六、周日有时间</a></li>
+                                <li role="presentation"><a role="menuitem" tabindex="-1" href="javascript:void(0);" value="9">平常周末晚上有时间</a></li>
+                                <li role="presentation"><a role="menuitem" tabindex="-1" href="javascript:void(0);" value="10">只有晚上有时间</a></li>
+                                <li role="presentation"><a role="menuitem" tabindex="-1" href="javascript:void(0);" value="11">周一至周五都有时间</a></li>
+                                <li role="presentation"><a role="menuitem" tabindex="-1" href="javascript:void(0);" value="12">工作轮休制不能确</a></li>
+                                <li role="presentation"><a role="menuitem" tabindex="-1" href="javascript:void(0);" value="13">任何时候都可以</a></li>
+                                </ul>
+                            </span>
+                        </span>
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label for="inputGender" class="control-label">有何技能特长：</label>
+                    <div class="controls">
+                        <textarea rows="3" class="input-xxlarge" name="about"></textarea>
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label class="control-label"></label>
+                    <div class="controls">
+                        <input name="step" value="2" type="hidden">
+                        <button type="submit" class="sui-btn btn-primary" id="btn_submit">提交保存</button>
+                    </div>
+                </div>
+                </form>
+        </div>
+	</div>
+</div>
+<div class="claer"></div>
+<!--END-->
+<script language="javascript">
+$(function(){ 
+	$('#btn_submit').click(function(){
+		$.post("__URL__/profile.html",$('#badu').serialize(),function(data){
+			var status=data.status;
+			if (status==false){
+				layer.msg('操作失败！ '+data.message, {icon: 5});
+			}else{
+				layer.msg(data.message, {icon: 1});
+			};
+		},'json');
+	});
+}); 
+</script>
+<!--底部-->
+<!--#include file="common/foot.html"-->
+<!--END-->
+</div>
+</body>
+</html>
