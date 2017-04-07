@@ -1,0 +1,91 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>{$info.title} - {$common.title} - {$sys.copyright}</title>
+<meta name="keywords" content="{$common.keywords}" />
+<meta name="description" content="{$common.description}" />
+<!--#include file="common/api.html"-->
+</head>
+<body>
+<!--头部-->
+<!--#include file="common/head.html"-->
+<!--END-->
+<div id="main">
+	<div id="position" class="graybg">
+		<div class="fl">您的位置：<a href="{$sys.siteurl}" target="_top">首页</a>  >> <a href="{$sys.siteurl}/{$common.url}" >{$common.title}</a> </div>
+		<!--#include file="common/api_search.html"-->
+	</div>
+    <div class="listpage">
+        <div class="fl col-sub box">
+            <div class="top"><h2><span>{$common.title}</span></h2></div>
+            <div class="mainbody">
+                <ul class="leftnav">
+                	<!--foreach:{$menu $vo}-->
+                    <li <?php if ($common['cid']==$vo['cid']) {?>class="curr"<!--{/if}-->>
+                    <a href="{$sys.siteurl}/{$vo.url}">{$vo.name}</a>
+                    </li>
+                    <!--/foreach-->
+                 </ul>
+            </div>
+            <div class="bt"></div>
+        </div>
+        <div class="fr col-main">
+            <div class="mainbody">
+            <div class="hd"><h2><font color="#FF0000">{$info.title}</font></h2></div>
+			<table class="layui-table">
+              <tbody>
+                <tr>
+                  <td nowrap>联络人：</td>
+                  <td class="left">{$info.name}</td>
+                  <td class="center">发布时间：</td>
+                  <td class="left">{$info.dtime time="Y-m-d H:i"}</td>
+                </tr>
+              <tr>
+                  <td nowrap>是否接收：</td>
+                <td colspan="3" class="left"><!--if:{$info['status']==1}--><font color="#FF0000">捐款捐物已接收<!--{else}--><font color="#006600">捐款捐物待接收<!--{/if}--></font></td>
+                </tr>
+                <tr>
+                  <td nowrap>捐赠内容：</td>
+                  <td colspan="3" class="left">{$info.content html}</td>
+                </tr>
+                <tr>
+                  <td nowrap>捐赠提示：</td>
+                  <td colspan="3" class="left">捐款捐款流向情况请留意网站公布信息，如有问题可致电{$sys.helponline}或者QQ群、微信等方式向我们咨询。</td>
+                </tr>
+                </tbody>
+            </table>            
+            
+            
+            </div>
+        </div>
+	</div>
+</div>
+<div class="claer"></div>
+<!--END-->
+<!--底部-->
+<script>
+layui.use(['form','element'], function(){
+  var form = layui.form();
+  var $ = layui.jquery,element = layui.element();
+  //监听提交
+  form.on('submit(btn_submit)', function(post){
+		$.post("__URL__/donate.html",{data:post.field},function(data){
+			var status=data.status;
+			if (status==false){
+				layer.msg('操作失败！ '+data.message, {icon: 5});
+			}else{
+				layer.msg(data.message, {icon: 1, time: 5000 }, function(){
+					location.href = '__URL__.html';
+				});  
+			};
+		},'json');	  
+    return false;
+  });
+});
+</script>
+<!--#include file="common/foot.html"-->
+<!--END-->
+</div>
+</body>
+</html>

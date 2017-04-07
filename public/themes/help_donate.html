@@ -1,0 +1,118 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>{$common.title} - {$sys.copyright}</title>
+<meta name="keywords" content="{$common.keywords}" />
+<meta name="description" content="{$common.description}" />
+<!--#include file="common/api.html"-->
+</head>
+<body>
+<!--头部-->
+<!--#include file="common/head.html"-->
+<!--END-->
+<div id="main">
+	<div id="position" class="graybg">
+		<div class="fl">您的位置：<a href="{$sys.siteurl}" target="_top">首页</a>  >> <a href="{$sys.siteurl}/{$common.url}" >{$common.title}</a> </div>
+		<!--#include file="common/api_search.html"-->
+	</div>
+    <div class="listpage">
+        <div class="fl col-sub box">
+            <div class="top"><h2><span>{$common.title}</span></h2></div>
+            <div class="mainbody">
+                <ul class="leftnav">
+                	<!--foreach:{$menu $vo}-->
+                    <li <?php if ($common['cid']==$vo['cid']) {?>class="curr"<!--{/if}-->>
+                    <a href="{$sys.siteurl}/{$vo.url}">{$vo.name}</a>
+                    </li>
+                    <!--/foreach-->
+                 </ul>
+            </div>
+            <div class="bt"></div>
+        </div>
+        <div class="fr col-main">
+            <div class="mainbody"><div class="hd"><h2><font color="#FF0000">{$common.title}</font></h2></div></div>
+            <form class="layui-form" onSubmit="return false;">
+              <div class="layui-form-item">
+                <label class="layui-form-label">联系人</label>
+                <div class="layui-input-inline">
+                  <input type="text" name="name" required lay-verify="required" placeholder="请输入捐赠人或您的姓名" autocomplete="off" class="layui-input">
+                </div>
+                <div class="layui-form-mid layui-word-aux">如果不是捐赠本人，可以填授权代理人</div>
+              </div>
+              <div class="layui-form-item">
+                <label class="layui-form-label">你的性别</label>
+                <div class="layui-input-block">
+                  <input type="radio" name="sex" value="1" title="男" checked>
+                  <input type="radio" name="sex" value="2" title="女">
+                </div>
+              </div>
+              <div class="layui-form-item">
+                <label class="layui-form-label">手机号码</label>
+                <div class="layui-input-inline">
+                  <input type="text" name="tel" required lay-verify="required" placeholder="请输入捐赠人或您的联系电话" autocomplete="off" class="layui-input">
+                </div>
+                <div class="layui-form-mid layui-word-aux">请提供手机号码方便与您联系</div>
+              </div>
+              <div class="layui-form-item">
+                <label class="layui-form-label">是否公开</label>
+                <div class="layui-input-inline">
+                  <input type="radio" name="open" value="1" title="公开" checked>
+                  <input type="radio" name="open" value="2" title="不公开">
+                </div>
+                <div class="layui-form-mid layui-word-aux">公开会让更多人了解捐赠情况</div>
+              </div>
+              <div class="layui-form-item">
+                <label class="layui-form-label">捐赠类项</label>
+                <div class="layui-input-block">
+                  <input type="checkbox" name="title[1]" title="资金" checked>
+                  <input type="checkbox" name="title[2]" title="物资物品" checked>
+                  <input type="checkbox" name="title[3]" title="衣物">
+                  <input type="checkbox" name="title[0]" title="其他">
+                </div>
+              </div>
+
+              <div class="layui-form-item layui-form-text">
+                <label class="layui-form-label">捐赠内容及捐赠意向用途</label>
+                <div class="layui-input-block">
+                  <textarea name="content" placeholder="请填写捐赠内容及捐赠意向（如我要捐献资金5万用于某某项目或某某人），如果不指定捐赠用途则由本机构根据公益项目或活动的实际情况分配。资金去向可在本协会网站查询。" class="layui-textarea"></textarea>
+                </div>
+              </div>
+              <div class="layui-form-item">
+                <div class="layui-input-block">
+                	<button class="layui-btn layui-btn-danger" lay-submit lay-filter="btn_submit" id="btn_submit">提交保存</button>
+                  <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+                </div>
+              </div>
+            </form>
+        </div>
+	</div>
+</div>
+<div class="claer"></div>
+<!--END-->
+<!--底部-->
+<script>
+layui.use(['form','element'], function(){
+  var form = layui.form();
+  var $ = layui.jquery,element = layui.element();
+  //监听提交
+  form.on('submit(btn_submit)', function(post){
+		$.post("__URL__/donate.html",{data:post.field},function(data){
+			var status=data.status;
+			if (status==false){
+				layer.msg('操作失败！ '+data.message, {icon: 5});
+			}else{
+				layer.msg(data.message, {icon: 1, time: 5000 }, function(){
+					location.href = '__URL__.html';
+				});  
+			};
+		},'json');	  
+    return false;
+  });
+});
+</script>
+<!--#include file="common/foot.html"-->
+<!--END-->
+</div>
+</body>
+</html>
