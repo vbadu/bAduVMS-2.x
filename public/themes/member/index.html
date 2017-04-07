@@ -1,0 +1,106 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>{$common.title} - {$sys.copyright}</title>
+<meta name="keywords" content="{$common.keywords}" />
+<meta name="description" content="{$common.description}" />
+<!--#include file="common/api.html"-->
+<link type="text/css" rel="stylesheet" href="__PUBLIC__/css/style_member.css" />
+</head>
+<body>
+<!--头部-->
+<!--#include file="common/head.html"-->
+<!--END-->
+<div id="main">
+	<div id="position" class="graybg">
+		<div class="fl"><!--#include file="member/nav.html"-->{$common.title}</div>
+		<!--#include file="common/api_search.html"-->
+	</div>
+    <div class="listpage">
+        <div class="fl col-sub box">
+            <div class="top"><h2><span>{$common.title}</span></h2></div>
+            <div class="mainbody">
+                <ul class="leftnav">
+                	<!--#include file="member/left.html"-->
+                 </ul>
+            </div>
+            <div class="bt"></div>
+        </div>
+        <div class="fr col-main">
+        	<div class="m-padding">
+            <div class="m-hd">
+                <div class="title">
+                    <div class="pic">
+                        <a href="{$sys.siteurl}/member/avatar{$config.URL_HTML_SUFFIX}">
+                            <img src="{$php(model('badu')->get_photo($user['id']))}?ver=<?php echo time();?>" alt="{$user.name}头像"/>
+                        </a>
+                    </div>
+                    <h3>亲爱的<span class="f-red"> {$user.nicename} </span>，欢迎您！</h3>
+              </div>
+              <div class="f-cb"></div>
+            </div>
+            <div class="clear"></div>
+            <div class="m-user-box">
+              <div class="top-box ">
+                <div class="m-tips-box">
+                  <dl>
+                    <dt>会员状态：</dt>
+                    <dd><!--if:{$user['status']==1}--><font color="#006600">已认证，编号：{$user.vcard}<!--{else}--><font color="#FF0000">待认证<!--{/if}--></font></dd>
+                  </dl>
+                  <dl>
+                    <dt>邮箱：</dt>
+                    <dd><?php echo half_replace($user['email'])?></dd>
+                  </dl>
+                  <dl>
+                    <dt>会员时数：</dt>
+                    <dd>{$user.vtime} 小时</dd>
+                  </dl>
+                  <dl>
+                    <dt>会员等级：</dt>
+                    <dd>{$user.gname}</dd>
+                  </dl>
+                  <dl>
+                    <dt>注册时间：</dt>
+                    <dd>{$user.dtime time="Y-m-d H:i"}</dd>
+                  </dl>
+                  <dl>
+                    <dt>登录IP：</dt>
+                    <dd>{$user.ip}</dd>
+                  </dl>
+                  <dl>
+                    <dt>登录时间：</dt>
+                    <dd>{$user.logintime time="Y-m-d H:i"}</dd>
+                  </dl>
+                  <dl>
+                    <dt>累计登录：</dt>
+                    <dd>{$user.loginnum} 次</dd>
+                  </dl>
+                </div>
+              </div>
+              <div class="f-cb"></div>
+            </div>
+            <div class="m-hd-box">
+              <h2>我的活动</h2>
+            </div>
+            <div class="m-lst-box m-lst-box-2">
+              <ul>
+                    <!--foreach:{$event $vo}-->
+                    <li><a href="{$sys.siteurl}/event/go/{$vo.id}{$config.URL_HTML_SUFFIX}" title="查看《 {$vo.title} 》活动介绍" target="_blank">[ #event_status{$vo['status']}#] {$vo.title len="60"}</a></li>
+                    <!--{/foreach}-->
+              </ul>
+            </div>
+            
+            
+            </div>
+        </div>
+	</div>
+</div>
+<div class="claer"></div>
+<!--END-->
+<!--底部-->
+<!--#include file="common/foot.html"-->
+<!--END-->
+</div>
+</body>
+</html>

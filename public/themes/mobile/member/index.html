@@ -1,0 +1,51 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="viewport" content="width=device-width, minimum-scale=1, maximum-scale=1">
+<title>{$common.title} - {$sys.copyright}</title>
+<meta name="keywords" content="{$common.keywords}" />
+<meta name="description" content="{$common.description}" />
+<!--#include file="common/mobile/api.html"-->
+</head>
+<body>
+<div id="main_body">
+	<!--#include file="common/mobile/head_nav.html"-->
+    <div class="main_member_body"> 
+    <div class="index_header">
+      <div class="user_header_img">
+        <div class="user_header_bg">
+        <a href="{$sys.siteurl}/member/avatar{$config.URL_HTML_SUFFIX}">
+        	<img src="{$php(model('badu')->get_photo($user['id']))}?ver=<?php echo time();?>" alt="{$user.name}头像"/>
+        </a>
+        </div>
+      </div>
+      <div class="member_header_info">
+        <div class="m_user_name">{$user.username}</div>
+        <div class="m_user_re">
+        	{$user.nicename}，欢迎您！<br>
+            会员状态：<!--if:{$user['status']==1}-->认证义工<!--{else}-->待认证会员<!--{/if}--><br>
+			<!--if:{$user['status']==1}-->注册编号：{$user.vcard}<br><!--{/if}-->
+            <!--if:{$user['status']==1}-->会员等级：{$user.gname}<!--{else}-->累计登录：{$user.loginnum} 次<!--{/if}-->
+        </div>
+      </div>
+    </div>
+    <section class="wap_member">
+        <div class="wap_member_mrecord">
+            <a href="__APP__/member/event{$config.URL_HTML_SUFFIX}" class="wap_member_mrecord_list"><i class="m_icon  fa fa-briefcase"></i>我的活动</a>
+            <a href="__APP__/member/cert{$config.URL_HTML_SUFFIX}" class="wap_member_mrecord_list"><i class="m_icon  fa fa-certificate "></i>我的证书</a>
+        </div>
+    </section>
+    <section class="wap_member">
+        <div class="wap_member_mrecord">
+            <a href="__APP__/member/profile{$config.URL_HTML_SUFFIX}" class="wap_member_mrecord_list"><i class="m_icon  fa fa-file-text"></i>我的资料</a>
+            <a href="__APP__/member/contact{$config.URL_HTML_SUFFIX}" class="wap_member_mrecord_list"><i class="m_icon  fa fa-fax"></i>联系方式</a>
+            <a href="__APP__/member/repwd{$config.URL_HTML_SUFFIX}" class="wap_member_mrecord_list "><i class="m_icon  fa fa-unlock-alt"></i>更改密码</a>
+            <a href="__APP__/member/logout{$config.URL_HTML_SUFFIX}" class="wap_member_mrecord_list" style="border:none"><i class="m_icon fa fa-power-off"></i>退出登录</a> 
+        </div>
+    </section>
+    </div>
+	<!--#include file="common/mobile/foot.html"-->			
+</div>
+</body>
+</html>
