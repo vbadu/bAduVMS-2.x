@@ -1,0 +1,188 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="viewport" content="width=device-width, minimum-scale=1, maximum-scale=1">
+<title>{$common.title} - {$sys.copyright}</title>
+<meta name="keywords" content="{$common.keywords}" />
+<meta name="description" content="{$common.description}" />
+<!--#include file="common/mobile/api.html"-->
+</head>
+<body>
+<div id="main_body">
+	<!--#include file="common/mobile/head.html"-->
+	<section class="s_hdp">
+		<div class="s_box pr">
+		    <div class="mid01_box pr" id="slider1">
+                <ul class="pr s_ul6 clears">
+                <!--list_pic:{table="content" image="true" position="1" order="updatetime desc" limit="5" }-->
+                <?php if (empty($list_pic['image'])) $list_pic['image']='/public/images/noimage.jpg'?>
+                  <li><a href="{$sys.siteurl}{$list_pic.aurl}" title="{$list_pic.title}"><div class="roll"><div class="pr"><img src="{$list_pic.image}" width="100%" height="200px" alt="{$list_pic.title}" /><span>{$list_pic.title}</span></div></div></a></li>
+                <!--/list_pic-->
+                </ul>
+		    </div>  
+		</div>
+	     <ul id="pagenavi1" class="page">
+	        <li><a href="javascript:void(0)" class="active"></a></li>
+	      	<li><a href="javascript:void(0)"></a></li>
+	      	<li><a href="javascript:void(0)"></a></li>
+	      	<li><a href="javascript:void(0)"></a></li>
+	      	<li><a href="javascript:void(0)"></a></li>
+	    </ul>
+	</section>
+    <div class="layui-tab">
+        <ul class="layui-tab-title">
+            <li class="layui-this">活动招募</li>
+            <li>活动分享</li>
+            <li>义工分享</li>
+        </ul>
+        <div class="layui-tab-content">
+            <div class="layui-tab-item layui-show">
+                <div class="list_box">
+                    <!--list:{table="event" order="dtime desc" limit="6"}-->
+                    <dl><?php if (empty($list['image'])) $list['image']='/public/images/noimage.jpg'?>
+                        <a href="{$sys.siteurl}/event/{$list.id}{$config.URL_HTML_SUFFIX}">
+                        <dt><img src="{$list.image}" alt="{$list.title}"></dt>
+                        <dd><h3>{$list.title len="45"}</h3></dd>
+                        <!--<dd>{$list.description len="60"}</dd> -->
+                        <dd><span>招募：{$list.zmrs}人 报名：{$list.bmrs}人 </span></dd>
+                        <dd><span>活动时间：{$list.stime time="Y-m-d h:i:s"}</span></dd>
+                        </a>
+                    </dl>
+                    <!--/list-->
+                </div>
+            </div>
+        	<div class="layui-tab-item">
+                <div class="list_box">
+                    <!--list:{table="content" cid="28" order="updatetime desc" limit="6"}-->
+                    <dl><?php if (empty($list['image'])) $list['image']='/public/images/noimage.jpg'?>
+                        <a href="{$sys.siteurl}{$list.aurl}">
+                        <dd><h2>{$list.title}</h2></dd>
+                        <!--<dd>{$list.description len="60"}</dd> -->
+                        <dd><span>阅读：{$list.views}</span>日期：{$list.updatetime time="Y-m-d"}</dd>
+                        </a>
+                    </dl>
+                    <!--/list-->
+                </div>
+            </div>
+        	<div class="layui-tab-item">
+                <div class="list_box">
+                    <!--list:{table="content" cid="27" order="updatetime desc" limit="6"}-->
+                    <dl><?php if (empty($list['image'])) $list['image']='/public/images/noimage.jpg'?>
+                        <a href="{$sys.siteurl}{$list.aurl}">
+                        <dd><h2>{$list.title}</h2></dd>
+                        <!--<dd>{$list.description len="60"}</dd> -->
+                        <dd><span>阅读：{$list.views}</span>日期：{$list.updatetime time="Y-m-d"}</dd>
+                        </a>
+                    </dl>
+                    <!--/list-->
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="layui-tab">
+        <ul class="layui-tab-title">
+            <li class="layui-this">工作动态</li>
+            <li>公告通知</li>
+            <li>财务公示</li>
+        </ul>
+        <div class="layui-tab-content">
+            <div class="layui-tab-item layui-show">
+                <div class="list_box">
+                    <!--list:{table="content" cid="24" order="updatetime desc" limit="6"}-->
+                    <dl>
+                        <a href="{$sys.siteurl}{$list.aurl}">
+                        <dd><h2>{$list.title}</h2></dd>
+                        <!--<dd>{$list.description len="60"}</dd> -->
+                        <dd><span>阅读：{$list.views}</span>日期：{$list.updatetime time="Y-m-d"}</dd>
+                        </a>
+                    </dl>
+                    <!--/list-->
+                </div>
+            </div>
+        	<div class="layui-tab-item">
+                <div class="list_box">
+                    <!--list:{table="content" cid="23" order="updatetime desc" limit="6"}-->
+                    <dl>
+                        <a href="{$sys.siteurl}{$list.aurl}">
+                        <dd><h2>{$list.title}</h2></dd>
+                        <!--<dd>{$list.description len="60"}</dd> -->
+                        <dd><span>阅读：{$list.views}</span>日期：{$list.updatetime time="Y-m-d"}</dd>
+                        </a>
+                    </dl>
+                    <!--/list-->
+                </div>
+            </div>
+        	<div class="layui-tab-item">
+                <div class="list_box">
+                    <!--list:{table="content" cid="5" order="updatetime desc" limit="6"}-->
+                    <dl>
+                        <a href="{$sys.siteurl}{$list.aurl}">
+                        <dd><h2>{$list.title}</h2></dd>
+                        <!--<dd>{$list.description len="60"}</dd> -->
+                        <dd><span>阅读：{$list.views}</span>日期：{$list.updatetime time="Y-m-d"}</dd>
+                        </a>
+                    </dl>
+                    <!--/list-->
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="layui-tab">
+        <ul class="layui-tab-title">
+            <li class="layui-this">公益新闻</li>
+            <li>义工培训</li>
+            <li>义工达人</li>
+        </ul>
+        <div class="layui-tab-content">
+            <div class="layui-tab-item layui-show">
+                <div class="list_box">
+                    <!--list:{table="content" cid="26,27" order="updatetime desc" limit="6"}-->
+                    <dl>
+                        <a href="{$sys.siteurl}{$list.aurl}">
+                        <dd><h2>{$list.title}</h2></dd>
+                        <!--<dd>{$list.description len="60"}</dd> -->
+                        <dd><span>阅读：{$list.views}</span>日期：{$list.updatetime time="Y-m-d"}</dd>
+                        </a>
+                    </dl>
+                    <!--/list-->
+                </div>
+            </div>
+        	<div class="layui-tab-item">
+                <div class="list_box">
+                    <!--list:{table="content" cid="30,31,32,33" order="updatetime desc" limit="6"}-->
+                    <dl>
+                        <a href="{$sys.siteurl}{$list.aurl}">
+                        <dd><h2>{$list.title}</h2></dd>
+                        <!--<dd>{$list.description len="60"}</dd> -->
+                        <dd><span>阅读：{$list.views}</span>日期：{$list.updatetime time="Y-m-d"}</dd>
+                        </a>
+                    </dl>
+                    <!--/list-->
+                </div>
+            </div>
+        	<div class="layui-tab-item">
+                <div class="list_box">
+                    <!--list:{table="content" cid="29" order="updatetime desc" limit="6"}-->
+                    <dl>
+                        <a href="{$sys.siteurl}{$list.aurl}">
+                        <dd><h2>{$list.title}</h2></dd>
+                        <!--<dd>{$list.description len="60"}</dd> -->
+                        <dd><span>阅读：{$list.views}</span>日期：{$list.updatetime time="Y-m-d"}</dd>
+                        </a>
+                    </dl>
+                    <!--/list-->
+                </div>
+            </div>
+        </div>
+    </div>
+	<!--#include file="common/mobile/foot.html"-->			
+</div>
+<script>
+layui.use('element', function(){
+  var $ = layui.jquery,element = layui.element();
+});
+</script>
+<!--END-->
+</body>
+</html>
