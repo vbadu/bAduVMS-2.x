@@ -9,10 +9,10 @@ class flinksMod extends commonMod{
 	public function __construct()
     {
         parent::__construct();
-		$this->model_url=$_GET['_module'];
-        if(!model('user_group')->model_power($this->model_url,'visit')){
-        	$this->msg('对不起，您没有该模块('.$this->model_url.')的操作权限！',0);
+        if(!model('user_group')->menu_power('system',true)){
+        	$this->msg('对不起，您没有该模块的操作权限！',0);
         }
+		$this->check_app_power('flinks',true);
     }
     
     public function index(){
@@ -42,18 +42,12 @@ class flinksMod extends commonMod{
     }
     
     public function add(){
-        if(!model('user_group')->model_power($this->model_url,'add')){
-        	$this->msg('对不起，您没有该模块('.$this->model_url.')的操作权限！',0);
-        }
         $type=model('flinks')->select_type();
         $this->assign('type', $type);
    	 	$this->display();
     }
     
     public function add_save(){
-        if(!model('user_group')->model_power($this->model_url,'add')){
-        	$this->msg('对不起，您没有该模块('.$this->model_url.')的操作权限！',0);
-        }
     	if(model('flinks')->add($_POST)){
             $this->msg('友情连接添加成功！',1);
         }else{
@@ -62,9 +56,6 @@ class flinksMod extends commonMod{
     }
     
     public function edit(){
-        if(!model('user_group')->model_power($this->model_url,'edit')){
-        	$this->msg('对不起，您没有该模块('.$this->model_url.')的操作权限！',0);
-        }
     	$id=intval($_GET['id']);
         if(empty($id)){
             $this->alert('参数传递错误！',0);
@@ -78,9 +69,6 @@ class flinksMod extends commonMod{
     }
     
     public function edit_save(){
-        if(!model('user_group')->model_power($this->model_url,'edit')){
-        	$this->msg('对不起，您没有该模块('.$this->model_url.')的操作权限！',0);
-        }
     	$id=intval($_POST['id']);
         if(empty($id)){
             $this->alert('参数传递错误！',0);
@@ -93,9 +81,6 @@ class flinksMod extends commonMod{
         }
     }
     public function del(){
-        if(!model('user_group')->model_power($this->model_url,'del')){
-        	$this->msg('对不起，您没有该模块('.$this->model_url.')的操作权限！',0);
-        }
      	$id=intval($_POST['id']);
         if(empty($id)){
             $this->msg('参数传递错误！',0);

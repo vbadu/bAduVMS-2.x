@@ -298,6 +298,28 @@ class commonMod
             return $data;
         }
     }
-    
-
+	protected function check_class_power($id=0){
+		if (1>strlen($id)) $this->msg('对不起，栏目不存在！',0);
+		if(!model('user_group')->class_power(intval($id))){
+			$this->msg('对不起，您没有该栏目(ID为：'.$id.')的操作权限！',0);
+		}	
+	}
+	protected function check_app_power($module,$is_mod=false,$cache=false){
+		if (1>strlen($module)) $this->msg('对不起，模块不存在！',0);
+		if(!model('user_group')->model_power($module,$is_mod,$cache)){
+			$this->msg('对不起，您没有该模块('.$module.')的操作权限！',0);
+		}	
+	}
+	protected function check_from_power($id=0){
+		if (1>strlen($id)) $this->msg('对不起，表单不存在！',0);
+		if(!model('user_group')->form_power(intval($id))){
+			$this->msg('对不起，您没有该表单(ID为：'.$id.')的操作权限！',0);
+		}	
+	}
+    public function data_info()
+    {
+        $data['field_type']=model('badu')->field_type();
+        $data['field_property']=model('badu')->field_property();
+        return $data;
+    }
 }

@@ -235,6 +235,18 @@ class memberModel extends commonModel{
 		}
 		echo $array[$data];
     }
-
+	public function auto_group($vtime=0){
+		$vtime=@number_format($vtime);
+		if (1>$vtime) return 0;
+		$group=$this->get_list('`type`=1 and `credit`>0','_group','','id desc,credit desc');
+		foreach ($group as $k=>$v){
+			$credit=@number_format($v['credit']);
+			if (isset($credit)  && $vtime>=$credit ){
+				$data['gid']=$v['id'];
+				$data['gname']=$v['name'];
+			}
+		}
+		return $data;
+	}
 
 }

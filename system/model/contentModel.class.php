@@ -5,19 +5,6 @@ class contentModel extends commonMod
     {
         parent::__construct();
     }
-
-    //模块修正
-    public function model_jump($mid,$module){
-        $model_info = model('category')->model_info($mid);
-        if (!empty($model_info['module_content'])&&$model_info['module_content']<>$module) {
-            module($model_info['module_content'])->index();
-            if ( $this->config['HTML_CACHE_ON'] ) {
-                HtmlCache::write();
-            }
-            exit;
-        }
-    }
-
     //获取内容
     public function info($aid)
     {
@@ -30,63 +17,27 @@ class contentModel extends commonMod
     }
 
     //完整内容
-    public function model_content($aid,$ext_id)
+    public function model_content($aid)
     {
-        if(!empty($ext_id)){
-            $model_info=model('category')->expand_model_info($ext_id);
-            $expand="LEFT JOIN {$this->model->pre}expand_content_{$model_info['table']} C ON C.aid = A.aid";
-            $expand_field="C.*,";
-        }
-        $info="
-            SELECT {$expand_field}A.*
-             FROM {$this->model->pre}content A 
-             {$expand}
-             WHERE A.aid={$aid} LIMIT 1
-            ";
-            $info=$this->model->query($info);
-            return $info[0]; 
-
+        return $this->model->field('*')->table('content')->where('aid='.$aid)->find();
     }
 
     //上一篇
     public function prev_content($aid,$cid,$ext_id){
-        if(!empty($ext_id)){
-            $model_info=model('category')->expand_model_info($ext_id);
-            $expand="LEFT JOIN {$this->model->pre}expand_content_{$model_info['table']} C ON C.aid = A.aid";
-            $expand_field="C.*,";
-        }
-        $info="
-            SELECT {$expand_field}A.*
-             FROM {$this->model->pre}content A 
-             LEFT JOIN {$this->model->pre}category B ON B.cid = A.cid
-             {$expand}
-             WHERE A.aid<{$aid} AND A.status=1 AND B.cid={$cid} ORDER BY A.aid desc LIMIT 1
-            ";
-            $info=$this->model->query($info);
+        $info="SELECT A.* FROM {$this->model->pre}content A LEFT JOIN {$this->model->pre}category B ON B.cid = A.cid WHERE A.aid<{$aid} AND A.status=1 AND B.cid={$cid} ORDER BY A.aid desc LIMIT 1";
+        $info=$this->model->query($info);
         return $info[0]; 
     }
 
     //下一篇
     public function next_content($aid,$cid,$ext_id){
-        if(!empty($ext_id)){
-            $model_info=model('category')->expand_model_info($ext_id);
-            $expand="LEFT JOIN {$this->model->pre}expand_content_{$model_info['table']} C ON C.aid = A.aid";
-            $expand_field="C.*,";
-        }
-        $info="
-            SELECT {$expand_field}A.*
-             FROM {$this->model->pre}content A 
-             LEFT JOIN {$this->model->pre}category B ON B.cid = A.cid
-             {$expand}
-             WHERE A.aid>{$aid} AND A.status=1 AND B.cid={$cid} ORDER BY A.aid asc LIMIT 1
-            ";
-            $info=$this->model->query($info);
-        return $info[0];
+        $info="SELECT A.* FROM {$this->model->pre}content A LEFT JOIN {$this->model->pre}category B ON B.cid = A.cid WHERE A.aid>{$aid} AND A.status=1 AND B.cid={$cid} ORDER BY A.aid asc LIMIT 1";
+        $info=$this->model->query($info);
+        return $info[0]; 
     }
 
     //替换后内容
     public function format_content($content){
-
         $replace = $this->model->table('replace')->select();
         $content=html_out($content);
         if (!empty($replace)) {
@@ -156,8 +107,4 @@ class contentModel extends commonMod
             return  __INDEX__ .'/'. $url_content;
 
     }
-
-
 }
-
-?>

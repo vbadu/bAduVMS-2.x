@@ -1,7 +1,7 @@
 <?php
 header("content-type:text/html; charset=utf-8");
 @date_default_timezone_set('PRC');
-
+if(file_exists(dirname(__FILE__).'/data/closed.lock')) exit("系统升级中，请稍后访问...");
 if(!empty($_SERVER['HTTP_X_REWRITE_URL']) ){
 	$_SERVER['REQUEST_URI'] = $_SERVER['HTTP_X_REWRITE_URL'];
 } else if (!isset($_SERVER['REQUEST_URI'])) {

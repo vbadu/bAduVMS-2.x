@@ -52,18 +52,17 @@ class editor_uploadMod extends commonMod
       //上传
     	$upload = new UploadFile();
     	$upload->maxSize = 1024 * 1024 * $this->config['ACCESSPRY_SIZE']; //大小
-		  $upload->allowExts = explode(',', $this->config['ACCESSPRY_TYPE']); //格式
-		  $upload->savePath = $file_path . $filetime . '/'; //保存路径
-      $upload->saveRule = 'filename'; //重命名
+		$upload->allowExts = explode(',', $this->config['ACCESSPRY_TYPE']); //格式
+		$upload->savePath = $file_path . $filetime . '/'; //保存路径
+        $upload->saveRule = 'md5_file'; //重命名
 
-		  if(!$upload->upload())
+		if(!$upload->upload())
         {
             $this->error_msg($upload->getErrorMsg()); //输出错误消息
             return;
         }else{
            $info = $upload->getUploadFileInfo();
            $info = $info[0];
-           //返回信息 Array ( [0] => Array ( [name] => 未命名.jpg [type] => image/pjpeg [size] => 53241 [key] => Filedata [extension] => jpg [savepath] => ../../../upload/2011-12-17/ [savename] => 1112170727041127335395.jpg ) )
            $ext=$info['extension'];
 
           if($_POST['wateradd']){

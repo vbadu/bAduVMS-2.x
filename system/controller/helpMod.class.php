@@ -35,7 +35,7 @@ class helpMod extends commonMod
         $cur_page = $page->getCurPage($url);
         $limit_start = ($cur_page - 1) * $listRows;
         $limit = $limit_start . ',' . $listRows;
-		$where['type']=1;
+		//$where['type']=1;
 		$where['open']=1;
 		//列表
 		$this->list=model('badu')->get_list($limit,$where,'help','id desc');
@@ -48,9 +48,12 @@ class helpMod extends commonMod
         if(empty($id)){
             $this->redirect(__URL__.'/index/');;
         }
-		$info = model('badu')->info(array('id'=>$id,'type'=>1,'open'=>1),'help');
+		$info = model('badu')->info(array('id'=>$id,'open'=>1),'help');
         if (is_array($info)==false){
          	$this->msg('访问的页面不存在或为非公开内容！');
+        }
+        if ($info['type']!=1){
+        	$tpl='_good';
         }
 		if (empty($info)) $this->msg('访问的页面不存在或为非公开内容！');
 		$this->info=$info;
@@ -58,7 +61,7 @@ class helpMod extends commonMod
 		$common['cid']=0;
 		$common['url']='help.html';
         $this->assign('common', $common);
-		$this->display('help_info.html');
+		$this->display('help_info'.$tpl.'.html');
 		
 	}
      //内容页donate
@@ -117,10 +120,10 @@ class helpMod extends commonMod
 			}
 			$post=in($_POST);
 			$title='';
-			if ($_post['title[1]']=='on')	$title.='资金 ';
-			if ($_post['title[2]']=='on')	$title.='物资物品 ';
-			if ($_post['title[3]']=='on')	$title.='衣物 ';
-			if ($_post['title[0]']=='on')	$title.='其他';
+			if ($post['title[1']=='on')	$title.='资金 ';
+			if ($post['title[2']=='on')	$title.='物资物品 ';
+			if ($post['title[3']=='on')	$title.='衣物 ';
+			if ($post['title[0']=='on')	$title.='其他';
 			if (empty($title) ) {
 				$this->msg('请选择捐赠类项，可单选或多选！',0);
 				return;

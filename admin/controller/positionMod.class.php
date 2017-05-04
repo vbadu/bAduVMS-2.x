@@ -5,10 +5,10 @@ class positionMod extends commonMod {
 	public function __construct()
     {
         parent::__construct();
-		$this->model_url=$_GET['_module'];
-        if(!model('user_group')->model_power($this->model_url,'visit')){
-        	$this->msg('对不起，您没有该模块('.$this->model_url.')的操作权限！',0);
+        if(!model('user_group')->menu_power('system',true)){
+        	$this->msg('对不起，您没有该模块的操作权限！',0);
         }
+		$this->check_app_power('position',true);
 	}
     //首页
 	public function index() {
@@ -19,18 +19,12 @@ class positionMod extends commonMod {
 
     //添加
     public function add() {
-        if(!model('user_group')->model_power($this->model_url,'add')){
-        	$this->msg('对不起，您没有该模块('.$this->model_url.')的操作权限！',0);
-        }
         $this->action_name='添加';
         $this->action='add';
         $this->show('position/info'); 
     }
 
     public function add_save() {
-        if(!model('user_group')->model_power($this->model_url,'add')){
-        	$this->msg('对不起，您没有该模块('.$this->model_url.')的操作权限！',0);
-        }
         //录入模型处理
         model('position')->add($_POST);
         $this->msg('推荐位添加成功！',1);
@@ -38,9 +32,6 @@ class positionMod extends commonMod {
 
     //修改
     public function edit() {
-        if(!model('user_group')->model_power($this->model_url,'edit')){
-        	$this->msg('对不起，您没有该模块('.$this->model_url.')的操作权限！',0);
-        }
         $id=$_GET['id'];
         $this->alert_str($id,'int');
         $this->info=model('position')->info($id);
@@ -50,9 +41,6 @@ class positionMod extends commonMod {
     }
 
     public function edit_save() {
-        if(!model('user_group')->model_power($this->model_url,'edit')){
-        	$this->msg('对不起，您没有该模块('.$this->model_url.')的操作权限！',0);
-        }
         $id=$_POST['id'];
         $this->alert_str($id,'int',true);
         //录入模型处理
@@ -62,9 +50,6 @@ class positionMod extends commonMod {
 
     //删除
     public function del() {
-        if(!model('user_group')->model_power($this->model_url,'del')){
-        	$this->msg('对不起，您没有该模块('.$this->model_url.')的操作权限！',0);
-        }
         $id=intval($_POST['id']);
         $this->alert_str($id,'int',true); 
         //录入模型处理

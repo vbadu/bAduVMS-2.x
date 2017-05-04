@@ -3,9 +3,9 @@ require (dirname(__file__) . '/data.php');
 require (dirname(__file__) . '/ver.php'); 
 
 //站点信息
-$config['sitename']='八度义工协会1';
+$config['sitename']='义工协会';
 $config['seoname']='八度义工协会';
-$config['siteurl']='http://zyzcms.net';
+$config['siteurl']='http://rmb.com';
 $config['keywords']='八度义工协会';
 $config['description']='八度义工协会';
 $config['masteremail']='admin@zyzcms.net';
@@ -15,8 +15,8 @@ $config['helponline']='0793-8300869';
 //会员设置
 $config['VIP_AUTO']=true;//是否自动生成编号
 $config['VIP_CARD']=361124;//区域代码或会员编号首位代码
-$config['VIP_CARD_IDS']=1;//会员编号初始编号
-$config['VIP_CARD_NOW']=2;//上一次使用编号，用于生成编号参考依据
+$config['VIP_CARD_IDS']=001;//会员编号初始编号
+$config['VIP_CARD_NOW']=001;//上一次使用编号，用于生成编号参考依据
 $config['VIP_CARD_DAY']=201611;//上一次使用编号，用于生成编号参考依据
 $config['VIP_CARD_MOD']=true;//true会员编号采取自动累计， false采取按年月初始化初始编号，比如10号编号到9999,11号第一位自动从初始编号0001开始
 $config['VIP_CARD_TPL']='{card}{yy}{mm}{dd}{id}';//会员编号规则模版

@@ -4,6 +4,10 @@ class navMod extends commonMod
     public function __construct()
     {
         parent::__construct();
+        if(!model('user_group')->menu_power('system',true)){
+        	$this->msg('对不起，您没有该模块的操作权限！',0);
+        }
+		$this->check_app_power('nav',true);
     }
     // 分类首页
     public function index()

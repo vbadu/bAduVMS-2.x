@@ -29,91 +29,10 @@ class App {
 		if ( is_file(CORE_PATH . '/common.function.php') ) {
 			require(CORE_PATH . '/common.function.php');
 		}
-		static $license;
-		if (is_null($license)) {
-			$this->license();
-		}
 		//加载扩展函数库
 		if ( is_file(CORE_PATH . '/../ext/extend.php') ) {
 			require(CORE_PATH . '/../ext/extend.php');
 		}
-	}
-	public function license(){
-		$buy_license_message = "<br />请联系 <a href=\"http://www.vbadu.com/\" target=\"_blank\">bAdu</a> 官方购买授权";
-		static $license = NULL;
-	
-		if (is_null($license)) {
-			$file = bAdu_PATH . "license";
-	
-			if (!is_file($file)) {
-				exit("授权文件不存在" . $buy_license_message);
-			}
-	
-			if (!is_readable($file) || !strlen($license = file_get_contents($file))) {
-				exit("无法读取授权文件");
-			}
-	
-			$key = "cOorumf2punxX5sps@vbadu.com";
-			
-			$license = strrev($license);
-			$license = base64_decode($license);
-			$license = substr($license, 10, -15 - strlen($key));
-			$license = App::licenseDecode($license, $key);
-			$license = explode("|", $license);
-		}
-		if (empty($license)) {
-			exit("您的授权文件有误" . $buy_license_message);
-		}
-		$version = $license[4];
-		$expires = $license[3];
-		$admindomain = $license[2];
-		$ip = $license[1];
-		$domain = $license[0];
-		
-	
-		if (!$version) {
-			exit("您的授权文件有误" . $buy_license_message);
-		}
-	
-		static $internal_validate = false;
-	
-		if (!$internal_validate) {
-			if ($expires && ($expires < time())) {
-				exit($expires."您的授权已过期" . $buy_license_message);
-			}
-	
-			$host = $_SERVER["SERVER_NAME"];
-			if (empty($host)) {
-				$host = $_SERVER["HTTP_HOST"];
-			}
-			$host = explode('.', $host);
-			$host = $host[count($host) - 2] . '.' . $host[count($host) - 1];	
-			if ($admindomain!='3389dae361af79b04c9c8e7057f60cc6' && md5($host) !== $admindomain){
-				exit("您当前使用的域名".$host."与授权域名不符" . $buy_license_message);
-			}
-	
-			$ip = explode(",", $ip);
-			$addr = $_SERVER["SERVER_ADDR"];
-	
-			if (empty($addr)) {
-				$addr = $_SERVER["LOCAL_ADDR"];
-			}
-	
-			if (!in_array('*',$ip) && !in_array($addr, $ip)) {
-				exit("您当前使用的 IP 与授权 IP 不符" . $buy_license_message);
-			}
-			
-			$internal_validate = true;
-		}
-		return true;
-	}
-	public static function licenseDecode($data, $key)
-	{
-		require_once(CORE_PATH . '/aes.class.php');
-		$aes = new Aes();
-		$aes->requirePkcs5();
-		$aes->setKey($key);
-		return $aes->decrypt($data);
 	}
 	//执行模块，单一入口控制核心
     public function run() {

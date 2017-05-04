@@ -76,12 +76,13 @@ class memberModel extends commonModel{
 		$table=$this->table.$table;
         return $this->model->table($table)->where($where)->delete(); 
     }
-	protected function make_vcard($_vcard=''){
+	protected function make_vcard($_vcard='',$back=false){
 		$config = $this->config;
 		if (empty($_vcard)){
 			$_vcard=(strlen($config['VIP_CARD_NOW'])>0)?in($config['VIP_CARD_NOW']):in($config['VIP_CARD_IDS']);
 			if (empty($_vcard)){$this->alert("会员编号自动生成失败，请先进入【系统】设置会员相关默认配置项。");	}
 		}
+		$_vcard = str_replace(array("<", ">", "[","]", "{","}"), array("", "","","","",""), $_vcard);
 		$vcard = $config['VIP_CARD_TPL'];
 		$vcard = preg_replace ("/\{card\}/iU", $config['VIP_CARD'], $vcard);
 		$vcard = preg_replace ("/\{yyyy\}/iU", date('Y'), $vcard);
@@ -90,7 +91,12 @@ class memberModel extends commonModel{
 		$vcard = preg_replace ("/\{dd\}/iU", date('d'), $vcard);
 		$vcard = preg_replace ("/\{hh\}/iU", date('h'), $vcard);
 		$vcard = preg_replace ("/\{ii\}/iU", date('i'), $vcard);
-		$vcard = preg_replace ("/\{id\}/iU", $_vcard, $vcard);
+		//dump($vcard);
+		$now_card=$vcard = preg_replace ("/\{id\}/iU", $_vcard, $vcard);
+		//dump($vcard,1);
+		if ($back){
+			return array('card'=>$vcard,'now'=>$now_card);	
+		}
 		return $vcard;
 	}
 	//生成编号	
@@ -114,7 +120,7 @@ class memberModel extends commonModel{
 				$_vcard=substr(substr($data['vcard'],-strlen($config['VIP_CARD_IDS'])-1)+1,-strlen($config['VIP_CARD_IDS']));
 				$vcard=$this->make_vcard($_vcard);
 				config(array('VIP_CARD_NOW'=>$_vcard));
-				Config::set('VIP_CARD_NOW',$_vcard);
+				Config::set('VIP_CARD_NOW','{'.$_vcard.'}');
 				Config::set('VIP_CARD_DAY',date('Ym'));
 				//echo  (int)$data['vcard'];
 			}
@@ -174,7 +180,6 @@ class memberModel extends commonModel{
 		$array=str_replace('{','',$array);
 		$array=explode('|',$array);
 		$temp=$vcard;
-
 		foreach ($array as $k=>$v){
 			if ($v=='card' && !empty($config['VIP_CARD']) && $config['VIP_CARD']==substr($temp,0,strlen($config['VIP_CARD']))){
 				$temp=substr_replace($temp,'',0,strlen($config['VIP_CARD']));
@@ -197,7 +202,8 @@ class memberModel extends commonModel{
 			if ($v=='ii' && @preg_match( "/[\d]{1,2}/", substr( $temp,0,2 ) ) ){
 				$temp=substr_replace($temp,'',0,2);
 			}
-			if ($v=='id' && !empty($config['VIP_CARD_IDS']) && strlen($temp)==strlen($config['VIP_CARD_IDS']) ){
+			$_vcard = str_replace(array("<", ">", "[","]", "{","}"), array("", "","","","",""), $config['VIP_CARD_IDS']);
+			if ($v=='id' && !empty($config['VIP_CARD_IDS']) && strlen($temp)==strlen($_vcard) ){
 				$temp='';
 			}
 		}
@@ -214,10 +220,11 @@ class memberModel extends commonModel{
 		foreach ($group as $k=>$v){
 			$credit=@number_format($v['credit']);
 			if (isset($credit)  && $vtime>=$credit ){
-				$groupid=$v['id'];
-				return $groupid;
+				$data['gid']=$v['id'];
+				$data['gname']=$v['name'];
 			}
 		}
+		return $data;
 	}
 	
 }?>

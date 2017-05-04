@@ -6,12 +6,10 @@
 </div>
 <div class="tab" id="tab"> 
 <a class="selected" href="#">{$action_name}单页面</a> 
-<?php if(model('user_group')->model_power('category','visit')){ ?>
 <a href="javascript:menuload('{$return_list}')">返回列表</a>
-<?php } ?>
 </div>
 <div class="page_form">
-<form action="__URL__/{$action}_save/time-<?php echo time(); ?>-ajax-true" method="post" id="form">
+<form action="__URL__/onepage/time-<?php echo time(); ?>-ajax-true" method="post" id="form">
 <div class="page_table form_table">
     <table width="100%" border="0" cellspacing="0" cellpadding="0">
       <tr>
@@ -61,7 +59,7 @@
         <td width="100" align="right">内容</td>
         <td colspan="2">
         <?php echo module('editor')->get_editor('content'); ?>
-        <textarea name="content" style="width:100%; height:350px;" id="content">{$page_info.content html}</textarea>
+        <textarea name="content" style="width:100%; height:350px;" id="content">{$info.content html}</textarea>
         <input type="button" onclick="javascript:get_remote_image()" style="margin-top:10px;" class="button_small" value="远程图片本地化" />
         <?php echo module('editor')->get_editor_upload('editor_upload','editor_content') ?>
         <input type="button" id="editor_upload" class="button_small" style="margin-top:10px;" value="上传图片和文件到编辑器" />
@@ -122,14 +120,12 @@
       </tr>
     </table>
 </div>
-<?php if(model('user_group')->model_power('category','add')||model('user_group')->model_power('category','edit')){ ?>
 <!--普通提交-->
 <div class="form_submit">
 <input name="cid" type="hidden" value="{$info.cid}" />
 <input name="file_id" id="file_id" type="hidden" value="{$file_id}" />
 <button type="submit" class="button">保存</button> 
 </div>
-<?php } ?>
 </form>
 </div>
 </div>

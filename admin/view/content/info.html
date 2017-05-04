@@ -6,7 +6,6 @@
 <div class="tab" id="tab"> 
 <a class="selected" href="#tab1">基本内容</a> 
 <a href="#tab2">高级信息</a> 
-<a href="#tab3">扩展信息</a> 
 <a href="javascript:history.go(-1)">返回上级</a></div>
 <div class="page_form">
   <form action="__URL__/{$action}_save/time-<?php echo time(); ?>-ajax-true" method="post" id="form" autocomplete="off">
@@ -161,13 +160,9 @@
         </td>
         <td>留空采用栏目指定模板</td>
       </tr>
-      </table>
-    </div>
-    <div class="page_table form_table" id="tab3">
-      <table width="100%" border="0" cellspacing="0" cellpadding="0">
           <tr>
-            <td width="100" align="right">编辑</td>
-            <td width="350">
+            <td align="right">编辑</td>
+            <td>
             <input name="editor" type="text" class="text_value" id="editor" value="{$info.editor}" />
             </td>
             <td></td>
@@ -178,18 +173,14 @@
             <td width="350" style="padding:0px; height:0px;"></td>
             <td style="padding:0px; height:0px;"></td>
           </tr>
-          <tbody id="expand">
-          </tbody>
       </table>
     </div>
-    <?php if(model('user_group')->model_power('content','add')||model('user_group')->model_power('content','edit')){ ?>
     <!--普通提交-->
     <div class="form_submit">
       <input name="aid" type="hidden" value="{$info.aid}" />
       <input name="file_id" id="file_id" type="hidden" value="{$file_id}" />
       <button type="submit" class="button">保存</button>
     </div>
-    <?php } ?>
   </form>
 </div>
 </div>

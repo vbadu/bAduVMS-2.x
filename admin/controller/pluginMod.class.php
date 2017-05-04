@@ -5,10 +5,10 @@ class pluginMod extends commonMod {
 	public function __construct()
     {
         parent::__construct();
-		$this->model_url=$_GET['_module'];
-        if(!model('user_group')->model_power($this->model_url,'visit')){
-        	$this->msg('对不起，您没有该模块('.$this->model_url.')的操作权限！',0);
+        if(!model('user_group')->menu_power('system',true)){
+        	$this->msg('对不起，您没有该模块的操作权限！',0);
         }
+		$this->check_app_power('plugin',true);
 	}
 	public function index() {
         $this->list=model('plugin')->plugin_list();
@@ -32,9 +32,6 @@ class pluginMod extends commonMod {
 
     //安装
     public function install() {
-        if(!model('user_group')->model_power($this->model_url,'install')){
-        	$this->msg('对不起，您没有该模块('.$this->model_url.')的操作权限！',0);
-        }
         $name=$_POST['name'];
         $this->alert_str($name,'',true);
         $dir = __ROOTDIR__ . '/system/plugins/' . $name;
@@ -76,9 +73,6 @@ class pluginMod extends commonMod {
     //导出
     public function out()
     {
-         if(!model('user_group')->model_power($this->model_url,'out')){
-        	$this->msg('对不起，您没有该模块('.$this->model_url.')的操作权限！',0);
-        }
        $id=intval($_POST['id']);
         $info=model('plugin')->info_data($id);
         if(!empty($info['file'])){
@@ -126,9 +120,6 @@ class pluginMod extends commonMod {
 
     //卸载
     public function uninstall() {
-        if(!model('user_group')->model_power($this->model_url,'uninstall')){
-        	$this->msg('对不起，您没有该模块('.$this->model_url.')的操作权限！',0);
-        }
         $id=intval($_POST['id']);
         $this->alert_str($id,'int',true);
         //获取插件信息
@@ -163,9 +154,6 @@ class pluginMod extends commonMod {
 
     //删除文件
     public function del_file(){
-        if(!model('user_group')->model_power($this->model_url,'del')){
-        	$this->msg('对不起，您没有该模块('.$this->model_url.')的操作权限！',0);
-        }
         $name=$_POST['name'];
         $this->alert_str($name,'',true);
         $dir = __ROOTDIR__ . '/system/plugins/' . $name;
@@ -180,9 +168,6 @@ class pluginMod extends commonMod {
 
     //停用插件
     public function disable(){
-        if(!model('user_group')->model_power($this->model_url,'status')){
-        	$this->msg('对不起，您没有该模块('.$this->model_url.')的操作权限！',0);
-        }
         $id=intval($_POST['id']);
         $this->alert_str($id,'int',true);
         //获取插件信息
@@ -199,9 +184,6 @@ class pluginMod extends commonMod {
 
     //启用插件
     public function enable(){
-        if(!model('user_group')->model_power($this->model_url,'status')){
-        	$this->msg('对不起，您没有该模块('.$this->model_url.')的操作权限！',0);
-        }
         $id=intval($_POST['id']);
         $this->alert_str($id,'int',true);
         //获取插件信息

@@ -6,7 +6,11 @@ class eventModel extends commonModel{
     {
         parent::__construct();
     }
-	
+    //统计
+	public function get_sum($id=1,$table=NULL) {
+		$data=$this->model->query("SELECT sum(vtime) as vtimes FROM {$this->model->pre}{$this->table}{$table} WHERE uid={$id}");
+		return $data[0]['vtimes'];
+	}
 	private function getWhere($data) {
 		if (!is_array($data)) return $data;
 		ksort($data);  

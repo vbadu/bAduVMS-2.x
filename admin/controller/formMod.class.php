@@ -4,9 +4,8 @@ class formMod extends commonMod
     public function __construct()
     {
         parent::__construct();
-		$this->model_url=$_GET['_module'];
-        if(!model('user_group')->model_power($this->model_url,'visit')){
-        	$this->msg('对不起，您没有该模块('.$this->model_url.')的操作权限！',0);
+		if(!model('user_group')->model_power('form',true)){
+        	$this->msg('对不起，您没有该模块的操作权限！!',0);
         }
 	}
 	//表单首页
@@ -18,9 +17,6 @@ class formMod extends commonMod
 
     //表单添加
     public function add() {
-        if(!model('user_group')->model_power($this->model_url,'add')){
-        	$this->msg('对不起，您没有该模块('.$this->model_url.')的操作权限！',0);
-        }
         $this->action_name='添加';
         $this->action='add';
         $this->show('form/info'); 
@@ -35,7 +31,7 @@ class formMod extends commonMod
 		$id=empty($data['fid'])?intval($data['id']):intval($data['fid']);
 		if (1>$id) return $this->msg('对不起，表单创建关键参数丢失，请与我们客服联系！',0);
 		//检查是否存在活动ID字段
-		$eid=model('form')->find_field_data($id,array('field'=>$data['eid']));
+		$eid=model('form')->find_field_data($id,array('field'=>'eid'));
 		if ($eid==0){
 			$form['fid']=$id;
 			$form['name']='活动ID';
@@ -52,7 +48,7 @@ class formMod extends commonMod
 			model('form')->field_add($form);	
 		}
 		//检查是否存在用户ID字段
-		$uid=model('form')->find_field_data($id,array('field'=>$data['uid']));
+		$uid=model('form')->find_field_data($id,array('field'=>'uid'));
 		if ($uid==0){
 			$form['fid']=$id;
 			$form['name']='会员ID';
@@ -70,7 +66,7 @@ class formMod extends commonMod
 			model('form')->field_add($form);	
 		}
 		//检查是否存在活动姓名字段
-		$vcard=model('form')->find_field_data($id,array('field'=>$data['mobile']));
+		$vcard=model('form')->find_field_data($id,array('field'=>'mobile'));
 		if ($vcard==0){
 			$form['fid']=$id;
 			$form['name']='手机号码';
@@ -90,9 +86,6 @@ class formMod extends commonMod
 
     //表单添加数据处理
     public function add_save() {
-        if(!model('user_group')->model_power($this->model_url,'add')){
-        	$this->msg('对不起，您没有该模块('.$this->model_url.')的操作权限！',0);
-        }
 		$data=in($_POST);
         $this->data_check($data);
         $data['fid']=model('form')->add($_POST);
@@ -102,11 +95,9 @@ class formMod extends commonMod
 
     //表单修改
     public function edit() {
-        if(!model('user_group')->model_power($this->model_url,'edit')){
-        	$this->msg('对不起，您没有该模块('.$this->model_url.')的操作权限！',0);
-        }
         $id=$_GET['id'];
         $this->alert_str($id,'int');
+		$this->check_from_power($id);
         $this->info=model('form')->info($id);
         $this->action_name='编辑';
         $this->action='edit';
@@ -115,6 +106,7 @@ class formMod extends commonMod
 
     //表单修改
     public function edit_save() {
+		$this->check_from_power($_POST['id']);
         $this->data_check($_POST);
         //录入模型处理
         model('form')->edit($_POST);
@@ -125,16 +117,10 @@ class formMod extends commonMod
     //导入
     public function in()
     {
-        if(!model('user_group')->model_power($this->model_url,'in')){
-        	$this->msg('对不起，您没有该模块('.$this->model_url.')的操作权限！',0);
-        }
         $this->display();
     }
 
     public function in_data(){
-        if(!model('user_group')->model_power($this->model_url,'in')){
-        	$this->msg('对不起，您没有该模块('.$this->model_url.')的操作权限！',0);
-        }
         $table=$_POST['table'];
         if(empty($table)){
             $this->msg('文件夹名尚未填写！',0);
@@ -165,10 +151,8 @@ class formMod extends commonMod
     //模型导出
     public function out()
     {
-        if(!model('user_group')->model_power($this->model_url,'out')){
-        	$this->msg('对不起，您没有该模块('.$this->model_url.')的操作权限！',0);
-        }
         $id=intval($_POST['id']);
+		$this->check_from_power($id);
         $info=model('form')->info($id);
         //创建文件夹
         $dir=__ROOTDIR__.'/data/form/'.$info['table'];
@@ -213,11 +197,9 @@ class formMod extends commonMod
 
     //表单删除
     public function del() {
-        if(!model('user_group')->model_power($this->model_url,'del')){
-        	$this->msg('对不起，您没有该模块('.$this->model_url.')的操作权限！',0);
-        }
         $id=intval($_POST['id']);
-        $this->alert_str($id,'int',true); 
+        $this->alert_str($id,'int',true);
+		$this->check_from_power($id); 
         //录入模型处理
         model('form')->del($id);
         $this->msg('表单删除成功！',1);
@@ -227,12 +209,14 @@ class formMod extends commonMod
     public function field_list() {
         $id=$_GET['id'];
         $this->alert_str($id,'int');
+		$this->check_from_power($id);
         $this->info=model('form')->info($id);
         $this->list=model('form')->field_list($id);
         $this->show();
     }
 
     public function field_data_check($data) {
+		$this->check_from_power($data['fid']);
         if(model('form')->field_check($data['fid'],$data['field'],$_POST['id'])){
             $this->msg('字段名不能重复',0);
         }
@@ -252,13 +236,11 @@ class formMod extends commonMod
 
     //添加字段
     public function field_add(){
-        if(!model('user_group')->model_power($this->model_url,'field')){
-        	$this->msg('对不起，您没有该模块('.$this->model_url.')的操作权限！',0);
-        }
         $fid=$_GET['fid'];
         $this->alert_str($fid,'int');
+		$this->check_from_power($fid);
         $this->table_info=model('form')->info($fid);
-        $this->view()->assign(module('expand_model')->data_info());
+        $this->view()->assign($this->data_info());
         $this->action_name='添加';
         $this->action='add';
         $this->show('form/field_info'); 
@@ -266,9 +248,6 @@ class formMod extends commonMod
 
     //字段添加
     public function field_add_save() {
-        if(!model('user_group')->model_power($this->model_url,'field')){
-        	$this->msg('对不起，您没有该模块('.$this->model_url.')的操作权限！',0);
-        }
         $fid=$_POST['fid'];
         $this->alert_str($fid,'int',true);
         $this->field_data_check($_POST);
@@ -280,12 +259,10 @@ class formMod extends commonMod
     //修改字段
     public function field_edit()
     {
-        if(!model('user_group')->model_power($this->model_url,'field')){
-        	$this->msg('对不起，您没有该模块('.$this->model_url.')的操作权限！',0);
-        }
         $id=intval($_GET['id']);
         $this->alert_str($id,'int');
         $this->info=model('form')->field_info($id);
+		$this->check_from_power($this->info['fid']);
         $this->table_info=model('form')->info($this->info['fid']);
         $this->field_type=model('form')->field_type();
         $this->field_property=model('form')->field_property();
@@ -297,9 +274,6 @@ class formMod extends commonMod
     //字段数据修改
     public function field_edit_save()
     {
-        if(!model('user_group')->model_power($this->model_url,'field')){
-        	$this->msg('对不起，您没有该模块('.$this->model_url.')的操作权限！',0);
-        }
         $this->alert_str($_POST['fid'],'int',true);
         $this->alert_str($_POST['id'],'int',true);
         $this->field_data_check($_POST);
@@ -311,10 +285,10 @@ class formMod extends commonMod
     //字段删除
     public function field_del()
     {
-        if(!model('user_group')->model_power($this->model_url,'field')){
-        	$this->msg('对不起，您没有该模块('.$this->model_url.')的操作权限！',0);
-        }
         $this->alert_str($_POST['id'],'int',true);
+		$info=model('form')->field_info(intval($_POST['id']));
+		if (!is_array($info) && 1>count($info)) $this->msg('字段不存在或已删除！',0);
+		$this->check_from_power(intval($info['fid']));
         //录入模型处理
         model('form')->field_del($_POST);
         $this->msg('字段删除成功！',1);

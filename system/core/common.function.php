@@ -477,50 +477,49 @@ if (!function_exists('json_encode')) {
 
 //POST表单处理函数,$post_array:POST的数据,$null_value:是否删除空表单,$delete_value:删除指定表单
 function postinput($post_array,$null_value = null,$delete_value = array()){
-        //清除值为空或者为0的元素
-        if($null_value){
-            foreach($post_array as $key=>$value){
-                $value = in($value);
-                if($value == ''){
-                    unset($post_array[$key]);
-                }
-            } 
-        }
-        //清除不需要的元素
-        $default_value = array('action','button','fid','submit');
-        $clear_array = array_merge($default_value,$delete_value);
-        foreach($post_array as $key=>$value){
-                if(in_array($key,$clear_array)){
-                    unset($post_array[$key]);		
-                }
-        }
-        return $post_array;
+	//清除值为空或者为0的元素
+	if($null_value){
+		foreach($post_array as $key=>$value){
+			$value = in($value);
+			if($value == ''){
+				unset($post_array[$key]);
+			}
+		} 
+	}
+	//清除不需要的元素
+	$default_value = array('action','button','fid','submit');
+	$clear_array = array_merge($default_value,$delete_value);
+	foreach($post_array as $key=>$value){
+			if(in_array($key,$clear_array)){
+				unset($post_array[$key]);		
+			}
+	}
+	return $post_array;
 }
 
 //复制目录
 function copy_dir($sourceDir,$aimDir){
-		$succeed = true;
-		if(!file_exists($aimDir)){
+	$succeed = true;
+	if(!file_exists($aimDir)){
 		if(!mkdir($aimDir,0777)){
-		return false;
+			return false;
 		}
-		}
-		$objDir = opendir($sourceDir);
-		while(false !== ($fileName = readdir($objDir))){
+	}
+	$objDir = opendir($sourceDir);
+	while(false !== ($fileName = readdir($objDir))){
 		if(($fileName != ".") && ($fileName != "..")){
-		if(!is_dir("$sourceDir/$fileName")){
-		if(!copy("$sourceDir/$fileName","$aimDir/$fileName")){
-		$succeed = false;
-		break;
+			if(!is_dir("$sourceDir/$fileName")){
+				if(!copy("$sourceDir/$fileName","$aimDir/$fileName")){
+					$succeed = false;
+					break;
+				}
+			}else{
+				copy_dir("$sourceDir/$fileName","$aimDir/$fileName");
+			}
 		}
-		}
-		else{
-		copy_dir("$sourceDir/$fileName","$aimDir/$fileName");
-		}
-		}
-		}
-		closedir($objDir);
-		return $succeed;
+	}
+	closedir($objDir);
+	return $succeed;
 }
 
 //判断ajax提交
@@ -556,7 +555,7 @@ cut_str(字符串, 截取长度, 开始长度, 编码);
 开始长度默认为 0
 cut_str($str, 8, 0, 'gb2312');
 */
- function cut_str($string, $sublen, $start = 0, $code = 'UTF-8'){
+function cut_str($string, $sublen, $start = 0, $code = 'UTF-8'){
 	if($code == 'UTF-8'){
 		$pa = "/[\x01-\x7f]|[\xc2-\xdf][\x80-\xbf]|\xe0[\xa0-\xbf][\x80-\xbf]|[\xe1-\xef][\x80-\xbf][\x80-\xbf]|\xf0[\x90-\xbf][\x80-\xbf][\x80-\xbf]|[\xf1-\xf7][\x80-\xbf][\x80-\xbf][\x80-\xbf]/";
 		preg_match_all($pa, $string, $t_string);
@@ -658,8 +657,6 @@ function strip_word_html($text, $allowed_tags = '<b><i><sup><sub><em><strong><u>
 	}
 	return $text;
 }
-//下面是用户自定义的函数
-
 //探测是否手机
 function is_mobile() {     
 	$user_agent = $_SERVER['HTTP_USER_AGENT'];     
@@ -891,16 +888,16 @@ function vipstar($data=1,$type=false) {
 }
 //返回域名 strcasecmp二进制安全比较字符串（不区分大小写）
 function get_domain() {
-		$https = !empty($_SERVER['HTTPS']) && strcasecmp($_SERVER['HTTPS'], 'on') === 0 ||
-			!empty($_SERVER['HTTP_X_FORWARDED_PROTO']) &&
-				strcasecmp($_SERVER['HTTP_X_FORWARDED_PROTO'], 'https') === 0;
-		return
-			($https ? 'https://' : 'http://').
-			(!empty($_SERVER['REMOTE_USER']) ? $_SERVER['REMOTE_USER'].'@' : '').
-			(isset($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : ($_SERVER['SERVER_NAME'].
-			($https && $_SERVER['SERVER_PORT'] === 443 ||
-			$_SERVER['SERVER_PORT'] === 80 ? '' : ':'.$_SERVER['SERVER_PORT']))).
-			substr($_SERVER['SCRIPT_NAME'],0, strrpos($_SERVER['SCRIPT_NAME'], '/'));
+	$https = !empty($_SERVER['HTTPS']) && strcasecmp($_SERVER['HTTPS'], 'on') === 0 ||
+		!empty($_SERVER['HTTP_X_FORWARDED_PROTO']) &&
+			strcasecmp($_SERVER['HTTP_X_FORWARDED_PROTO'], 'https') === 0;
+	return
+		($https ? 'https://' : 'http://').
+		(!empty($_SERVER['REMOTE_USER']) ? $_SERVER['REMOTE_USER'].'@' : '').
+		(isset($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : ($_SERVER['SERVER_NAME'].
+		($https && $_SERVER['SERVER_PORT'] === 443 ||
+		$_SERVER['SERVER_PORT'] === 80 ? '' : ':'.$_SERVER['SERVER_PORT']))).
+		substr($_SERVER['SCRIPT_NAME'],0, strrpos($_SERVER['SCRIPT_NAME'], '/'));
 }
 //过滤所有非中文文本内容
 function clear_no_text($str){
@@ -1094,8 +1091,7 @@ function second_format($second){
 	}
 	return $str;
 }
-function decodeData($data)
-{
+function decodeData($data){
 	return is_array($data)
 		? $data
 		: ($data[0]=='{' || $data[0]=='[') ? json_decode($data, true) : unserialize($data);
@@ -1132,7 +1128,6 @@ function url_ext(){
 		App::$action=$_GET['a'];
 	}
 }
-
 function url($module='', $action='', $param=array()){
 	$route=$module.'/'.$action;
 	$module=empty($module)?'':'?m='.$module;
@@ -1169,106 +1164,160 @@ function url($module='', $action='', $param=array()){
 	}
 	return $url;
 }
-	function api_idcard($str){
-		$str = strtolower($str);
-		if (empty($str)) return false;
-		$url = "http://apis.juhe.cn/idcard/index";
-		$param = array(
-			  "cardno" => $str,
-			  "dtype" => "json",
-			  "key" => "6ef0284e13b27d4b72ba0742083fd49e"
-		);
-		$params = http_build_query($param);
-		$httpInfo = array();
-		$ch = curl_init();
-		curl_setopt( $ch, CURLOPT_HTTP_VERSION , CURL_HTTP_VERSION_1_1 );
-		curl_setopt( $ch, CURLOPT_USERAGENT , 'JuheData' );
-		curl_setopt( $ch, CURLOPT_CONNECTTIMEOUT , 60 );
-		curl_setopt( $ch, CURLOPT_TIMEOUT , 60);
-		curl_setopt( $ch, CURLOPT_RETURNTRANSFER , true );
-		if (ini_get('open_basedir') == '' && ini_get('safe_mode' == 'Off')) {
-			curl_setopt($curl, CURLOPT_FOLLOWLOCATION, 1);
-		}
-		curl_setopt( $ch, CURLOPT_URL , $url.'?'.$params );
-		$response = curl_exec( $ch );
-		$err = curl_error($ch);
-		if ($response === FALSE) {
-			if ($err) return "cURL Error #:" .$err;
-			return false;
-		}
-		$httpCode = curl_getinfo( $ch , CURLINFO_HTTP_CODE );
-		$httpInfo = array_merge( $httpInfo , curl_getinfo( $ch ) );
-		curl_close( $ch );
-		$result = json_decode($response,true);
-		
-		if($result){
-			if($result['error_code']=='0'){
-				if ($result['result']['sex']=='男') $result['result']['sex']='M';
-				$result['result']['birthday']= str_replace(array('年','月'),'-',$result['result']['birthday']);
-				$result['result']['birthday']= str_replace('日','',$result['result']['birthday']);
-				return $result['result'];
-			}else{
-				return $result['error_code'].":".$result['reason'];
-			}
+function api_idcard($str){
+	$str = strtolower($str);
+	if (empty($str)) return false;
+	$url = "http://apis.juhe.cn/idcard/index";
+	$param = array(
+		  "cardno" => $str,
+		  "dtype" => "json",
+		  "key" => "6ef0284e13b27d4b72ba0742083fd49e"
+	);
+	$params = http_build_query($param);
+	$httpInfo = array();
+	$ch = curl_init();
+	curl_setopt( $ch, CURLOPT_HTTP_VERSION , CURL_HTTP_VERSION_1_1 );
+	curl_setopt( $ch, CURLOPT_USERAGENT , 'JuheData' );
+	curl_setopt( $ch, CURLOPT_CONNECTTIMEOUT , 60 );
+	curl_setopt( $ch, CURLOPT_TIMEOUT , 60);
+	curl_setopt( $ch, CURLOPT_RETURNTRANSFER , true );
+	if (ini_get('open_basedir') == '' && ini_get('safe_mode' == 'Off')) {
+		curl_setopt($curl, CURLOPT_FOLLOWLOCATION, 1);
+	}
+	curl_setopt( $ch, CURLOPT_URL , $url.'?'.$params );
+	$response = curl_exec( $ch );
+	$err = curl_error($ch);
+	if ($response === FALSE) {
+		if ($err) return "cURL Error #:" .$err;
+		return false;
+	}
+	$httpCode = curl_getinfo( $ch , CURLINFO_HTTP_CODE );
+	$httpInfo = array_merge( $httpInfo , curl_getinfo( $ch ) );
+	curl_close( $ch );
+	$result = json_decode($response,true);
+	
+	if($result){
+		if($result['error_code']=='0'){
+			if ($result['result']['sex']=='男') $result['result']['sex']='M';
+			$result['result']['birthday']= str_replace(array('年','月'),'-',$result['result']['birthday']);
+			$result['result']['birthday']= str_replace('日','',$result['result']['birthday']);
+			return $result['result'];
 		}else{
-			return "请求失败";
+			return $result['error_code'].":".$result['reason'];
+		}
+	}else{
+		return "请求失败";
+	}
+}
+//处理图片
+function thumb($img,$maxWidth=60,$maxHeight=60,$headpic=false){
+	if(empty($img)) return !($headpic) ? __PUBLIC__.'/images/nopic.png' : __PUBLIC__.'/images/nohead.png';
+	$file=pathinfo($img);
+	$thumbname=$file['dirname'].'/thumb_'.$maxWidth.'_'.$maxHeight.'.'.basename($img);
+	$img = Image::thumb($img,$thumbname,$type='',$maxWidth,$maxHeight,true,true,true);
+	if(empty($img)) return !($headpic) ? __PUBLIC__.'/images/nopic.png' : __PUBLIC__.'/images/nohead.png';
+	if (file_exists($img)){
+		if (preg_match("/^(".preg_quote(__UPDURL__, '/')."|".preg_quote(__UPDDIR__, '/').")(.*)$/", $img, $matches)) $img = $matches[2];
+	}
+	return __UPDURL__.$img;
+}
+//处理活动图片
+function thumbs($img,$maxWidth=60,$maxHeight=60){
+	if(empty($img)) return __PUBLIC__.'/images/Unnamed.jpg';
+	$file=pathinfo($img);
+	$thumbname=$file['dirname'].'/thumb_'.$maxWidth.'_'.$maxHeight.'.'.basename($img);
+	$img = Image::thumb($img,$thumbname,$type='',$maxWidth,$maxHeight,true,true,true);
+	if(empty($img)) return __PUBLIC__.'/images/Unnamed.jpg';
+	if (file_exists($img)){
+		if (preg_match("/^(".preg_quote(__UPDURL__, '/')."|".preg_quote(__UPDDIR__, '/').")(.*)$/", $img, $matches)) $img = $matches[2];
+	}
+	return __UPDURL__.$img;
+}
+//处理标题
+function diytitle($title,$css="h4",$color=NULL,$bold=NULL){
+	if(empty($title)) return '';
+	if(empty($css)) return $title;
+	$style='';
+	if (isset($color)) $style.="color:".$color.";";
+	if (isset($bold)) $style.="font-weight:bold;";
+	if (isset($css)) $title="<".$css." style=".$style.">".$title."</".$css.">";
+	return $title;
+}
+//处理地理位置
+function diyarea($title,$css="h4",$color=NULL,$bold=NULL){
+	if(empty($title)) return '';
+	if(empty($css)) return $title;
+	$style='';
+	if (isset($color)) $style.="color:".$color.";";
+	if (isset($bold)) $style.="font-weight:bold;";
+	if (isset($css)) $title="<".$css." style=".$style.">".$title."</".$css.">";
+	return $title;
+}
+//查询IP位置
+function getIPLoc($queryIP){
+	$url = 'http://ip.qq.com/cgi-bin/searchip?searchip1=' . $queryIP;
+	$ch = curl_init($url);
+	curl_setopt($ch, CURLOPT_ENCODING, 'gb2312');
+	curl_setopt($ch, CURLOPT_TIMEOUT, 10);
+	curl_setopt($ch, CURLOPT_RETURNTRANSFER, true); // 获取数据返回
+	$result = curl_exec($ch);
+	$result = mb_convert_encoding($result, "utf-8", "gb2312"); // 编码转换，否则乱码
+	curl_close($ch);
+	preg_match("@<span>(.*)</span></p>@iU", $result, $ipArray);
+	$loc = $ipArray[1];
+	return $loc;
+}
+//生成唯一的值
+function cp_uniqid(){
+	return md5(uniqid(rand(), true));
+}
+//无限级分类
+function Array2Tree($data, $pid){
+	$tree = '';
+	foreach($data as $k => $v){
+		if($v['pid'] == $pid){
+			//父亲找到儿子
+			$v['pid'] = Array2Tree($data, $v['cid']);
+			$v['fid'] = $pid;
+			$tree[] = $v;
+			//unset($data[$k]);
 		}
 	}
-	//处理图片
-	function thumb($img,$maxWidth=60,$maxHeight=60,$headpic=false){
-		if(empty($img)) return !($headpic) ? __PUBLIC__.'/images/nopic.png' : __PUBLIC__.'/images/nohead.png';
-		$file=pathinfo($img);
-		$thumbname=$file['dirname'].'/thumb_'.$maxWidth.'_'.$maxHeight.'.'.basename($img);
-		$img = Image::thumb($img,$thumbname,$type='',$maxWidth,$maxHeight,true,true,true);
-		if(empty($img)) return !($headpic) ? __PUBLIC__.'/images/nopic.png' : __PUBLIC__.'/images/nohead.png';
-    	if (file_exists($img)){
-			if (preg_match("/^(".preg_quote(__UPDURL__, '/')."|".preg_quote(__UPDDIR__, '/').")(.*)$/", $img, $matches)) $img = $matches[2];
+	return $tree;
+}
+//生成无限级列表
+function Tree2Html($tree,$class_power){
+	$html = '';
+	foreach($tree as $t){
+		if($t['pid'] == ''){
+			$html .= "<input class='sub' name='class_power[]' type='checkbox' value='{$t['cid']}' ";
+			if (in_array($t['cid'],(array)$class_power)) $html .= 'checked="checked"';
+			$html .= $t['name'].'&nbsp;&nbsp';
+		}else{
+			$html .= "<legend onclick='selectalls('class_power[{$t['cid']}][]')'><input type='checkbox' name='class_power[]' value='{$t['cid']}'>《{$t['name']}》 </legend>";
+			$html .= Tree2Html($t['pid'],$class_power);
 		}
-		return __UPDURL__.$img;
 	}
-	//处理活动图片
-	function thumbs($img,$maxWidth=60,$maxHeight=60){
-		if(empty($img)) return __PUBLIC__.'/images/Unnamed.jpg';
-		$file=pathinfo($img);
-		$thumbname=$file['dirname'].'/thumb_'.$maxWidth.'_'.$maxHeight.'.'.basename($img);
-		$img = Image::thumb($img,$thumbname,$type='',$maxWidth,$maxHeight,true,true,true);
-		if(empty($img)) return __PUBLIC__.'/images/Unnamed.jpg';
-    	if (file_exists($img)){
-			if (preg_match("/^(".preg_quote(__UPDURL__, '/')."|".preg_quote(__UPDDIR__, '/').")(.*)$/", $img, $matches)) $img = $matches[2];
+	return $html ? '<fieldset class="source">'.$html.'</fieldset>' : $html ;
+}
+function getTreeHtml($tree,$class_power,$name='class_power'){
+	$html = '';
+	foreach($tree as $k=>$v){
+		
+		if(is_array($v['pid'])){
+			$html.= '<fieldset class="source"><legend><input name="'.$name.'['.$v['fid'].'][]" id="'.$name.'[]" type="checkbox" value="'.$v['cid'].'"';
+			if (in_array($v['cid'],(array)$class_power)) $html .= ' checked="checked"';
+			$html .='>&nbsp;&nbsp《'.$v['name'].'》 &nbsp;&nbsp</legend>';
+			$html .= getTreeHtml($v['pid'],$class_power,$name);
+			$html .='</fieldset>';
+		}else{
+			$html .= '<input class="sub" id="'.$name.'[]" name="'.$name.'['.$v['fid'].'][]" type="checkbox" value="'.$v['cid'].'"';
+			if (in_array($v['cid'],(array)$class_power)) $html .= ' checked="checked"';
+			$html .= '>&nbsp;&nbsp'.$v['name'].'&nbsp;&nbsp';
+			
 		}
-		return __UPDURL__.$img;
+		unset($v[$k]);
+		
 	}
-	//处理标题
-	function diytitle($title,$css="h4",$color=NULL,$bold=NULL){
-		if(empty($title)) return '';
-		if(empty($css)) return $title;
-		$style='';
-		if (isset($color)) $style.="color:".$color.";";
-		if (isset($bold)) $style.="font-weight:bold;";
-		if (isset($css)) $title="<".$css." style=".$style.">".$title."</".$css.">";
-		return $title;
-	}
-	//处理地理位置
-	function diyarea($title,$css="h4",$color=NULL,$bold=NULL){
-		if(empty($title)) return '';
-		if(empty($css)) return $title;
-		$style='';
-		if (isset($color)) $style.="color:".$color.";";
-		if (isset($bold)) $style.="font-weight:bold;";
-		if (isset($css)) $title="<".$css." style=".$style.">".$title."</".$css.">";
-		return $title;
-	}
-		//查询IP位置
-	function getIPLoc($queryIP){
-	    $url = 'http://ip.qq.com/cgi-bin/searchip?searchip1=' . $queryIP;
-	    $ch = curl_init($url);
-	    curl_setopt($ch, CURLOPT_ENCODING, 'gb2312');
-	    curl_setopt($ch, CURLOPT_TIMEOUT, 10);
-	    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true); // 获取数据返回
-	    $result = curl_exec($ch);
-	    $result = mb_convert_encoding($result, "utf-8", "gb2312"); // 编码转换，否则乱码
-	    curl_close($ch);
-	    preg_match("@<span>(.*)</span></p>@iU", $result, $ipArray);
-	    $loc = $ipArray[1];
-	    return $loc;
-	}
+	return $html;
+}

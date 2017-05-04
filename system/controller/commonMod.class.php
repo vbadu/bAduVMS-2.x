@@ -103,7 +103,8 @@ class commonMod
         header('HTTP/1.1 404 Not Found');
         header('Status: 404 Not Found');
         $this->common=model('pageinfo')->media('您要查找的页面不存在');
-        echo $this->msg=$msg;
+        $this->msg=$msg;
+		//dump($msg,1);
         $this->display('404.html');
         exit;
     }

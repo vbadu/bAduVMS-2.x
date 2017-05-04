@@ -4,9 +4,7 @@
     <small>[发布]按钮即将内容发布到网站（手机触屏）版页面中，网友可以浏览访问。[归档]将旧的内容归档到库中。[下架]内容暂时下架。[归档]和[下架]在网站(手机触屏)版页面中不可见。</small> </div>
   <div class="exercise"> 
    <a href="#">内容列表</a>
-   <?php if(model('user_group')->model_power('content','add')){ ?>
    <a href="__URL__/add/cid-{$class_info.cid}">添加内容</a>
-   <?php } ?>
    </div>
 </div>
 <div class="page_main">
@@ -60,12 +58,8 @@
         </center></td>
         
         <td><center>
-        <?php if($edit_power){ ?>
         <a href="__URL__/edit/id-{$vo.aid}">修改</a>
-        <?php } ?>
-        <?php if($del_power){ ?>
         &nbsp;&nbsp;<a href="javascript:void(0);" onclick="del('{$vo.aid}',this)">删除</a>
-        <?php } ?>
         </center></td>
       </tr>
       <!--{/foreach}-->
@@ -76,20 +70,12 @@
 <div class="page_tool">
   <div class="function">
   <input type="button" onclick="javascript:selectall('id[]');" class="button_small" value="全选" />
-  <?php if($past_power){ ?>
   <input type="button" onclick="javascript:audit(1);"  class="button_small" value="发布" />
   <input type="button" onclick="javascript:audit(5);"  class="button_small" value="归档" />
-  <?php } ?>
-  <?php if($cancel_power){ ?>
   <input type="button" onclick="javascript:audit(2);" class="button_small" value="下架" />
-  <?php } ?>  
-  <?php if($del_power){ ?>
   <input type="button" onclick="javascript:audit(3);" class="button_small" value="删除" />
-  <?php } ?>
-  <?php if($edit_power){ ?>
   <input type="button" onclick="javascript:$('#mobile').toggle();" class="button_small" value="移动" />
-  <?php } ?>
-  
+  <input type="hidden" value="{$class_info.cid}" id="class_id"/>
   <span id="mobile" style="display:none">
   			<select name="cid"  id="cid" >
               <option value="">======选择栏目======</option>

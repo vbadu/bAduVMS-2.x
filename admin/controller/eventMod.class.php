@@ -2,6 +2,9 @@
 class eventMod extends commonMod{
 	public function __construct(){
         parent::__construct();
+        if(!model('user_group')->menu_power('event',true)){
+        	$this->msg('对不起，您没有该模块的操作权限！',0);
+        }
     }
     //公共列表信息
     public function common_list_where(){
@@ -114,7 +117,7 @@ class eventMod extends commonMod{
         $limit_start = ($cur_page - 1) * $listRows;
         $limit = $limit_start . ',' . $listRows;
         $this->list=model('event')->get_list($where['where'],NULL,$limit);
-        $count=model('event')->get_count($where['where']);
+		$count=model('event')->get_count($where['where']);
         $this->assign('page', $this->page($url, $count, $listRows));
 		$this->show();
     }
@@ -150,8 +153,8 @@ class eventMod extends commonMod{
 			$count=model('event')->get_count($where,'_team');
 			$this->assign('page', $this->page($url, $count, $listRows));
 			$this->show();
-		}
-    }
+		}		
+	}
     public function baoming(){
     	if (!empty($_POST) && is_array($_POST)){
 			$post=in($_POST);
@@ -233,6 +236,9 @@ class eventMod extends commonMod{
     }
 	//数据字典
     public function dict(){
+		if(!model('user_group')->menu_power('event/dict',true)){
+        	$this->msg('对不起，您没有该模块的操作权限！',0);
+        }
 		$this->action_name='数据字典';
         $url = __URL__ . '/dict/-page-{page}';
     	$listRows = 30;
@@ -249,6 +255,9 @@ class eventMod extends commonMod{
     }
 	//数据字典编辑
     public function dict_edt(){
+		if(!model('user_group')->menu_power('event/dict',true)){
+        	$this->msg('对不起，您没有该模块的操作权限！',0);
+        }
     	if (!empty($_POST) && is_array($_POST)){
     		$this->edt_save($_POST);
     	}

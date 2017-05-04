@@ -6,8 +6,8 @@ class tagsMod extends commonMod {
     {
         parent::__construct();
 		$this->model_url=$_GET['_module'];
-        if(!model('user_group')->model_power($this->model_url,'visit')){
-        	$this->msg('对不起，您没有该模块('.$this->model_url.')的操作权限！',0);
+        if(!model('user_group')->menu_power('article',true)){
+        	$this->msg('对不起，您没有该模块的操作权限！',0);
         }
 	}
 	public function index() {
@@ -56,9 +56,6 @@ class tagsMod extends commonMod {
 	}
 
     public function category() {
-        if(!model('user_group')->model_power($this->model_url,'cat_visit')){
-        	$this->msg('对不起，您没有该模块('.$this->model_url.')的操作权限！',0);
-        }
         $this->list=model('tags')->tag_category();
         $this->show();
     }
@@ -67,18 +64,12 @@ class tagsMod extends commonMod {
     //添加TAG分类
     public function category_add()
     {
-        if(!model('user_group')->model_power($this->model_url,'cat_add')){
-        	$this->msg('对不起，您没有该模块('.$this->model_url.')的操作权限！',0);
-        }
         $this->action_name='添加';
         $this->action='add';
         $this->show('tags/category_info'); 
     }
 
     public function category_add_save() {
-        if(!model('user_group')->model_power($this->model_url,'cat_add')){
-        	$this->msg('对不起，您没有该模块('.$this->model_url.')的操作权限！',0);
-        }
         //录入模型处理
         model('tags')->category_add($_POST);
         $this->msg('TAG组添加成功！',1);
@@ -86,9 +77,6 @@ class tagsMod extends commonMod {
 
     //修改
     public function category_edit() {
-        if(!model('user_group')->model_power($this->model_url,'cat_edit')){
-        	$this->msg('对不起，您没有该模块('.$this->model_url.')的操作权限！',0);
-        }
         $cid=intval($_GET['cid']);
         $this->alert_str($cid,'int');
         $this->info=model('tags')->category_info($cid);
@@ -99,9 +87,6 @@ class tagsMod extends commonMod {
 
     //修改数据
     public function category_edit_save() {
-        if(!model('user_group')->model_power($this->model_url,'cat_edit')){
-        	$this->msg('对不起，您没有该模块('.$this->model_url.')的操作权限！',0);
-        }
         $cid=$_POST['cid'];
         $this->alert_str($cid,'int',true);
         //录入模型处理
@@ -111,9 +96,6 @@ class tagsMod extends commonMod {
 
     //删除
     public function category_del() {
-        if(!model('user_group')->model_power($this->model_url,'cat_del')){
-        	$this->msg('对不起，您没有该模块('.$this->model_url.')的操作权限！',0);
-        }
         $cid=intval($_POST['cid']);
         $this->alert_str($cid,'int',true);
         //录入模型处理
@@ -132,19 +114,12 @@ class tagsMod extends commonMod {
 
         switch ($status) {
             case 1:
-		        if(!model('user_group')->model_power($this->model_url,'del')){
-		        	$this->msg('对不起，您没有该模块('.$this->model_url.')的操作权限！',0);
-		        }
                 foreach ($id_array as $value) {
                     model('tags')->del($value);
                 }
                 $this->msg('tag删除成功！',1);
                 break;
             case 2:
-		        if(!model('user_group')->model_power($this->model_url,'edit')){
-		        	$this->msg('对不起，您没有该模块('.$this->model_url.')的操作权限！',0);
-		        }
-
                 foreach ($id_array as $value) {
                     $data['id']=$value;
                     $data['cid']=$cid;
@@ -153,10 +128,5 @@ class tagsMod extends commonMod {
                 $this->msg('tag分组成功！',1);
                 break;
         }
-        
     }
-	
-
-	
-
 }

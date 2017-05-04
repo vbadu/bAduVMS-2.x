@@ -4,23 +4,46 @@ class indexMod extends commonMod
     public function __construct()
     {
         parent::__construct();
+        if(!model('user_group')->menu_power('index',true)){
+        	$this->msg('对不起，您没有该模块的操作权限！',0);
+        }
 	}
-    // 显示管理后台首页
     public function index()
     {
 		$this->user=model('user')->current_user();
         $this->menu_list=model('menu')->main_menu();
         $this->display();
     }
-
-    // 显示管理后台欢迎页
     public function home(){
+		$this->check_app_power('index/home',true);
         require __CONFIG__;
         $this->config_array=$config;
+		$update=$path=__ROOTDIR__.'/data/update.lock';
+		$cookie_time=time();
+		$check = false;
+		if (is_file($update)){
+			$html = file_get_contents($update);
+			$html = explode('|', $html);
+			if ($html[1]>0 && ($html[1]>$config['ver'])) $check = true;
+			$cookie_time=(empty($html[0]))?$cookie_time:$html[0];
+		}
+		$cookie_time=ceil((time()-$cookie_time)/86400); 
+		if ($cookie_time>7 OR $check==true){
+			$newver=Http::doGet("http://down.vbadu.net/".strtolower($config['ver_name']).'/?ver='.$config['ver']);
+			if (strlen($newver)>560) $newver=$config['ver'];
+			if ($cookie_time>7) file_put_contents($update,time().'|'.$newver);
+		}else{
+			$newver=$config['ver'];
+		}
+		$this->newver=$newver;
     	$this->user=model('user')->current_user();
         $this->show();
     }
-    //环境信息
+    public function _empty(){
+		unlink(__ROOTDIR__.'/data/closed.lock');
+		$this->msg('您不是付费用户，请到官方网站下载补丁包自助升级！',0);
+		
+    }
     public function getAreaJson(){
 		if (!is_numeric($_GET['id'])) exit(json_encode(array('code'=>0)));
 		$id=intval($_GET['id']);
@@ -44,16 +67,14 @@ class indexMod extends commonMod
 		}
 		echo json_encode($json);
 	}
-
     public function edit(){
+		$this->check_app_power('index/edit',true);
         $this->view()->assign(module('user')->edit_info());
     }
-
     public function tool_bom(){
         $str=$this->tool_bom_dir(__ROOTDIR__);
         $this->msg($str.'所有BOM清除完毕！');
     }
-
     //清除BOM
     public function tool_bom_dir($basedir){
         if ($dh = opendir($basedir)) {
@@ -85,14 +106,10 @@ class indexMod extends commonMod
                 return true;
         }
     }
-
     public function rewrite ($filename, $data) {
         $filenum = fopen($filename, "w");
         flock($filenum, LOCK_EX);
         fwrite($filenum, $data);
         fclose($filenum);
     }
-	
 }
-
-?>

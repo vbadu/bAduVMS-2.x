@@ -224,7 +224,73 @@ class Http
 			return false;
 		}
 	}
-	
+	/*
+     功能： 远程下载文件
+     参数:$filename 下载文件路径
+     $showname 下载显示的文件名
+     $expire  下载内容浏览器缓存时间
+	*/
+	static public function doRemote($url, $filename = '') 
+	{
+		if(function_exists('curl_init') && function_exists('curl_exec')) {
+			$ch = curl_init();
+			curl_setopt($ch, CURLOPT_URL, $url);
+			curl_setopt($ch, CURLOPT_HEADER, 0);
+			curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+			curl_setopt($ch, CURLOPT_USERAGENT, 'akcms');
+			$content = curl_exec($ch);
+			curl_close($ch);
+		} elseif(function_exists('fsockopen')) {
+			$offset = strpos($url, '://');
+			if($offset === false) return false;
+			if(strpos($url, '/', $offset + 3) === false) $url .= '/';
+			$host = self::getfield('://', '/', $url);
+			$request =  "GET ".$url." HTTP/1.0\r\n";
+			$request .= "Host: ".$host."\r\n";
+			$request .= "Accept: */*\r\n";
+			$request .= "User-Agent: akcms\r\n\r\n";
+			$sHnd = @fsockopen($host, 80, $errno, $errstr, 30);
+			if(!$sHnd) return false;
+			@fputs($sHnd, $request);
+			$content = '';
+			while(!feof($sHnd)) {
+				$content .= fgets($sHnd, 4096);
+			}
+			fclose($sHnd);
+			$offset = strpos($content, "\r\n\r\n");
+			if($offset != false) $content = substr($content, $offset + 4);
+		} elseif(ini_get('allow_url_fopen') == '1') {
+			@ini_set('user_agent', $agent);
+			$content = file_get_contents($url);
+		} else {
+			exit('ERROR:spider disabled!');
+		}
+		if(!empty($filename)) {
+			$fp = fopen($filename, 'w');
+			fwrite($fp, $content);
+			fclose($fp);
+		}
+		return $content;
+	}
+	static public function getfield($start, $end, $content, $repeatsplit = '') {
+		if(empty($content)) return false;
+		$return = '';
+		while(1) {
+			$start_position = 0;
+			$end_position = strlen($content);
+			if($start != '') $start_position = strpos($content, $start);
+			if($start_position === false) break;
+			$start_position += strlen($start);
+			if($end != '') $end_position = strpos($content, $end, $start_position);
+			if($end_position === false) break;
+			$return .= substr($content, $start_position, $end_position - $start_position);
+			if(empty($repeatsplit)) return $return;
+			$return .= $repeatsplit;
+			$content = substr($content, $end_position + strlen($end));
+		}
+		if(strlen($return) > strlen($repeatsplit)) $return = substr($return, 0, strlen($return) - strlen($repeatsplit));
+		return $return;
+	}
 	/*
      功能： 下载文件
      参数:$filename 下载文件路径

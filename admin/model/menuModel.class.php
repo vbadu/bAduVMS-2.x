@@ -5,7 +5,6 @@ class menuModel extends commonModel
     {
         parent::__construct();
     }
-
     //获取主菜单
     public function main_menu(){
         $menu_list=array(
@@ -20,7 +19,7 @@ class menuModel extends commonModel
                 'url'=>__APP__.'/menu/article',
                 ),
             2=>array(
-                'pid'=>4,
+                'pid'=>5,
                 'name'=>'活动管理',
                 'url'=>__APP__.'/menu/event',
                 ),
@@ -35,35 +34,36 @@ class menuModel extends commonModel
                 'url'=>__APP__.'/menu/system',
                 ),
             );
-
-
-/*
-*/
         $user=model('user')->current_user();
-        $menu_power=unserialize($user['menu_power']);
-        
+        $menu_power=explode(',',$user['menu_power']);
         foreach ($menu_list as $value) {
             if(in_array($value['pid'], (array)$menu_power)){
                 $list[]=$value;
             }
         }
-        
         if($user['keep']<>1){
             return $list;
         }else{
             return $menu_list;
         }
-        
-        
     }
-
+	public function check_menu($pid=0){
+        $user=model('user')->current_user();
+        if($user['keep']==1) return true;
+        $menu_power=explode(',',$user['menu_power']);
+		if(in_array(intval($pid), (array)$menu_power)){
+			return true;
+		}
+		return false;
+	}
     //获取菜单
     public function admin_menu($pid=0) {
+		if (!$this->check_menu($pid)) exit('对不起，您没有编号'.$pid.'模块的操作权限！');
         $list=$this->model->table('admin_menu')->where('status=1 AND pid='.$pid)->order('id asc')->select();
         $data=array();
         if(!empty($list)){
             foreach ($list as $value) {
-               if(model('user_group')->model_power($value['module'],'visit')){
+               if(model('user_group')->model_power($value['id'])){
                     $data[]=$value;
                }
             }
@@ -75,15 +75,18 @@ class menuModel extends commonModel
     public function menu_list($pid=0) {
         return $this->model->table('admin_menu')->where('status=1 and pid='.$pid)->order('id asc')->select();
     }
+
+
     //格式化内容菜单
-    public function content_menu($model=1,$gid=null) {
-        $data=$this->model->field('A.cid,A.pid,A.mid,A.type,A.name,B.admin_category,B.admin_content')
+    public function content_menu($model=1,$gid=null,$pid=null) {
+		if (strlen($pid)>0 && $pid>=0) $model=$model.' And pid='.intval($pid);
+        $data=$this->model->field('cid,pid,mid,type,name')
                 ->table('category','A')
-                ->add_table('model','B','A.mid = B.mid')
-				->where('A.model = '.$model)
-                ->order('A.sequence DESC,A.cid ASC')
+				->where('model = '.$model)
+                ->order('sequence DESC,cid ASC')
                 ->select();
-        if(!empty($gid)){
+		$keep=true;	
+		if(!empty($gid)){
             $user=model('user')->current_user();
             $class_power=explode(',', $user['class_power']);
             if($user['keep']<>1){
@@ -111,7 +114,7 @@ class menuModel extends commonModel
             foreach ($data as $key=>$value) {
                 $tree[$key]=$value;
                 if(in_array($value['cid'],(array)$class_power)||$keep==false){
-                    $tree[$key]['pw']=0;
+					$tree[$key]['pw']=0;
                 }else{
                     $tree[$key]['pw']=1;
                 }

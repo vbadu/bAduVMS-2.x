@@ -68,14 +68,14 @@
         <td><textarea name="content">{$info.content}</textarea></td>
       </tr>
       <tr>
-        <td width="100" align="right">是否审核</td>
+        <td width="100" align="right">是否审核/捐款捐物是否接收</td>
         <td>
         <?php if(!isset($info['status'])){ $info['status']=1; } ?>
-        <input name="status" type="radio" value="1" <!--if:{$info['status']==0}-->checked="checked"<!--{/if}--> />
-        已审核
+        <input name="status" type="radio" value="1" <!--if:{$info['status']==1}-->checked="checked"<!--{/if}--> />
+        已审核/已接收
         &nbsp;&nbsp;
-        <input name="status" type="radio" value="2" <!--if:{$info['status']==2}-->checked="checked"<!--{/if}--> />
-        未审核
+        <input name="status" type="radio" value="2" <!--if:{$info['status']!=1}-->checked="checked"<!--{/if}--> />
+        未审核/待接收
         </td>
       </tr>
       <tr>
@@ -85,7 +85,7 @@
         <input name="helps" type="radio" value="1" <!--if:{$info['helps']==1}-->checked="checked"<!--{/if}--> />
         已对接
         &nbsp;&nbsp;
-        <input name="helps" type="radio" value="2" <!--if:{$info['helps']==2}-->checked="checked"<!--{/if}--> />
+        <input name="helps" type="radio" value="2" <!--if:{$info['helps']!=1}-->checked="checked"<!--{/if}--> />
         未对接
         </td>
       </tr>

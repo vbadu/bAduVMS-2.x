@@ -42,6 +42,114 @@ class user_groupModel extends commonModel {
         return $this->model->table('admin_group')->where('id='.intval($id))->delete(); 
     }
 
+    //获取模块ID
+    public function get_appid($id,$is_mod=false,$nopid=false)
+    {
+		if ($nopid){
+			$where='pid !=0 AND ';	
+		}
+        if ($is_mod){
+        	$mod=$this->model->table('admin_menu')->where($where.'module="'.in($id).'"')->find();
+			if (is_array($mod)) return $mod;
+        }else{
+			$mod=$this->model->table('admin_menu')->where($where.'id="'.intval($id).'"')->find();
+			if (is_array($mod)) return $mod;
+		}
+		return false;
+    }
+    //判断主菜单权限
+    public function menu_power($id,$is_mod=false,$cache=true)
+    {
+        $user=model('user')->current_user();
+        if($user['keep']==1){
+            return true;
+        }
+		$info=$this->cache->get('menu_power_'.$user['uid'].$id);
+		if(empty($info)||$cache==false){
+        	$info=$this->get_appid($id,$is_mod);
+			$this->cache->set('menu_power_'.$user['uid'].$id, $info);
+		}
+        if(empty($info)){
+            return false;
+        }
+        if (isset($user['menu_power']) && strlen($user['menu_power'])>0){
+        	$menu_power=explode(',',$user['menu_power']);
+			if(in_array($info['id'],(array)$menu_power)){
+				return true;
+			}
+		}
+        return false;
+    }
+
+    //判断是否有模块权限
+    public function model_power($module,$is_mod=false,$cache=true)
+    {
+        $user=model('user')->current_user();
+        if($user['keep']==1){
+            return true;
+        }
+        $info=$this->cache->get('model_power_'.$user['uid'].$module);
+        if(empty($info)||$cache==false){
+            $info=$this->get_appid($module,$is_mod,true);
+            $this->cache->set('model_power_'.$user['uid'].$module, $info);
+        }
+        if(empty($info)){
+            return false;
+        }
+        if (isset($user['model_power']) && strlen($user['model_power'])>0){
+        	$model_power=explode(',',$user['model_power']);
+			if(in_array($info['id'],(array)$model_power)){
+				return true;
+			}
+		}
+        return false;
+    }
+
+    //判断栏目权限
+    public function form_power($cid,$cache=true)
+    {
+        if (empty($cid)) return false;
+        $user=model('user')->current_user();
+		if($user['keep']==1){
+            return true;
+        }
+        if (isset($user['form_power']) && strlen($user['form_power'])>0){
+        	$form_power=explode(',',$user['form_power']);
+			if(in_array($cid,(array)$form_power)){
+				return true;
+			}
+		}
+        return false;
+    }
+    //判断栏目权限
+    public function class_power($cid,$cache=true)
+    {
+        if (empty($cid)) return false;
+        $user=model('user')->current_user();
+		if($user['keep']==1){
+            return true;
+        }
+        if (isset($user['class_power']) && strlen($user['class_power'])>0){
+        	$class_power=explode(',',$user['class_power']);
+			//dump($class_power,1);
+			if(in_array($cid,(array)$class_power)){
+				return true;
+			}
+		}
+        return false;
+    }
+
+
+
+
+
+
+
+
+
+
+
+/*
 
     //获取子权限表
     public function admin_power($pid)
@@ -69,9 +177,6 @@ class user_groupModel extends commonModel {
         if(empty($model_power)){
             return false;
         }
-        //dump($user);
-        //dump($model_power);
-
         if(in_array($action,(array)$model_power[$info['id']])||in_array($info['id'],(array)$model_power[$info['id']])){
             return true;
         }
@@ -79,12 +184,17 @@ class user_groupModel extends commonModel {
     }
 
     //判断主菜单权限
-    public function menu_power($id)
+    public function menu_power($id,$isint=true)
     {
         $user=model('user')->current_user();
         if($user['keep']==1){
             return true;
         }
+        if (!$isint){
+        	$mod=$this->model->table('admin_menu')->where('module="'.in($id).'"')->find();
+        	$id=$mod['id'];
+        }
+        
         $menu_power=unserialize($user['menu_power']);
         if(in_array($id,(array)$menu_power)){
             return true;
@@ -125,7 +235,7 @@ class user_groupModel extends commonModel {
 
     }
 
-
+*/
 	
 
 }

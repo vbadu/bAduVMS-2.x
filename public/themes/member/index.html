@@ -53,6 +53,14 @@
                     <dd><?php echo half_replace($user['email'])?></dd>
                   </dl>
                   <dl>
+                    <dt>会员时数：</dt>
+                    <dd>{$user.vtime} 小时</dd>
+                  </dl>
+                  <dl>
+                    <dt>会员等级：</dt>
+                    <dd>{$user.gname}</dd>
+                  </dl>
+                  <dl>
                     <dt>注册时间：</dt>
                     <dd>{$user.dtime time="Y-m-d H:i"}</dd>
                   </dl>
@@ -78,7 +86,7 @@
             <div class="m-lst-box m-lst-box-2">
               <ul>
                     <!--foreach:{$event $vo}-->
-                    <li><a href="{$sys.siteurl}/event/go/{$vo.id}{$config.URL_HTML_SUFFIX}" title="查看《 {$vo.title} 》活动介绍" target="_blank">[ #event_status{$vo.status}#] {$vo.title len="60"}</a></li>
+                    <li><a href="{$sys.siteurl}/event/go/{$vo.id}{$config.URL_HTML_SUFFIX}" title="查看《 {$vo.title} 》活动介绍" target="_blank">[ #event_status{$vo['status']}#] {$vo.title len="60"}</a></li>
                     <!--{/foreach}-->
               </ul>
             </div>

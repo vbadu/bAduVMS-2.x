@@ -5,14 +5,12 @@
   <div class="exercise"> 
    <a href="javascript:menuload('__URL__')">栏目列表</a>
    <!--if:{$model==2}-->
-   <a href="javascript:menuload('__APP__/content_category/add/model-2')">添加活动分类</a>
+   <a href="javascript:menuload('__URL__/event')">添加活动分类</a>
    <!--{else}-->
-   <?php if(model('user_group')->model_power('category','add')){ ?>
-   <!--foreach:{$model_list $vo}-->
-   <a href="javascript:menuload('__APP__/{$vo.model}_category/add/model-{$model}')">添加{$vo.name}栏目</a>
-   <!--{/foreach}-->
-   <?php } ?>
-    <!--{/if}-->
+   <a href="javascript:menuload('__URL__/content')">添加资讯栏目</a>
+   <a href="javascript:menuload('__URL__/onepage')">添加单页</a>
+   <a href="javascript:menuload('__URL__/jump')">添加跳转</a>
+   <!--{/if}-->
    </div>
 </div>
 <div class="page_main">
@@ -22,9 +20,8 @@
         <th width="10%"><center>ID</center></th>
         <th width="25%">栏目名称</th>
         <th width="10%"><center>顺序</center></th>
+        <th width="10%"><center>栏目类型</center></th>
         <th width="10%"><center>栏目显示</center></th>
-        <th width="15%"><center>栏目属性</center></th>
-        <th width="15%"><center>栏目类型</center></th>
         <th width="15%"><center>栏目操作</center></th>
       </tr>
       <!--foreach:{$list $vo}-->
@@ -36,11 +33,19 @@
         <!--{/if}-->
         </td>
         <td><center>
-        <?php if(model('user_group')->model_power('category','edit')){ ?>
         <input type="text" value="{$vo.sequence}" class="sequence" onblur="sequence({$vo['cid']},$(this).val())" />
-        <?php }else{ ?>
-        {$vo.sequence}
-        <?php } ?>
+        </center></td>
+        <td><center>
+        <!--if:{$model==2}-->活动分类
+        <!--{else}-->
+        <!--if:{$vo['mid']==1}-->
+        列表
+        <?php }elseif($vo['mid']==2){?>
+        单页
+        <!--{else}-->
+        跳转
+        <!--{/if}-->
+        <!--{/if}-->
         </center></td>
         <td><center>
         <!--if:{$vo['show']==1}-->
@@ -50,30 +55,14 @@
         <!--{/if}-->
         </center></td>
         <td><center>
-        <!--if:{$vo['model']==1}-->
-        文章
-        <!--{else}-->
-        活动
-        <!--{/if}-->
-        </center></td>
-        <td><center>{$vo.mname}</center></td>
-        <td><center>
-        <?php if($edit_power){ ?>
-        <a href="__APP__/{$vo.admin_category}/edit/id-{$vo.cid}">修改</a>
-        <?php } ?>
-        <?php if($del_power){ ?>
-        &nbsp;&nbsp;<a href="javascript:void(0);" onclick="del('__APP__/{$vo.admin_category}/del','{$vo.cid}',this)">删除</a>
-        <?php } ?>
+        <a href="__URL__/edit/id-{$vo.cid}">修改</a>
+        &nbsp;&nbsp;<a href="javascript:void(0);" onclick="del('__URL__/del','{$vo.cid}',this)">删除</a>
         </center>
          </td>
       </tr>
       <!--{/foreach}-->
     </table>
   </div>
-</div>
-
-<div class="page_tool">
-  <div class="page"></div>
 </div>
 <script>
 //栏目形象图

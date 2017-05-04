@@ -64,7 +64,11 @@ class Model{
 			return $this->db->execute($this->sql, $params); //不是查询条件，直接执行
 		}
     }
-	
+	//执行原生sql语句，如果sql是查询语句，返回二维数组
+    public function sql_query($sql) {
+        if ( empty($sql) ) return false;
+		return mysql_fetch_array($this->query($sql));
+    }	
 	//统计行数
 	public function count() {
 		$table = $this->options['table'];	//当前表

@@ -78,26 +78,6 @@ function fontbold()
 		$('#font_bold').val(0);
 	}
 }
-//获取附加字段
-function get_fields() {
-	var cid = $('#cid').val();
-	var aid = '{$info.aid}';
-	$.ajax({
-		type: 'POST',
-		url: "__APP__/expand_model/get_field",
-		data: {
-			cid: cid,
-			aid: aid
-		},
-		dataType: "html",
-		success: function(data) {
-			if(data==''){
-				var data='<tr><td width="100" align="left"></td><td width="350"></td><td></td></tr>';
-			}
-			$('#expand').html(data);
-		}
-	})
-}
 //模板列表
 function tpl_list(id){
 	var list = [ 

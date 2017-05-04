@@ -1,8 +1,6 @@
 <script type="text/javascript">
 //提交表单
-<?php if($_GET['type']<>'content'||model('user_group')->model_power('category','visit')){ ?>
-savelistform({addurl:"__URL__/add/model-{$info.model}",listurl:"__APP__/category/index/model-{$info.model}"});
-<?php }else{ ?>
+//savelistform({addurl:"__URL__",listurl:"__APP__/category/index"});
 saveform({
 	success:function(msg){
 		tip({msg:msg,time:3});
@@ -11,7 +9,6 @@ saveform({
 		tip({msg:msg,time:3});
 	}
 	});
-<?php } ?>
 //高级模式
 function advanced(){
 	$('.advanced').toggle();
@@ -55,6 +52,4 @@ $(document).ready(function() {
 		targetMode: "list"
 	});
 });
-
-
 </script>

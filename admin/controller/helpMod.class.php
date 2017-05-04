@@ -4,6 +4,10 @@ class helpMod extends commonMod
     public function __construct()
     {
         parent::__construct();
+        if(!model('user_group')->menu_power('index',true)){
+        	$this->msg('对不起，您没有该模块的操作权限！',0);
+        }
+		$this->check_app_power('help',true);
     }
     // 分类首页
     public function index()

@@ -35,10 +35,11 @@ function audit(status){
     }
     })
 	var cid = $('#cid').val();
+	var class_id = $('#class_id').val();
 	ajaxpost({
 		name:'您确认要继续进行操作吗？操作将无法撤销！',
 		url:"__APP__/content/batch",
-		data:{status: status, id:str, cid:cid},
+		data:{status: status, id:str, cid:cid, class_id:class_id},
 		tip:1,
 		success:function(){
 			window.location.reload();	

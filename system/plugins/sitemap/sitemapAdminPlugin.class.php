@@ -6,6 +6,10 @@ class sitemapAdminPlugin extends common_pluginMod
     {
         $_GET['_module']='sitemap';
         parent::__construct();
+        if(!model('user_group')->menu_power('system',true)){
+        	$this->msg('对不起，您没有该模块的操作权限！',0);
+        }
+		$this->check_app_power('sitemap',true);
     }
     
     //插件附加表信息

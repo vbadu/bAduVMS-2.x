@@ -5,7 +5,6 @@ class emptyMod extends commonMod
     public function _empty()
     {
         header("content-type:text/html; charset=utf-8");
-
         //执行插件部分
         $module_name = in($_GET['_module']);
         $action_name = in($_GET['_action']);
@@ -17,15 +16,12 @@ class emptyMod extends commonMod
                 }
             }
         }
-        
         //处理根目录
         $root=substr(str_replace('/','\/', __ROOT__),1);
         if(empty($root)){
             $root='/';
         }
-
         //过滤URL
-        	
         $url = parse_url($_SERVER['REQUEST_URI']);
         $url=str_replace('index.php/','', $url['path']);
         $url=str_replace('index.php','',$url);
@@ -77,7 +73,7 @@ class emptyMod extends commonMod
             }
             
         }
-
+		
         $mod_list=$this->model->table('model')->select();
 
         foreach ($mod_list as $value) {
@@ -124,7 +120,6 @@ class emptyMod extends commonMod
             return;
         }
         unset($match);
-
         //判断栏目规则
         preg_match($root.'\/'.$url_catrgory.'/i',$url,$match);
         if(substr($match[0], 0,1)<>'/'){
@@ -135,7 +130,8 @@ class emptyMod extends commonMod
             return;
         }
         unset($match);
-
+        $this->error404('<b>该网页链接已失效。</b>');
+        return;
 	}
 	public function page_url($root,$url,$value){
         //内容列表规则

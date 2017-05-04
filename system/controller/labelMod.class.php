@@ -73,11 +73,6 @@ class labelMod extends commonMod {
             }else{
                 $expand_id=$data['expand'];
             }
-            if(!empty($expand_id)){
-                $model_info=model('category')->expand_model_info($expand_id);
-                $expand="LEFT JOIN {$this->model->pre}expand_content_{$model_info['table']} C ON C.aid = A.aid";
-                $expand_field="C.*,";
-            }
         }
         if($where['order']<>'rand()'){
             if(substr($where['order'],1)<>'B'||substr($where['order'],1)<>'C'){

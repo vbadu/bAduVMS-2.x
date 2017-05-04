@@ -39,7 +39,17 @@ html { _height: auto; _padding:0px; }
   <div class="loading" id="content_loading" style="display:none"></div>
   <iframe id="main" name="main" src="" frameborder="0"></iframe>
 </div>
-<div id="foot"><a href="http://www.vbadu.com" target="_blank" title="技术支持：上饶市八度印象科技有限公司 (Mob:18679366609 QQ：858964320)">技术支持：上饶市八度印象科技有限公司</a></div>
+<div id="foot"><a href="http://www.vbadu.com" target="_blank" title="技术支持：上饶市八度印象科技有限公司">技术支持：上饶市八度印象科技有限公司</a></div>
+<div style="display:none"><script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?b241de14dfd7640ca1a32f9cddf83a35";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+</div>
 </body>
 <script>
 var myLayout;
@@ -99,7 +109,7 @@ function main_load(url){
 function logout(){
 	dialog({
 		title: '退出确认',
-		content: '是否退出工作管理系统？ ',
+		content: '是否退出管理系统？ ',
 		button: [{
 			name: '退出',
 			callback: function() {

@@ -13,7 +13,7 @@ define('__ROOTUPD__', $root.'/public/upload'); //根公共上传
 define('__CONFIG__', bAdu_PATH . 'config/config.php'); //根公共上传
 require __CONFIG__;
 require bAdu_PATH . 'core/App.class.php'; 
-
+define('__UPDURL__', __ROOTURL__.'/upload'); //根上传目录
 define('__TPLDIR__', __ROOTDIR__.'/'.$config['TPL_TEMPLATE_PATH']); //根模板目录
 
 $config['DB_CACHE_PATH'] = __ROOTDIR__.'/data/db_cache/'; 

@@ -5,12 +5,10 @@
   </div>
 </div>
 <div class="tab" id="tab"> <a class="selected" href="#">{$action_name}栏目</a> 
-<?php if(model('user_group')->model_power('category',1)){ ?>
-<a  href="javascript:menuload('__APP__/category/index/model-{$info.model}')">返回列表</a>
-<?php } ?>
+<a href="javascript:menuload('{$return_list}')">返回列表</a>
 </div>
 <div class="page_form">
-<form action="__URL__/{$action}_save/time-<?php echo time(); ?>-ajax-true" method="post" id="form">
+<form action="__URL__/content/time-<?php echo time(); ?>-ajax-true" method="post" id="form">
 <div class="page_table form_table">
     <table width="100%" border="0" cellspacing="0" cellpadding="0">
       <tr>
@@ -26,7 +24,6 @@
         </td>
         <td></td>
       </tr>
-      <?php if($info){ ?>
       <tr>
         <td width="100" align="right">栏目名称</td>
         <td width="300">
@@ -34,16 +31,6 @@
         </td>
         <td></td>
       </tr>
-      <?php }else{ ?>
-      <tr>
-        <td width="100" align="right">栏目名称</td>
-        <td>
-        <textarea name="namelist" class="text_textarea" id="namelist"  reg="\S" msg="栏目名称不能为空" ></textarea>
-        </td>
-        <td>批量添加一行一个栏目名<br>
-          每行格式为名称|URL名称</td>
-      </tr>
-      <?php } ?>
       <tr class="advanced">
         <td width="100" align="right">副栏目名称</td>
         <td width="300">
@@ -51,7 +38,6 @@
         </td>
         <td></td>
       </tr>
-      <?php if($info){ ?>
       <tr class="advanced">
         <td width="100" align="right">栏目URL优化</td>
         <td width="300">
@@ -59,7 +45,6 @@
         </td>
         <td></td>
       </tr>
-      <?php } ?>
       <tr>
         <td width="100" align="right">栏目缩略图</td>
         <td colspan="2">
@@ -88,6 +73,7 @@
         </td>
         <td>可以填写HTML代码</td>
       </tr>
+      <!--if:{$model==1}-->
       <tr>
         <td width="100" align="right">栏目属性</td>
         <td width="300">
@@ -100,6 +86,7 @@
         </td>
         <td>频道页无法发布内容，列表页可以发布内容</td>
       </tr>
+      <!--{/if}-->
       <tr class="advanced">
         <td width="100" align="right">栏目显示</td>
         <td width="300">
@@ -157,29 +144,14 @@
         </td>
         <td>用于该栏目下的内容显示</td>
       </tr>
-      <tr class="advanced">
-        <td width="100" align="right">扩展模型</td>
-        <td width="300">
-        <select name="expand" id="expand">
-            <option value="0">无</option>
-            <!--foreach:{$model_list $vo}-->
-            <option value="{$vo.mid}" <?php if($vo['mid']==$info['expand']){ ?> selected="selected" <?php } ?> >{$vo.name}</option>
-            <!--{/foreach}-->
-        </select>
-        </td>
-        <td>用于附加内容字段</td>
-      </tr>
     </table>
 </div>
-<?php if(model('user_group')->model_power('category','add')||model('user_group')->model_power('category','edit')){ ?>
 <!--普通提交-->
 <div class="form_submit">
 <input name="file_id" id="file_id" type="hidden" value="{$file_id}" />
 <input name="cid" type="hidden" value="{$info.cid}" />
-<input name="mid" type="hidden" value="{$info.model}" />
 <button type="submit" class="button">保存</button> 
 </div>
-<?php } ?>
 </form>
 </div>
 </div>

@@ -5,32 +5,28 @@ class userMod extends commonMod {
 	public function __construct()
     {
         parent::__construct();
-		$this->model_url=$_GET['_module'];
-        if(!model('user_group')->model_power($this->model_url,'visit')){
-        	$this->msg('对不起，您没有该模块('.$this->model_url.')的访问权限！',0);
+        if(!model('user_group')->menu_power('user',true)){
+        	$this->msg('对不起，您没有该模块的操作权限！',0);
         }
 	}
 	public function index() {
+		$this->check_app_power('user',true);
         $this->list=model('user')->admin_list();
 		$this->show();
 	}
 
 	//用户添加
 	public function add() {
-        if(!model('user_group')->model_power($this->model_url,'add')){
-        	$this->msg('对不起，您没有该模块('.$this->model_url.')的操作权限！',0);
-        }
-        $this->user_group=model('user_group')->admin_list();
+		$this->check_app_power('user',true);
+		$this->user_group=model('user_group')->admin_list();
 		$this->action_name='添加';
         $this->action='add';
         $this->show('user/info');
 	}
 
 	public function add_save() {
-        if(!model('user_group')->model_power($this->model_url,'add')){
-        	$this->msg('对不起，您没有该模块('.$this->model_url.')的操作权限！',0);
-        }
-        if($_POST['password']<>$_POST['password2']){
+ 		$this->check_app_power('user',true);
+       if($_POST['password']<>$_POST['password2']){
             $this->msg('两次密码输入不同！',0);
             return;
         }
@@ -46,9 +42,7 @@ class userMod extends commonMod {
 
     //用户修改
     public function edit() {
-        if(!model('user_group')->model_power($this->model_url,'edit')){
-        	$this->msg('对不起，您没有该模块('.$this->model_url.')的操作权限！',0);
-        }
+		$this->check_app_power('user',true);
         $id=$_GET['id'];
         $this->alert_str($id,'int');
         $this->user_group=model('user_group')->admin_list();
@@ -65,9 +59,6 @@ class userMod extends commonMod {
 
     //修改资料
     public function edit_info() {
-        if(!model('user_group')->model_power($this->model_url,'info')){
-        	$this->msg('对不起，您没有该模块('.$this->model_url.')的操作权限！',0);
-        }
         $this->info=model('user')->current_user();
         $this->info_group=model('user_group')->info($this->info['gid']);
         $user=model('user')->current_user();
@@ -81,10 +72,7 @@ class userMod extends commonMod {
 
     //用户修改
     public function edit_save() {
-        if(!model('user_group')->model_power($this->model_url,'edit')){
-        	$this->msg('对不起，您没有该模块('.$this->model_url.')的操作权限！',0);
-        }
-
+		$this->check_app_power('user',true);
         if (!empty($_POST['password']))
         {
             if (empty($_POST['password2']))
@@ -117,9 +105,7 @@ class userMod extends commonMod {
 
     //用户删除
     public function del() {
-        if(!model('user_group')->model_power($this->model_url,'del')){
-        	$this->msg('对不起，您没有该模块('.$this->model_url.')的操作权限！',0);
-        }
+		$this->check_app_power('user',true);
         $id=intval($_POST['id']);
         $this->alert_str($id,'int',true);
         $info=model('user')->info($id);

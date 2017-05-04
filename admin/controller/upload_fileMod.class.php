@@ -5,10 +5,10 @@ class upload_fileMod extends commonMod {
 	public function __construct()
     {
         parent::__construct();
-		$this->model_url=$_GET['_module'];
-        if(!model('user_group')->model_power($this->model_url,'visit')){
-        	$this->msg('对不起，您没有该模块('.$this->model_url.')的操作权限！',0);
+        if(!model('user_group')->menu_power('system',true)){
+        	$this->msg('对不起，您没有该模块的操作权限！',0);
         }
+		$this->check_app_power('upload_file',true);
 	}
 	public function index() {
 

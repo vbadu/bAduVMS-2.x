@@ -5,85 +5,93 @@ class categoryMod extends commonMod
     {
         parent::__construct();
     }
-
+    public function _empty(){
+		$this->error404(3);
+	}
     public function index()
     {
         $cid = intval($_GET['cid']);
         if (empty($cid)) {
             $this->error404();
         }
-
         //读取栏目信息
-        $this->info=model('category')->info($cid);
-        if (!is_array($this->info)){
+        $info=model('category')->info($cid);
+        if (!is_array($info)){
             $this->error404();
         }
         //模块自动纠正
-        model('category')->model_jump($this->info['mid'],'category');
-
+		$mid=intval($info['mid']);
+		if ($mid==3){
+			$link=$this->return_tpl(html_out($info['content']));
+			header("HTTP/1.1 301 Moved Permanently");
+			header("Location: ".$link."");
+			exit;
+		}
+		//URL路径
+		$model_info = model('category')->model_info($mid);
+		$url=model('category')->url_format($model_info['url_category_page'],$cid,$info['urlname']);
+		if ($mid==2){
+			if(empty($info['content'])){
+				$info['content']='暂无内容';
+			}
+        	$info['content']=html_out($info['content']);
+			//读取内容替换
+			$content=model('content')->format_content($info['content']);
+			$page = new Page();
+			$content = $page->contentPage(html_out($content),"<hr class=\"ke-pagebreak\" />",
+			$url, 10, 4); //文章分页
+			$info['content']=$content['content'];
+			$this->page=$content['page'];
+		}elseif ($mid==1){
+			//设置分页
+			$size = intval($info['page']); 
+			if (empty($size)) {
+				$listrows = 10;
+			} else {
+				$listrows = $size;
+			}
+			$model_info = model('category')->model_info($info['mid']);
+			$url=model('category')->url_format($model_info['url_category_page'],$cid,$info['urlname']);
+			$limit=$this->pagelimit($url,$listrows);
+	
+			//设置栏目属性
+			if ($info['type'] == 0) {
+				$son_id = model('category')->getcat($info['cid']);
+				$where = 'A.status=1 AND B.cid in (' . $son_id . ')';
+			} else {
+				$where = 'A.status=1 AND B.cid=' . $info['cid'];
+			}
+			//执行查询
+			$this->loop=model('category')->content_list($cid,$where,$limit,$info['content_order']);
+			$count = model('category')->content_count($cid,$where);
+			//查询下级栏目信息
+			$this->get_category = model('category')->get_list($cid);
+			if (!$this->get_category) {
+				$this->get_category = array("cid" => "0","pid" => "0","mid" => "0","name" => "无下级栏目");
+			}
+			//获取分页
+			$this->page=$this->page($url, $count, $listrows);
+			//获取上一页代码
+			$this->prepage=$this->page($url, $count, $listrows,'',1);
+			//获取下一页代码
+			$this->nextpage=$this->page($url, $count, $listrows,'',2);
+			$this->count=$count;
+		}else{
+			$this->error404();	
+		}
         /*hook*/
-        $this->plus_hook('category','index',$this->info);
-        $this->info=$this->plus_hook_replace('category','index_replace',$this->info);
+        $this->plus_hook('category','index',$info);
+        $info=$this->plus_hook_replace('category','index_replace',$info);
         /*hook end*/
-
         //位置导航
-        $this->nav=array_reverse(model('category')->nav($this->info['cid']));
-
-        //设置分页
-        $size = intval($this->info['page']); 
-        if (empty($size)) {
-            $listrows = 10;
-        } else {
-            $listrows = $size;
-        }
-        $model_info = model('category')->model_info($this->info['mid']);
-        $url=model('category')->url_format($model_info['url_category_page'],$cid,$this->info['urlname']);
-        $limit=$this->pagelimit($url,$listrows);
-
-        //设置栏目属性
-        if ($this->info['type'] == 0) {
-            $son_id = model('category')->getcat($this->info['cid']);
-            $where = 'A.status=1 AND B.cid in (' . $son_id . ')';
-        } else {
-            $where = 'A.status=1 AND B.cid=' . $this->info['cid'];
-        }
- //       dump($this->info['cid']);
-        //执行查询
-        $this->loop=model('category')->content_list($cid,$where,$limit,$this->info['content_order']);
-        $count = model('category')->content_count($cid,$where);
-
+        $this->nav=array_reverse(model('category')->nav($info['cid']));
         //查询上级栏目信息
-        $this->parent_category = model('category')->info($this->info['pid']);
+        $this->parent_category = model('category')->info($info['pid']);
         if (!$this->parent_category) {
-            $this->parent_category = array(
-                "cid" => "0",
-                "pid" => "0",
-                "mid" => "0",
-                "name" => "无上级栏目");
+            $this->parent_category = array("cid" => "0","pid" => "0","mid" => "0","name" => "无上级栏目");
         }
-        
-        //查询下级栏目信息
-        $this->get_category = model('category')->get_list($cid);
-        if (!$this->get_category) {
-            $this->get_category = array(
-                "cid" => "0",
-                "pid" => "0",
-                "mid" => "0",
-                "name" => "无下级栏目");
-        }
-
-        //获取分页
-        $this->page=$this->page($url, $count, $listrows);
-        //获取上一页代码
-        $this->prepage=$this->page($url, $count, $listrows,'',1);
-        //获取下一页代码
-        $this->nextpage=$this->page($url, $count, $listrows,'',2);
-        
-        $this->count=$count;
-
-		$get = $this->info;
-		$nav['id']=$get['cid'];
-		$nav['pid']=empty($get['pid'])?20:$get['pid'];
+		$nav['id']=$info['cid'];
+		$nav['pid']=empty($info['pid'])?20:$info['pid'];
         switch ($nav['id']) {
             case 2:
                $nav['aq']=" class='aon'";
@@ -117,13 +125,17 @@ class categoryMod extends commonMod
 				break;
 		}
         $this->navs = $nav;
-        
+        $this->info = $info;
         //MEDIA信息
-        $this->common=model('pageinfo')->media($this->info['name'],$this->info['keywords'],$this->info['description']);
+        $this->common=model('pageinfo')->media($info['name'],$info['keywords'],$info['description']);
         
         //获取顶级栏目信息
         $this->top_category = model('category')->info($this->nav[0]['cid']);
-        $this->display($this->info['class_tpl']);
+        $this->display($info['class_tpl']);
+        if ( $this->config['HTML_CACHE_ON'] ) {
+           HtmlCache::write();
+        }
+		exit;
     }
 
 

@@ -2,9 +2,6 @@
 	<input name="type" value="{$type}" type="hidden">
 归档日期：
 	<?php echo model('event')->get_set_select('weekday',1,$_GET['weekday'])?>
-所在区域：<?php if(empty($_GET['area'])) $_GET['area']="17,240,2038,3409";?>
-<data id="area0"></data><data id="area1"></data><data id="area2"></data><data id="area3"></data>
-<script>ajax_area('{$_GET['area']}','area');</script>
 活动开始日期：
 	<input name="stime" id="stime" type="text" class="text_value" style="width:80px;" value="<?php if(!empty($_GET['stime'])) echo $_GET['stime']?>" readonly/>
 结束日期：

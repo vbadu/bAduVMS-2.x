@@ -232,7 +232,595 @@ class baduModel extends commonModel{
 		$return = array($dir, $name);
 		return $return;
 	}
+    //获取字段类型名称
+    public function field_type($id=null,$name=false)
+    {
+        $list=array(
+            1=> array(
+                'name'=>'文本框'
+                ),
+            2=> array(
+                'name'=>'多行文本'
+                ),
+            3=> array(
+                'name'=>'编辑器'
+                ),
+            4=> array(
+                'name'=>'文件上传'
+                ),
+            10=> array(
+                'name'=>'单图片上传'
+                ),
+            5=> array(
+                'name'=>'组图上传'
+                ),
+            6=> array(
+                'name'=>'下拉菜单'
+                ),
+            7=> array(
+                'name'=>'日期和时间'
+                ),
+            8=> array(
+                'name'=>'单选'
+                ),
+            9=> array(
+                'name'=>'多选'
+                ),
+           11=> array(
+                'name'=>'发布时间'
+                ),
+           12=> array(
+                'name'=>'隐藏域表单'
+                ),
+        );
+        if(!empty($id)){
+            if($name){
+                return $list[$id]['name'];
+            }else{
+                return $list[$id];
+            }
+        }else{
+            return $list;
+        }
+    }
 
+    //获取字段属性
+    public function field_property($id=null,$name=false)
+    {
+        $list=array(
+            1=> array(
+                'name'=>'varchar',
+                'maxlen'=>255,
+                ),
+            2=> array(
+                'name'=>'int',
+                'maxlen'=>10,
+                ),
+            3=> array(
+                'name'=>'text',
+                'maxlen'=>0,
+                ),
+            4=> array(
+                'name'=>'decimal',
+                'maxlen'=>10,
+                ),
+        );
+        if(!empty($id)){
+            if($name){
+                return $list[$id]['name'];
+            }else{
+                return $list[$id];
+            }
+        }else{
+            return $list;
+        }
+    }
+
+    //格式化字段
+    public function field_data($data) {
+        $property=$this->field_property($data['property']);
+        if($data['property']==4){
+            $data['decimal_len']=','.$data['decimal'];
+        }else{
+            $data['decimal_len']='';
+        }
+
+        if(intval($data['len'])>$property['maxlen']){
+            $data['len']=$property['maxlen'];
+        }
+        $data['default']=html_in($data['default']);
+        $data['config']=html_in($data['config']);
+        return $data;
+    }
+    //获取字段显示
+    public function get_list_model($type,$str,$config){
+        switch ($type) {
+            case '1':
+            case '2':
+            case '4':
+            case '12':
+                return $str;
+                break;
+            case '3':
+                return html_out($str);
+                break;
+            case '5':
+                if(!empty($str)){
+                    $array=unserialize($str);
+                    if(!empty($array)){
+                        foreach ($array as $value) {
+                            $strs.=$value['url'].'<br>';
+                        }
+                    }
+                }
+                return $strs;
+                break;
+            case '6':
+            case '8':
+                $list=explode("\n",html_out($config));
+                foreach ($list as $key) {
+                    $value=explode('|',$key);
+                    if($value[1]==$str){
+                        return $value[0];
+                    }
+                }
+                break;
+            case '7':
+            case '11':
+                return date('Y-m-d H:i:s',$str);
+                break;
+            case '9':
+                $list=explode("\n",html_out($config));
+                foreach ($list as $key) {
+                    $value=explode('|',$key);
+                    if($value[1]==$str){
+                        $strs.=$value[0].' ';
+                    }
+                }
+                return $strs;
+                break;
+            case '10':
+                return '<img name="" src="'.$str.'" alt="" style="max-width:170px; max-height:90px; _width:170px; _height:90px;" />';
+                break;
+            default:
+                return $str;
+                break;
+        }
+
+    }
+
+    //获取字段HTML
+    public function get_field_html($info,$data=null){
+        $info['default']=html_out($info['default']);
+
+        if(!empty($data)){
+            $info['default']=$data;
+        }
+
+        $html='';
+        switch ($info['type']) {
+            case '1':
+                $html.='
+                <tr>
+                    <td align="right">'.$info['name'].'</td>
+                    <td>
+                    <input name="'.$info['field'].'" type="text" class="text_value" id="'.$info['field'].'" value="'.$info['default'].'" 
+                ';
+                if(!empty($info['must'])){
+                    $html.=' reg="\S" msg="'.$info['name'].'不能为空！" ';
+                }
+                $html.='/>
+                    </td>
+                    <td>'.$info['tip'].'</td>
+                </tr>
+                ';
+                break;
+            case '2':
+                $html.='
+                <tr>
+                    <td align="right">'.$info['name'].'</td>
+                    <td><textarea name="'.$info['field'].'" class="text_textarea" id="'.$info['field'].'" >'.$info['default'].'</textarea>
+                    </td>
+                    <td>'.$info['tip'].'</td>
+                </tr>
+                ';
+                break;
+            case '3':
+                
+                $html.='
+                <tr>
+                    <td align="right">'.$info['name'].'</td>
+                    <td colspan="2"><textarea name="'.$info['field'].'" style="width:100%; height:350px;" id="'.$info['field'].'">'.$info['default'].'</textarea>
+                    '.module('editor')->get_editor_upload($info['field'].'_upload','editor_'.$info['field']).'
+                    <input type="button" id="'.$info['field'].'_upload" class="button_small" style="margin-top:10px;" value="上传图片和文件到编辑器" />
+                    </td>
+                </tr>
+                ';
+                $html.=module('editor')->get_editor($info['field'],true);
+                break;
+            case '4':
+                
+                $html.='
+                <tr>
+                    <td align="right">'.$info['name'].'</td>
+                    <td>
+                    <input name="'.$info['field'].'" type="text"  class="text_value"  style="width:200px; float:left"  id="'.$info['field'].'" value="'.$info['default'].'" 
+                ';
+                if(!empty($info['must'])){
+                    $html.=' reg="\S"  msg="'.$info['name'].'不能为空！" ';
+                }
+                $html.='/>
+                &nbsp;&nbsp;<input type="button" id="'.$info['field'].'_botton" class="button_small" value="选择文件" />
+                    </td>
+                    <td>'.$info['tip'].'</td>
+                </tr>
+                ';
+                $html.=module('editor')->get_file_upload($info['field'].'_botton',$info['field'],true);
+                break;
+            case '10':
+                
+                $html.='
+                <tr>
+                    <td align="right">'.$info['name'].'</td>
+                    <td>
+                    <input name="'.$info['field'].'" type="text"  class="text_value"  style="width:200px; float:left"  id="'.$info['field'].'" value="'.$info['default'].'" 
+                ';
+                if(!empty($info['must'])){
+                    $html.=' reg="\S"  msg="'.$info['name'].'不能为空！" ';
+                }
+                $html.='/>
+                &nbsp;&nbsp;<input type="button" id="'.$info['field'].'_botton" class="button_small" value="选择图片" />
+                    </td>
+                    <td>'.$info['tip'].'</td>
+                </tr>
+                ';
+                $html.=module('editor')->get_image_upload($info['field'].'_botton',$info['field'],true);
+                break;
+            case '5':
+                
+                $html.='
+                <tr>
+                    <td align="right">'.$info['name'].'</td>
+                    <td colspan="2">
+                    <input type="button" id="'.$info['field'].'_button" class="button_small" value="上传多图" />
+                    <div class="fn_clear"></div>
+                    <div class="images">
+                    <ul id="'.$info['field'].'_list" class="images_list">';
+
+                if(!empty($data)){
+                $info['default']=unserialize($info['default']);
+                if(!empty($info['default'])){
+                foreach ($info['default'] as $value) {
+                $html.="<li>
+                        <div class='pic' id='images_button'>
+                        <img src='".$value['url']."' width='125' height='105' />
+                        <input  id='".$info['field']."[]' name='".$info['field']."[]' type='hidden' value='".$value['url']."' />
+                        <input  id='".$info['field']."_original[]' name='".$info['field']."_original[]' type='hidden' value='".$value['original']."' />
+                        </div>
+                        <div class='title'>标题： <input name='".$info['field']."_title[]' type='text' id='".$info['field']."_title[]' value='".$value['title']."' /></div>
+                        <div class='title'>排序： <input id='".$info['field']."_order[]' name='".$info['field']."_order[]' value='".$value['order']."' type='text' style='width:50px;' /> <a href='javascript:void(0);' onclick='$(this).parent().parent().remove()'>删除</a></div>
+                    </li>";
+                }
+                }
+                }
+
+                $html.="</ul>
+                    <div style='clear:both'></div>
+                    </div>
+                    </td>
+                </tr>
+                ";
+                $html.=module('editor')->get_images_upload($info['field'],$ajax=true);
+                break;
+            case '6':
+                $html.='<tr>';
+                $html.='<td align="right">';
+                $html.=$info['name'];
+                $html.='</td>';
+                $html.='<td>';
+                $select_list='<select name="'.$info['field'].'" id="'.$info['field'].'">';
+                $list=explode("\n",html_out($info['config']));
+                foreach ($list as $key) {
+                    $value=explode('|',$key);
+                    $select_list.='<option ';
+                    if($info['default']==$value[1]){
+                        $select_list.='selected="selected" ';
+                    }
+                    $select_list.=' value="'.$value[1].'">'.$value[0].'</option>';
+                }
+                $select_list.='</select>';
+                $html.=$select_list;
+                $html.='</td>';
+                $html.='<td>';
+                $html.=$info['tip'];
+                $html.='</td>';
+                $html.='</tr>';
+                break;
+            case '7':
+                $config=explode("\n", $info['config']);
+                if(empty($config[0])){
+                    $config[0]='Y-m-d';
+                }
+                if(empty($config[1])){
+                    $config[1]='yyyy-MM-dd';
+                }
+                if($data){
+                    $info['default']=date($config[0],intval($info['default']));
+                }else{
+                    $info['default']=date($config[0]);
+                }
+                $html.='<tr>';
+                $html.='<td align="right">';
+                $html.=$info['name'];
+                $html.='</td>';
+                $html.='<td>';
+                $html.='<input name="'.$info['field'].'"  id="'.$info['field'].'" type="text" class="text_value" style="width:210px; float:left" value="'.$info['default'].'"';
+                if($info['must']==1){
+                    $html.=' reg="\S" msg="'.$info['name'].'不能为空" ';
+                }
+                $html.='/><div  id="'.$info['field'].'_button" class="time"></div></td>';
+                $html.='<td>';
+                $html.=$info['tip'];
+                $html.='</td>';
+                $html.='</tr>';
+                $html.='<script>';
+                $html.="$('#".$info['field']."_button').calendar({ id:'#".$info['field']."',format:'".$config[1]."'});";
+                $html.='</script>';
+                break;
+            case '8':
+                $html.='<tr>';
+                $html.='<td align="right">';
+                $html.=$info['name'];
+                $html.='</td>';
+                $html.='<td>';
+                $list=explode("\n",html_out($info['config']));
+                foreach ($list as $key) {
+                    $value=explode('|',$key);
+                    $select_list.='<input name="'.$info['field'].'" type="radio" value="'.$value[1].'" ';
+                    if($info['default']==''){
+                        $info['default']=1;
+                    }
+                    if($info['default']==$value[1]){
+                        $select_list.='checked="checked" ';
+                    }
+                    $select_list.=' /> '.$value[0].'&nbsp;&nbsp;';
+                }
+                $html.=$select_list;
+                $html.='</td>';
+                $html.='<td>';
+                $html.=$info['tip'];
+                $html.='</td>';
+                $html.='</tr>';
+                break;
+            case '9':
+                $html.='<tr>';
+                $html.='<td align="right">';
+                $html.=$info['name'];
+                $html.='</td>';
+                $html.='<td>';
+                $list=explode("\n",html_out($info['config']));
+                
+                if(!empty($data)){
+                   $default=unserialize($info['default']);
+                }else{
+                   $default=explode('|', $info['default']);
+                }
+                foreach ($list as $key) {
+                    $value=explode('|',$key);
+                    $select_list.='<input name="'.$info['field'].'[]" type="checkbox" value="'.$value[1].'" ';
+                    if($default<>''){
+                    if(in_array($value[1], $default)){
+                        $select_list.='checked="checked" ';
+                    }
+                    }
+                    $select_list.=' /> '.$value[0].'&nbsp;&nbsp;';
+                }
+                $html.=$select_list;
+                $html.='</td>';
+                $html.='<td>';
+                $html.=$info['tip'];
+                $html.='</td>';
+                $html.='</tr>';
+                break;
+            case '11':
+                $config=explode("\n", $info['config']);
+                if(empty($config[0])){
+                    $config[0]='Y-m-d H:i:s';
+                }
+                if(empty($config[1])){
+                    $config[1]='yyyy-MM-dd HH:mm:ss';
+                }
+                if($data){
+                    $info['default']=date($config[0],intval($info['default']));
+                }else{
+                    $info['default']=date($config[0]);
+                }                
+                $html.='
+                <tr>
+                    <td align="right">'.$info['name'].'</td>
+                    <td>'.$info['default'].'
+                    <input name="'.$info['field'].'" type="hidden" id="'.$info['field'].'" value="'.$info['default'].'"/></td>
+                    <td>'.$info['tip'].'</td>
+                </tr> ';
+                break;
+            case '12':
+                $html.='
+                <tr>
+                    <td align="right">'.$info['name'].'</td>
+                    <td>'.$info['default'].'
+                    <input name="'.$info['field'].'" type="hidden" id="'.$info['field'].'" value="'.$info['default'].'"/></td>
+                    <td>'.$info['tip'].'</td>
+                </tr> ';
+                break;
+
+        }
+        return $html;
+    }
+    //获取字段HTML
+    public function get_field_text($info,$data=null){
+        $info['default']=html_out($info['default']);
+
+        if(!empty($data)){
+            $info['default']=$data;
+        }
+
+        $html='';
+        switch ($info['type']) {
+            case '1':
+            case '2':
+            case '3':
+            case '4':
+            case '5':
+            case '10':
+            case '11':
+            case '12':
+                $html.='
+                <tr>
+                    <td align="right">'.$info['name'].'：</td>
+                    <td>'.$info['default'].'</td>
+                </tr>
+                ';
+                break;
+            case '6':
+                $html.='<tr>';
+                $html.='<td align="right">';
+                $html.=$info['name'];
+                $html.='：</td>';
+                $html.='<td>';
+                $list=explode("\n",html_out($info['config']));
+                foreach ($list as $key) {
+                    $value=explode('|',$key);
+                    if($info['default']==$value[1]){
+                        $html.=$value[0];
+                    }
+                }
+                $html.='</td>';
+                $html.='</tr>';
+                break;
+            case '7':
+                $config=explode("\n", $info['config']);
+                if(empty($config[0])){
+                    $config[0]='Y-m-d';
+                }
+                if(empty($config[1])){
+                    $config[1]='Y-m-d';
+                }
+                if($data){
+                    $info['default']=date($config[0],intval($info['default']));
+                }else{
+                    $info['default']=date($config[0]);
+                }
+                $html.='<tr>';
+                $html.='<td align="right">';
+                $html.=$info['name'];
+                $html.='：</td>';
+                $html.='<td>';
+                $html.=$info['default'];
+                $html.='</td>';
+                $html.='</tr>';
+                break;
+            case '8':
+                $html.='<tr>';
+                $html.='<td align="right">';
+                $html.=$info['name'];
+                $html.='：</td>';
+                $html.='<td>';
+                $list=explode("\n",html_out($info['config']));
+                foreach ($list as $key) {
+                    $value=explode('|',$key);
+                    $select_list.='<input name="'.$info['field'].'" type="radio" value="'.$value[1].'" ';
+                    if($info['default']==''){
+                        $info['default']=1;
+                    }
+                    if($info['default']==$value[1]){
+                        $select_list.='checked="checked" ';
+                    }
+                    $select_list.=' /> '.$value[0].'&nbsp;&nbsp;';
+                }
+                $html.=$select_list;
+                $html.='</td>';
+                $html.='</tr>';
+                break;
+            case '9':
+                $html.='<tr>';
+                $html.='<td align="right">';
+                $html.=$info['name'];
+                $html.='：</td>';
+                $html.='<td>';
+                $list=explode("\n",html_out($info['config']));
+                
+                if(!empty($data)){
+                   $default=unserialize($info['default']);
+                }else{
+                   $default=explode('|', $info['default']);
+                }
+                foreach ($list as $key) {
+                    $value=explode('|',$key);
+                    $select_list.='<input name="'.$info['field'].'[]" type="checkbox" value="'.$value[1].'" ';
+                    if($default<>''){
+                    if(in_array($value[1], $default)){
+                        $select_list.='checked="checked" ';
+                    }
+                    }
+                    $select_list.=' /> '.$value[0].'&nbsp;&nbsp;';
+                }
+                $html.=$select_list;
+                $html.='</td>';
+                $html.='</tr>';
+                break;
+        }
+        return $html;
+    }
+
+
+    //格式化录入字段内容
+    public function field_in($value,$type,$field,$data='') {
+        switch ($type) {
+            case '1':
+            case '4':
+            case '11':
+                return in($value);
+                break;
+            
+            case '2':
+            case '3':
+                return html_in($value);
+                break;
+            case '5':
+                if(is_array($value)){
+                    $str1=$field.'_title';
+                    $str2=$field.'_order';
+                    $str3=$field.'_original';
+                    $title=$data[$str1];
+                    $order=$data[$str2];
+                    $original=$data[$str3];
+                   foreach ($value as $key=>$vo) {
+                        $list[$key]['url']=$vo;
+                        $list[$key]['original']=$original[$key];
+                        $list[$key]['title']=$title[$key];
+                        $list[$key]['order']=$order[$key];
+                   }
+                }
+                return serialize($list);
+                break;
+            case '6':
+                return in($value);
+                break;
+            case '8':
+                return intval($value);
+                break;
+            case '7':
+            case '11':
+                return strtotime($value);
+                break;
+            case '9':
+                return serialize($value);
+                break;
+            default:
+                return in($value);
+                break;
+        }
+    }
 
 
 

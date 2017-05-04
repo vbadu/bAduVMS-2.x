@@ -9,6 +9,10 @@ class mybackAdminPlugin extends common_pluginMod
     {
         $_GET['_module']='myback';
         parent::__construct();
+        if(!model('user_group')->menu_power('system',true)){
+        	$this->msg('对不起，您没有该模块的操作权限！',0);
+        }
+		$this->check_app_power('myback',true);
     }
     //首页    
     public function index()

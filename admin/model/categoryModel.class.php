@@ -5,22 +5,40 @@ class categoryModel extends commonModel
     {
         parent::__construct();
     }
-
+    //获取列表
+    public function select($where=null,$limit=10,$order="id desc",$tree=false,$pid = 0){
+        $data=$this->model->table('category')->where($where)->limit($limit)->order($order)->select();
+        if ($tree){
+			$cat = new Category(array('cid', 'pid', 'name', 'cname'));
+			return $cat->getTree($data, $pid);
+		}
+        return $data;
+    }
+	public function count($where=null) {
+        return $this->model->table('category')->where($where)->count();
+	}
     //获取栏目树形列表
     public function category_list($model=1,$id = 0) {
+        $sql="SELECT * FROM {$this->model->pre}category WHERE model={$model} ORDER BY sequence DESC,cid ASC";
+        $data=$this->model->query($sql); 
+        $cat = new Category(array('cid', 'pid', 'name', 'cname'));
+        $data= $cat->getTree($data, $id);
+		return $data;
+    }
+	//获取栏目树形列表
+    public function category_model_list($model=1,$id = 0) {
         $sql="
-        SELECT A.*,B.model,B.name as mname,B.admin_category,B.admin_content
+        SELECT A.*,B.model,B.name as mname
         FROM {$this->model->pre}category A 
         LEFT JOIN {$this->model->pre}model B ON A.mid = B.mid
 		WHERE A.model={$model}
         ORDER BY A.sequence DESC,A.cid ASC
         ";
         $data=$this->model->query($sql); 
-
         $cat = new Category(array('cid', 'pid', 'name', 'cname'));
-        return $cat->getTree($data, $id);
+        $data= $cat->getTree($data, $id);
+		return $data;
     }
-
     //获取子栏目统计
     public function list_count($pid)
     {
@@ -40,8 +58,10 @@ class categoryModel extends commonModel
     {
         return $this->model->field('cid')->table('category')->where('pid='.$id)->select();
     }
-    //获取内容基本信息
-
+    public function getModelId($id)
+    {
+        return $this->model->field('mid')->table('category')->where('cid='.$id)->select();
+    }
     //获取栏目基本信息
     public function info($id)
     {
@@ -55,6 +75,7 @@ class categoryModel extends commonModel
         $data['urlname']=$this->get_urlname($data['name'],$data['urlname'],$cid);
         //获取语言信息
         $data['seo_content']=html_in($data['seo_content']);
+		$data['content']=html_in($data['content']);
         return $data;
 
     }
@@ -64,7 +85,6 @@ class categoryModel extends commonModel
     {   
         //格式化部分字段
         $data=$this->common_data_save($data);
-        dump($data);
         //录入数据
         $cid=$this->model->table('category')->data($data)->insert();
         model('upload')->relation('category',$data['file_id'],$cid);
@@ -77,8 +97,9 @@ class categoryModel extends commonModel
     //栏目保存
     public function edit_save($data)
     {
-        //格式化部分字段
+		//格式化部分字段
         $data=$this->common_data_save($data);
+		//dump($data,1);
         //录入数据
         $status=$this->model->table('category')->data($data)->where('cid='.$data['cid'])->update();
         model('upload')->relation('category',$data['file_id'],$data['cid']);

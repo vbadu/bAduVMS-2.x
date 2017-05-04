@@ -3,9 +3,13 @@
 class memberMod extends commonMod {
 	public function __construct(){
         parent::__construct();
+        if(!model('user_group')->menu_power('user',true)){
+        	$this->msg('对不起，您没有该模块的操作权限！',0);
+        }
     }
 	//会员首页
 	public function index() {
+		$this->check_app_power('member',true);
 		$this->action_name='个人会员';
         $url = __URL__ . '/index/page-{page}';
     	$listRows = 30;
@@ -21,6 +25,7 @@ class memberMod extends commonMod {
 	}
 	//团体会员
 	public function team() {
+		$this->check_app_power('member',true);
 		$this->action_name='团体会员';
         $url = __URL__ . '/team/page-{page}';
     	$listRows = 30;
@@ -69,6 +74,7 @@ class memberMod extends commonMod {
 	}
     //用户修改
     public function edit() {
+		$this->check_app_power('member',true);
         $this->action_name='资料修改';
 		if (!empty($_POST) && is_array($_POST)){
 			$id=intval($_POST['uid']);
@@ -83,7 +89,7 @@ class memberMod extends commonMod {
 			$info['btime']=intval($post['btime']);
 			$info['status']=intval($post['status']);
 			if (strlen($post['password'])>5){
-				$info['password']=md5(in($post['password']).$data['email']);
+				$info['password']=md5(in($post['password']).$info['email']);
 			}
 			$info['gid']=intval($post['gid']);
 			$group=model('member')->info('id='.$info['gid'],'_group');
@@ -96,6 +102,7 @@ class memberMod extends commonMod {
 			$data['tel']=in($post['tel']);
 			$data['address']=in($post['address']);
 			$data['major']=in($post['major']);
+			$data['job']=in($post['job']);
 			$data['organization']=in($post['organization']);
 			$data['nation']=intval($post['nation']);
 			$data['politics']=intval($post['politics']);
@@ -164,11 +171,11 @@ class memberMod extends commonMod {
 		}
 		$this->info=$user;
 		$this->group=model('member')->get_list('_group','type!=1');
-        //dump($this->info);
 		$this->show();
     }
     //用户修改
     public function edit_team() {
+		$this->check_app_power('member',true);
         $this->action_name='资料修改';
 		if (!empty($_POST) && is_array($_POST)){
 			$id=intval(in($_POST['id']));
@@ -188,7 +195,7 @@ class memberMod extends commonMod {
 			$data['gid']=intval(in($_POST['gid']));
 			$data['status']=intval(in($_POST['status']));
 			$data['btime']=intval(in($_POST['btime']));
-			$data['password']=md5($data['user'].in($_POST['password']).$data['sex']);
+			$data['password']=md5($_POST['password'].$data['email']);
 			$datas['about']=serialize(in($_POST['info']));
 			$group=model('member')->info('id='.$data['gid'],'_group');
 			$data['gname']=$group['name'];
@@ -231,6 +238,7 @@ class memberMod extends commonMod {
 
 	//会员组管理
     public function group(){
+		$this->check_app_power('member/group',true);
 		$this->action_name='会员组';
         $url = __URL__ . '/group/page-{page}';
     	$listRows = 30;
@@ -245,6 +253,8 @@ class memberMod extends commonMod {
     }
 	//添加编辑人员信息
     public function edit_group(){
+		$this->check_app_power('member/group',true);
+		$power=array();
 		if (!empty($_POST) && is_array($_POST)){
 			$id=intval(in($_POST['id']));
 			$data['name']=in($_POST['name']);
@@ -279,6 +289,7 @@ class memberMod extends commonMod {
     }
 	// 公共调用
     public function set(){
+		$this->check_app_power('member',true);
 		if (!empty($_POST) && is_array($_POST)){
 			$id=intval(in($_POST['id']));
 			$zt=intval(in($_POST['zt']));
@@ -310,12 +321,8 @@ class memberMod extends commonMod {
 		}
 		$this->msg('nothing！',0);
     }
-	// 编号规则
-	public function vcard($vcard=''){
-		
-		
-	}
 	public function recount(){
+		$this->check_app_power('member',true);
 		$this->action_name='个人会员';
 		@header("Content-type: text/html; charset=utf-8");
 		$next=intval($_GET['next']);
@@ -338,10 +345,14 @@ class memberMod extends commonMod {
 							$btime=@number_format($v['btime']);
 							$mdata['vtime']=($btime+$alltime);
 							if ($mdata['vtime']>0){
-								$mdata['gid']=model('member')->auto_group($mdata['vtime']);
+								$data=model('member')->auto_group($mdata['vtime']);
+								$mdata['gid']=$data['gid'];
+								$mdata['gname']=$data['gname'];
 								if (1>$mdata['gid']) unset($mdata['gid']);
 							}
-							model('member')->edit($mdata,array("id"=>$v['id']));
+							if ($mdata['gid']>1){
+								model('member')->edit($mdata,array("id"=>$v['id']));
+							}
 							unset($mdata);
 						}
 					}				

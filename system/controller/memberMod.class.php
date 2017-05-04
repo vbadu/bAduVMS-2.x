@@ -101,15 +101,17 @@ class memberMod extends commonMod {
 				$this->msg('请输入密保邮箱或身份证号码!',0);
 			}
 			if (!is_email($post)){
-				if (!badu_api_bankcard($post)){
+				$sfz=api_idcard($post);
+				if (strlen($sfz['sex'])!=1){
 					$this->msg('请输入正确的密保邮箱或身份证号码!',0);
 				}else{
 					$where['idcard']=$post;	
+					$user=model('member')->info($where,'_data');
 				}
 			}else{
 				$where['email']=$post;	
+				$user=model('member')->info($where);
 			}
-			$user=model('member')->info($where);
 			if (!is_array($user) || 1>count($user)){
 					$this->msg('您输入的身份凭据不存在，可能还未注册或已更换过其他电邮或身份信息!',0);
 			}
@@ -363,7 +365,7 @@ class memberMod extends commonMod {
 		//$this->msg=model('helper')->get_msg_list($user['id'],$limit);
 		$common['title']='我的首页';
 		$common['cid']=11;
-		//dump($user);
+		$this->recount();
         $this->assign('common', $common);
         $this->assign('user', $user);
 		$this->display('member/index.html');
@@ -717,6 +719,27 @@ class memberMod extends commonMod {
 			$this->msg('重新申请操作成功！',1);
 		}
 	}
-
+	public function recount(){
+		$member=$this->check_id();
+		if ($_COOKIE[$member['id']."_member_update_".date('Y-m-d')]){
+			return false;
+		}
+		$alltime=model('event')->get_sum($member['id'],'_team');
+		$alltime=@number_format($alltime);
+		$btime=@number_format($member['btime']);
+		$mdata['vtime']=($btime+$alltime);
+		if ($mdata['vtime']>0){
+			$data=model('member')->auto_group($mdata['vtime']);
+			$mdata['gid']=$data['gid'];
+			$mdata['gname']=$data['gname'];
+			if (1>$mdata['gid']) unset($mdata['gid']);
+		}
+		if ($mdata['gid']>1){
+			model('member')->edit($mdata,array("id"=>$member['id']));
+		}
+		unset($mdata);
+		setcookie($member['id']."_member_update_".date('Y-m-d'),$member['id'],time()+24*3600);
+		return true;
+	}
 
 }

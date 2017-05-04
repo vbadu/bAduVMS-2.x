@@ -37,7 +37,15 @@
         </td>
         <td></td>
       </tr>
-
+      <tr>
+        <td width="120" align="right">是否启用</td>
+        <td>
+        <?php if(!isset($info['display'])){ $info['display']=0; } ?>
+          <input name="display" type="radio" value="1" <?php if($info['display']==1){ ?> checked="checked" <?php } ?> />是
+          &nbsp;&nbsp;
+          <input name="display" type="radio" value="0" <?php if($info['display']==0){ ?> checked="checked" <?php } ?> />否
+        </td>
+        </tr>
     </table>
 </div>
 <?php if(model('user_group')->model_power('form','add')||model('user_group')->model_power('form','edit')){ ?>

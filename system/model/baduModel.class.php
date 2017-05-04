@@ -10,7 +10,7 @@ class baduModel extends commonMod
 		$model=intval($model);
 		$id=intval($id);
         $sql="
-        SELECT A.*,B.model,B.name as mname,B.admin_category,B.admin_content
+        SELECT A.*,B.model,B.name as mname
         FROM {$this->model->pre}category A 
         LEFT JOIN {$this->model->pre}model B ON A.mid = B.mid
 		WHERE A.model={$model}

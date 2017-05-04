@@ -13,10 +13,7 @@ class rewriteModel extends commonMod
         if(!empty($dir)){
             $condition['urlname']=$dir;
             $category = $this->model->field('cid,pid,urlname')->table('category')->where($condition)->find();
-            if(empty($category)){
-                $this->error404();
-                return;
-            }else{
+            if(!empty($category)){
                 $_GET['cid']=$category['cid'];
                 $_GET['pid']=$category['pid'];
                 $_GET['page']=intval($page);
@@ -24,7 +21,7 @@ class rewriteModel extends commonMod
                 return;
             }
         }
-        $this->error404();
+        $this->error404('<b>该网页链接已失效。</b>');
         return;
     }
 
@@ -34,7 +31,7 @@ class rewriteModel extends commonMod
         if(is_numeric($dir)){
             $aid=intval($dir);
         }else{
-        $dir=in($dir);
+        	$dir=in($dir);
         }
         if(!empty($aid)){
             $_GET['aid']=$aid;
@@ -54,7 +51,7 @@ class rewriteModel extends commonMod
                 return;
             }
         }
-        $this->error404();
+        $this->error404('<b>该网页链接已失效。</b>');
         return;
     }
 

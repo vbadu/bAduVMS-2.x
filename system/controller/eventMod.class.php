@@ -2,6 +2,10 @@
 class eventMod extends commonMod{
 	public function __construct(){
         parent::__construct();
+        if(!model('user_group')->menu_power('event',true)){
+        	$this->msg('对不起，您没有该模块的操作权限！',0);
+        }
+
 		$this->category_left=model('badu')->category(2);
     }
     //公共列表信息
@@ -69,12 +73,20 @@ class eventMod extends commonMod{
         $status=intval($_GET['status']);
         switch ($status) {
             case '1':
-                $where		.=	' AND status=1';
+                $where		.=	' AND zt=1';
                 $where_url	.=	'-status-1';
                 break;
             case '2':
-                $where	.=	' AND status=0';
+                $where	.=	' AND zt=2';
                 $where_url	.=	'-status-2';
+                break;
+             case '3':
+                $where	.=	' AND zt=3';
+                $where_url	.=	'-status-3';
+                break;
+             default:
+                $where	.=	' AND zt>=0';
+                $where_url	.=	'-status-0';
                 break;
         }
         //搜索

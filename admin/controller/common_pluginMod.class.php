@@ -29,9 +29,10 @@ class common_pluginMod extends commonMod
     }
 
     //模板输出定义
-    protected function display($tpl = '', $return = false, $is_tpl = true ,$diy_tpl=false){
+    protected function display($tpl = '', $return = false, $is_tpl = true ,$diy_tpl=false,$plustpl=true){
         module('common')->view()->assign( $this->_data );
-        module('common')->display(__ROOTDIR__. '/system/plugins/'.$_GET['_module'].'/template/'.$tpl,false,true,true);
+		if($plustpl==true)	$tpl =__ROOTDIR__. '/system/plugins/'.$_GET['_module'].'/template/'.$tpl;
+        module('common')->display($tpl,$return,$is_tpl,$diy_tpl);
     }
 
     //获取插件信息
@@ -41,7 +42,16 @@ class common_pluginMod extends commonMod
         return $config;
     }
 
-
+   //操作成功之后的提示
+    protected function success($msg, $url = null)
+    {
+       if ($url == null)
+            $url = 'javascript:history.go(-1);';
+        $this->_data['msg']= $msg;
+        $this->_data['url']= $url;
+        $this->display('index/msg',false,true,false,false);
+        exit;
+    }
 
 }
 ?>

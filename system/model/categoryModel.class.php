@@ -27,22 +27,35 @@ class categoryModel extends commonMod
         return $this->model->table('model')->where('mid='.$mid)->find();
     }
 
-    //扩展模型信息
-    public function expand_model_info($mid)
-    {
-        return $this->model->table('expand_model')->where('mid='.$mid)->find();
-    }
-
     //模块修正
-    public function model_jump($mid,$module){
-        $model_info = $this->model_info($mid);
-        if (!empty($model_info['module_category'])&&$model_info['module_category']<>$module) {
-            module($model_info['module_category'])->index();
-            if ( $this->config['HTML_CACHE_ON'] ) {
-                HtmlCache::write();
-            }
-            exit;
+    public function model_jump($info){
+		//dump($info,1);
+		$mid=intval($info['mid']);
+		if ($mid==3){
+			$link=$this->return_tpl(html_out($info['content']));
+			header("HTTP/1.1 301 Moved Permanently");
+			header("Location: ".$link."");
+			exit;
+		}elseif ($mid==2){
+			if(empty($info['content'])){
+				$info['content']='暂无内容';
+			}
+        	$info['content']=html_out($info['content']);
+	
+		}
+
+        /*hook*/
+        $this->plus_hook('category','index',$this->info);
+        $this->info=$this->plus_hook_replace('category','index_replace',$this->info);
+        /*hook end*/
+
+        //位置导航
+        $this->nav=array_reverse(model('category')->nav($this->info['cid']));
+
+        if ( $this->config['HTML_CACHE_ON'] ) {
+           HtmlCache::write();
         }
+        exit;
     }
     //内容列表
     public function get_list($id='',$limit='0,100',$order='sequence desc,cid desc'){
@@ -57,20 +70,10 @@ class categoryModel extends commonMod
     //内容列表
     public function content_list($cid,$where,$limit,$list_sort)
     {
-        $category=model('category')->info($cid);
-        $expand_id=$category['expand'];
-        if(!empty($expand_id)){
-            $model_info=model('category')->expand_model_info($expand_id);
-            $expand="LEFT JOIN {$this->model->pre}expand_content_{$model_info['table']} C ON C.aid = A.aid";
-            $expand_field="C.*,";
-        }
-        $loop="
-            SELECT {$expand_field}A.*,B.name as cname,B.subname as csubname,B.mid
+        $loop="SELECT A.*,B.name as cname,B.subname as csubname,B.mid
              FROM {$this->model->pre}content A 
              LEFT JOIN {$this->model->pre}category B ON A.cid = B.cid
-             {$expand}
-             WHERE {$where} ORDER BY {$list_sort} LIMIT {$limit}
-            ";
+             WHERE {$where} ORDER BY {$list_sort} LIMIT {$limit}";
             return $this->model->query($loop);
     }
 

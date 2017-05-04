@@ -43,7 +43,9 @@ class formModel extends commonModel
     public function add($data)
     {
         $where['table']=$data['table'];
-        if($this->model->table('form')->where($where)->find()){
+		$sql = "SHOW TABLES LIKE   '%{$this->model->pre}form_data_{$data['table']}%';";
+		$status=$this->model->sql_query($sql);
+		if (strlen($status[0])>0){
             return false;
         }
          //添加初始表
@@ -61,28 +63,38 @@ class formModel extends commonModel
     public function edit($data)
     {
         $info=$this->info($data['id']);
-        //修改表
-        $sql="
-        ALTER TABLE {$this->model->pre}form_data_{$info['table']} RENAME TO {$this->model->pre}form_data_{$data['table']}
-        ";
-        $this->model->query($sql);
-
-        $condition['id']=intval($data['id']);
-        return $this->model->table('form')->data($data)->where($condition)->update(); 
+		$sql = "SHOW TABLES LIKE   '%{$this->model->pre}form_data_{$info['table']}%';";
+		$status=$this->model->sql_query($sql);
+		if (strlen($status[0])>0){
+			//修改表
+			$sql="
+			ALTER TABLE {$this->model->pre}form_data_{$info['table']} RENAME TO {$this->model->pre}form_data_{$data['table']}
+			";
+			$this->model->query($sql);
+	
+			$condition['id']=intval($data['id']);
+			return $this->model->table('form')->data($data)->where($condition)->update(); 
+		}
+		return $this->add($data);
     }
 
     //删除表单
     public function del($id)
     {
         $info=$this->info($id);
-        //删除表
-        $sql="
-        DROP TABLE `{$this->model->pre}form_data_{$info['table']}`
-        ";
-        $this->model->query($sql);
-        //删除表内字段
-        $this->model->table('form_field')->where('fid='.$id)->delete();
-        return $this->model->table('form')->where('id='.$id)->delete(); 
+		$sql = "SHOW TABLES LIKE   '%{$this->model->pre}form_data_{$info['table']}%';";
+		$status=$this->model->sql_query($sql);
+		if (strlen($status[0])>0){
+			//删除表
+			$sql="
+			DROP TABLE `{$this->model->pre}form_data_{$info['table']}`
+			";
+			$this->model->query($sql);
+			//删除表内字段
+			$this->model->table('form_field')->where('fid='.$id)->delete();
+			return $this->model->table('form')->where('id='.$id)->delete(); 
+        }
+        return false;
     }
     public function find_field_data($fid,$condition=null)
     {
@@ -96,7 +108,7 @@ class formModel extends commonModel
     public function field_list_data($fid)
     {
         $where['fid']=$fid;
-        $where['system']=0;
+        //$where['system']=0;
 		return $this->model->table('form_field')->where($where)->order('sequence asc,id asc')->select();
     }
     //字段修改
@@ -138,18 +150,23 @@ class formModel extends commonModel
     //字段添加
     public function field_add($data)
     {
-        //dump($data);
 		$model=$this->info($data['fid']);
-		
         $property=$this->field_property($data['property']);
-        $data=model('expand_model')->field_data($data);
-        //添加真实字段
-        $sql="
-        ALTER TABLE {$this->model->pre}form_data_{$model['table']} ADD {$data['field']} {$property['name']}({$data['len']}{$data['decimal_len']}) DEFAULT NULL
-        ";
-        $this->model->query($sql);
-        $data['admin_html']=html_in($data['admin_html']);
-        return $this->model->table('form_field')->data($data)->insert();
+        $data=model('badu')->field_data($data);
+		$sql = "desc {$this->model->pre}form_data_{$model['table']} {$data['field']}";
+		$status=$this->model->sql_query($sql);
+		if (strlen($status[0])>0){
+			$count=$this->find_field_data($data['fid'],array('field'=>$data['field']));
+			if (1>$count) return $this->model->table('form_field')->data($data)->insert();
+		}else{
+			//添加真实字段
+			$sql="
+			ALTER TABLE {$this->model->pre}form_data_{$model['table']} ADD {$data['field']} {$property['name']}({$data['len']}{$data['decimal_len']}) DEFAULT NULL
+			";
+			$this->model->query($sql);
+			$data['admin_html']=html_in($data['admin_html']);
+			return $this->model->table('form_field')->data($data)->insert();
+		}
     }
 
     //字段修改
@@ -158,15 +175,27 @@ class formModel extends commonModel
         $model=$this->info($data['fid']);
         $info=$this->field_info($data['id']);
         $property=$this->field_property($data['property']);
-        $data=model('expand_model')->field_data($data);
-        //修改真实字段
-        $sql="
-        ALTER TABLE {$this->model->pre}form_data_{$model['table']} CHANGE {$info['field']} {$data['field']} {$property['name']}({$data['len']}{$data['decimal_len']})
-        ";
-        $this->model->query($sql);
-        $condition['id']=intval($data['id']);
-        $data['admin_html']=html_in($data['admin_html']);
-        return $this->model->table('form_field')->data($data)->where($condition)->update(); 
+        $data=model('badu')->field_data($data);
+		$sql = "desc {$this->model->pre}form_data_{$model['table']} {$info['field']}";
+		$status=$this->model->sql_query($sql);
+		if (strlen($status[0])>0){
+			//修改真实字段
+			$sql="
+			ALTER TABLE {$this->model->pre}form_data_{$model['table']} CHANGE {$info['field']} {$info['field']} {$property['name']}({$data['len']}{$data['decimal_len']})
+			";
+			$this->model->query($sql);
+			$condition['id']=intval($data['id']);
+			$data['admin_html']=html_in($data['admin_html']);
+			return $this->model->table('form_field')->data($data)->where($condition)->update(); 
+		}else{
+			//添加真实字段
+			$sql="
+			ALTER TABLE {$this->model->pre}form_data_{$model['table']} ADD {$data['field']} {$property['name']}({$data['len']}{$data['decimal_len']}) DEFAULT NULL
+			";
+			$this->model->query($sql);
+			$data['admin_html']=html_in($data['admin_html']);
+			return $this->model->table('form_field')->data($data)->insert();
+		}
     }
 
     //字段删除
@@ -174,10 +203,14 @@ class formModel extends commonModel
     {
         $info=$this->field_info($data['id']);
         $model=$this->info($info['fid']);
-        $sql="ALTER TABLE {$this->model->pre}form_data_{$model['table']} DROP {$info['field']}";
-        $this->model->query($sql);
-        $condition['id']=intval($info['id']);
-        return $this->model->table('form_field')->where($condition)->delete(); 
+		$sql = "desc {$this->model->pre}form_data_{$model['table']} {$info['field']}";
+		$status=$this->model->sql_query($sql);
+		if (strlen($status[0])>0){
+			$sql="ALTER TABLE {$this->model->pre}form_data_{$model['table']} DROP {$info['field']}";
+			$this->model->query($sql);
+			$condition['id']=intval($info['id']);
+			return $this->model->table('form_field')->where($condition)->delete(); 
+		}
     }
 
     //获取字段类型名称

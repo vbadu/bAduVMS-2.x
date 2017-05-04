@@ -28,7 +28,7 @@ class contentModel extends commonModel
             $where="WHERE {$where_cid}{$where}";
         }
         $sql="
-            SELECT A.*,B.name as cname,B.mid,C.admin_content
+            SELECT A.*,B.name as cname,B.mid
              FROM {$this->model->pre}content A 
              LEFT JOIN {$this->model->pre}category B ON A.cid = B.cid
              LEFT JOIN {$this->model->pre}model C ON C.mid = B.mid
@@ -108,7 +108,6 @@ class contentModel extends commonModel
         $aid=$this->model->table('content')->data($data)->insert(); //录入基本信息
         model('tags')->content_save($data['keywords'],$aid); //处理TAG
         model('position')->add_content_save($data['position'],$aid); //保存推荐位
-        model('expand_model')->add_content_save($data,$aid);  //录入扩展模型数据
         model('upload')->relation('content',$data['file_id'],$aid); //录入附件表
         /*hook*/
         $this->plus_hook('content','add_data',$data);
@@ -125,9 +124,9 @@ class contentModel extends commonModel
     }
 
     //获取内容基本信息
-    public function info($aid)
+    public function info($aid,$field='*')
     {
-        return $this->model->table('content')->where('aid='.$aid)->find();
+        return $this->model->table('content')->field($field)->where('aid='.$aid)->find();
     }
 
     //获取附加内容
@@ -137,7 +136,7 @@ class contentModel extends commonModel
     }
 
     //基础表信息
-    public function edit_save($data,$ext=true)
+    public function edit_save($data)
     {
         //格式化部分字段
         $data=$this->common_data_save($data);
@@ -145,9 +144,6 @@ class contentModel extends commonModel
         $aid=$this->model->table('content')->data($data)->where('aid='.$data['aid'])->update(); //录入基本信息
         model('tags')->content_save($data['keywords'],$data['aid']); //处理TAG
         model('position')->edit_content_save($data['position'],$data['aid']); //保存推荐位
-        if($ext){
-        model('expand_model')->edit_content_save($data); //录入扩展模型数据
-        }
         model('upload')->relation('content',$data['file_id'],$data['aid']); //录入附件表
         /*hook*/
         $this->plus_hook('content','edit_data',$data);
@@ -180,7 +176,6 @@ class contentModel extends commonModel
         $this->plus_hook('content','del_data',$aid);
         /*hook end*/
         //删除内容基本信息
-        model('expand_model')->del_content($aid);
         $status=$this->model->table('content')->where('aid='.$aid)->delete(); 
         model('position')->del_content($aid);
         model('tags')->del_content($aid);

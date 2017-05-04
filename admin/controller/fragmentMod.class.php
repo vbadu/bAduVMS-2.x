@@ -5,10 +5,10 @@ class fragmentMod extends commonMod {
 	public function __construct()
     {
         parent::__construct();
-		$this->model_url=$_GET['_module'];
-        if(!model('user_group')->model_power($this->model_url,'visit')){
-        	$this->msg('对不起，您没有该模块('.$this->model_url.')的操作权限！',0);
+        if(!model('user_group')->menu_power('system',true)){
+        	$this->msg('对不起，您没有该模块的操作权限！',0);
         }
+		$this->check_app_power('fragment',true);
 	}
 	public function index() {
 		$this->list=model('fragment')->fragment_list();
@@ -17,18 +17,12 @@ class fragmentMod extends commonMod {
 
 	//变量添加
 	public function add() {
-        if(!model('user_group')->model_power($this->model_url,'add')){
-        	$this->msg('对不起，您没有该模块('.$this->model_url.')的操作权限！',0);
-        }
         $this->action_name='添加';
         $this->action='add';
 		$this->show('fragment/info'); 
 	}
 
 	public function add_save() {
-        if(!model('user_group')->model_power($this->model_url,'add')){
-        	$this->msg('对不起，您没有该模块('.$this->model_url.')的操作权限！',0);
-        }
         $id=model('fragment')->add($_POST);
         model('upload')->relation('plus',$_POST['file_id'],$id);
         $this->msg('自定义变量添加成功！',1);
@@ -36,9 +30,6 @@ class fragmentMod extends commonMod {
 
     //变量修改
     public function edit() {
-        if(!model('user_group')->model_power($this->model_url,'edit')){
-        	$this->msg('对不起，您没有该模块('.$this->model_url.')的操作权限！',0);
-        }
         $id=intval($_GET['id']);
         $this->alert_str($id,'int');
         $this->info=model('fragment')->info($id);
@@ -50,9 +41,6 @@ class fragmentMod extends commonMod {
 
     //变量修改
     public function edit_save() {
-        if(!model('user_group')->model_power($this->model_url,'edit')){
-        	$this->msg('对不起，您没有该模块('.$this->model_url.')的操作权限！',0);
-        }
         $id=$_POST['id'];
         $this->alert_str($id,'int',true);
         model('fragment')->edit($_POST);
@@ -62,9 +50,6 @@ class fragmentMod extends commonMod {
 
     //变量删除
     public function del() {
-        if(!model('user_group')->model_power($this->model_url,'del')){
-        	$this->msg('对不起，您没有该模块('.$this->model_url.')的操作权限！',0);
-        }
         $id=intval($_POST['id']);
         $this->alert_str($id,'int',true); 
         //录入模型处理
@@ -72,8 +57,4 @@ class fragmentMod extends commonMod {
         model('upload')->del_file('plus',$id);
         $this->msg('变量删除成功！',1);
     }
-	
-
-	
-
 }

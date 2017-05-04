@@ -5,10 +5,10 @@ class user_groupMod extends commonMod {
 	public function __construct()
     {
         parent::__construct();
-		$this->model_url=$_GET['_module'];
-        if(!model('user_group')->model_power($this->model_url,'visit')){
-        	$this->msg('对不起，您没有该模块('.$this->model_url.')的操作权限！',0);
+        if(!model('user_group')->menu_power('user',true)){
+        	$this->msg('对不起，您没有该模块的操作权限！',0);
         }
+		$this->check_app_power('user_group',true);
 	}
 	public function index() {
 		$this->list=model('user_group')->admin_list();
@@ -17,21 +17,9 @@ class user_groupMod extends commonMod {
 
 	//用户组添加
 	public function add() {
-        if(!model('user_group')->model_power($this->model_url,'add')){
-        	$this->msg('对不起，您没有该模块('.$this->model_url.')的操作权限！',0);
-        }
         $this->user=model('user')->current_user();
-        //获取栏目树
-        $tree=model('menu')->content_menu();
-        if(!empty($tree)){
-            $data='';
-            foreach ($tree as $value) {
-               $data.='{cid:'.$value['cid'].',pid:'.$value['pid'].', name:"'.$value['name'].'"  ,title:"'.$value['name'].'" }, '."\n";
-            }
-            $data.='{name:" ", isHidden:true  }'."\n";
-        }
-        $this->class_tree=$data;
-
+		$this->class_tree=model('menu')->content_menu();
+		$this->class_power=explode(',',$this->info['class_power']);
         //获取模块权限
         $this->menu_list=model('menu')->menu_list();
         $this->form_list=model('form')->form_list();
@@ -41,32 +29,49 @@ class user_groupMod extends commonMod {
 	}
 
     public function data_save($data) {
-        if(!empty($data['class_power'])){
-            $data['class_power']=substr($data['class_power'],0,-1);   
-        }else{
-            $data['class_power']='';
-        }
-        $data['model_power']=serialize($data['model_power']);
-        $data['menu_power']=serialize($data['menu_power']);
-        $data['form_power']=serialize($data['form_power']);
+		if (is_array($data['menu_power'])) $data['menu_power']=implode(',',$data['menu_power']);
+		if (is_array($data['class_power'])) {
+			$temp=array();
+			foreach($data['class_power'] as $k => $v){
+				$temp=array_merge($v,$temp);
+			}
+		}
+		if (is_array($data['event_power'])) {
+			$_temp=array();
+			foreach($data['event_power'] as $k => $v){
+				$_temp=array_merge($v,$_temp);
+			}
+			unset($data['event_power']);
+			$data['class_power']=(is_array($_temp) && is_array($temp))?array_merge($_temp,$temp):$_temp;
+			
+		}
+		if (is_array($data['class_power'])) $data['class_power']=implode(',',$data['class_power']);
+		if (is_array($data['form_power'])) $data['form_power']=implode(',',$data['form_power']);
+		if (is_array($data['model_power'])) $data['model_power']=implode(',',$data['model_power']);
+ 		//if (is_array($data['model_power'])) $data['model_power']=serialize($data['model_power']);
         return $data;
     }
 
 	public function add_save() {
-        if(!model('user_group')->model_power($this->model_url,'add')){
-        	$this->msg('对不起，您没有该模块('.$this->model_url.')的操作权限！',0);
-        }
         $data=$this->data_save($_POST);
         //录入模型处理
         model('user_group')->add($data);
         $this->msg('用户组添加成功！',1);
 	}
+	
+	public function totree($ar=array(), $id='cid', $pid='pid'){
+		foreach($ar as $v) $t[$v[$id]] = $v;  
+		foreach ($t as $k => $item){	
+			if( $item[$pid]) {  
+				$t[$item[$pid]]['child'][$item[$id]] =& $t[$k];
+				unset($t[$k]);
+			}
+		}
+		return $t;
+	}
 
     //用户组修改
     public function edit() {
-        if(!model('user_group')->model_power($this->model_url,'edit')){
-        	$this->msg('对不起，您没有该模块('.$this->model_url.')的操作权限！',0);
-        }
         $id=$_GET['id'];
         $this->alert_str($id,'int');
         //用户组信息
@@ -75,31 +80,18 @@ class user_groupMod extends commonMod {
         if($this->info['grade']<$this->user['grade']){
             $this->msg('请勿越权操作！',0);
         }
-        //获取栏目树
-        $tree=model('menu')->content_menu();
-        $class_power=explode(',', $this->info['class_power']);
-        $data='';
-        if(!empty($tree)){
-            foreach ($tree as $value) {
-                if(!empty($this->info['class_power'])){
-                    if(in_array($value['cid'],$class_power)){
-                        $purview=' , checked:true ';
-                    }else{
-                        $purview=' ';
-                    }
-                }
-               $data.='{cid:'.$value['cid'].',pid:'.$value['pid'].',name:"'.$value['name'].'" ,title:"'.$value['name'].'" '.$purview.' }, '."\n";
-            }
-            $data.='{name:" ", isHidden:true  }'."\n";
-        }
-        $this->class_tree=$data;
-
         //获取模块权限
+        $this->model_power=explode(',',$this->info['model_power']);
+        $this->menu_power=explode(',',$this->info['menu_power']);
         $this->menu_list=model('menu')->menu_list();
+		$this->class_power=explode(',',$this->info['class_power']);
+		$content_cat=model('menu')->content_menu(1,$this->user['gid']);
+		$this->content_cat=getTreeHtml(Array2Tree($content_cat,0),$this->class_power,'class_power');
+		$event_cat=model('menu')->content_menu(2,$this->user['gid']);
+		$this->event_cat=getTreeHtml(Array2Tree($event_cat,0),$this->class_power,'event_power');
+		//$this->class_tree=model('menu')->content_menu();
+ 		$this->form_power=explode(',',$this->info['form_power']);
         $this->form_list=model('form')->form_list();
-        $this->model_power=unserialize($this->info['model_power']);
-        $this->form_power=unserialize($this->info['form_power']);
-        $this->menu_power=unserialize($this->info['menu_power']);
         $this->action_name='编辑';
         $this->action='edit';
         $this->show('user_group/info');
@@ -107,9 +99,6 @@ class user_groupMod extends commonMod {
 
     //用户组修改
     public function edit_save() {
-        if(!model('user_group')->model_power($this->model_url,'edit')){
-        	$this->msg('对不起，您没有该模块('.$this->model_url.')的操作权限！',0);
-        }
         $this->alert_str($_POST['id'],'int',true);
         $data=$this->data_save($_POST);
         //录入模型处理
@@ -119,9 +108,6 @@ class user_groupMod extends commonMod {
 
     //用户组删除
     public function del() {
-        if(!model('user_group')->model_power($this->model_url,'del')){
-        	$this->msg('对不起，您没有该模块('.$this->model_url.')的操作权限！',0);
-        }
         $id=intval($_POST['id']);
         $this->alert_str($id,'int',true);
         $info=model('user_group')->info($id);
@@ -136,8 +122,4 @@ class user_groupMod extends commonMod {
         model('user_group')->del($id);
         $this->msg('用户组删除成功！',1);
     }
-	
-
-	
-
 }
