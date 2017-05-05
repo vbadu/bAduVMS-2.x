@@ -1,0 +1,66 @@
+<script>
+//快速编辑
+$('tr').hover(
+	function () {
+		$(this).find('.quickeditor').show();
+	},
+	function () {
+		$(this).find('.quickeditor').hide();
+	}
+);
+function quickeditor(url){
+	urldialog({
+	title:'快速编辑',
+	url:url,
+	width:550,
+	height:570
+	});
+}
+//选择
+function selectall(name){   
+    $("[name='"+name+"']").each(function(){//反选   
+    if($(this).attr("checked")){   
+          $(this).removeAttr("checked");   
+    }else{   
+          $(this).attr("checked",'true');   
+    }   
+    })  
+}
+//批量操作
+function audit(status){
+	var str="";
+	$("[name='id[]']").each(function(){//反选   
+    if($(this).attr("checked")){
+		  str+=$(this).val()+","; 
+    }
+    })
+	var cid = $('#cid').val();
+	var class_id = $('#class_id').val();
+	ajaxpost({
+		name:'您确认要继续进行操作吗？操作将无法撤销！',
+		url:"__APP__/content/batch",
+		data:{status: status, id:str, cid:cid, class_id:class_id},
+		tip:1,
+		success:function(){
+			window.location.reload();	
+		}
+	});
+}
+//栏目形象图
+$(".class_pic").powerFloat({
+    targetMode: "ajax"
+});
+//删除
+function del(aid,obj) {
+	var obj;
+	ajaxpost({
+		name:'确认要删除本内容吗?删除无法恢复！',
+		url:"__URL__/del",
+		data:{aid: aid,cid: '{$class_info.cid}'},
+		tip:1,
+		success:function(){
+			$(obj).parent().parent().parent().remove();
+		}
+	});
+}
+</script>

@@ -1,0 +1,15 @@
+<script type="text/javascript">
+//提交表单
+<?php if($_GET['type']<>'content'||model('user_group')->model_power('nav','visit')){ ?>
+savelistform({addurl:"__URL__/add/type-{$type}",listurl:"__APP__/nav/index/type-{$type}"});
+<?php }else{ ?>
+saveform({
+	success:function(msg){
+		tip({msg:msg,time:3});
+	},
+	failure:function(msg){
+		tip({msg:msg,time:3});
+	}
+	});
+<?php } ?>
+</script>

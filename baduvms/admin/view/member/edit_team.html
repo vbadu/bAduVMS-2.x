@@ -1,0 +1,208 @@
+<div class="page_function">
+<div class="info">
+  <h3>{$action_name}</h3><small>使用以下功能进行{$action_name}操作</small>
+</div>
+</div>
+<div class="tab" id="tab"> 
+    <a class="selected" href="#tab1">基本资料</a>
+    <a href="#tab2">扩展信息</a> 
+    <a href="javascript:history.go(-1)">返回上页</a>
+</div>
+<div class="page_form">
+    <form action="__URL__/edit/time-<?php echo time();?>-ajax-true" method="post" id="form">
+    <div class="page_table form_table" id="tab1">
+    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+      <tr>
+        <td width="150" align="right">登录帐号：</td>
+        <td><input name="user" type="text" class="text_value" id="user" value="{$user.user}" reg="\S" msg="登录帐号不能为空" /></td>
+         <td width="100" align="right">登录密码：</td>
+         <td><input name="password" id="password" class="text_value" type="password"/>（不修改留空）</td>
+      </tr>
+      <tr>
+        <td align="right">会员编号：</td>
+        <td><input name="vcard" type="text" class="text_value" id="vcard" value="{$user.vcard}" reg="\S" msg="会员编号不能为空" /></td>
+        <td align="right">负责人姓名：</td>
+        <td align="left"><input name="nicename" id="nicename" class="text_value" type="text" value="{$user.nicename}" reg="\S" msg="负责人姓名不能为空" />（指该帐号管理人）</td>
+      </tr>
+      <tr>
+        <td align="right">注册单位全称：</td>
+        <td><input name="name" type="text" id="name" class="text_value" value="{$user.name}" reg="\S" msg="单位全称不能为空" /></td>
+        <td align="right">负责人性别：</td>
+        <td>
+            <input name="sex" type="radio" value="1" <!--if:{$user['sex']==1}-->checked="checked"<!--{/if}-->  />男
+            <input name="sex" type="radio" value="0" <!--if:{$user['sex']==0}-->checked="checked"<!--{/if}-->  />女
+		</td>
+      </tr>
+      <tr>
+        <td align="right">单位LOGO标志：</td>
+        <td>
+        	<?php echo module('editor')->get_image_upload('image', 'image', false, NULL, true, true);?>
+          	<input name="image" type="text" class="text_value" id="image" value="{$user.image}"/>
+        </td>
+        <td align="right">负责人身份证号：</td>
+        <td>
+        <input name="idcard" id="idcard" class="text_value" type="text" value="{$user.idcard}" reg="\S" msg="身份证号不能为空" />
+        </td>
+      </tr>
+      <tr>
+        <td align="right">联系电话：</td>
+        <td>
+            <input name="tel" type="text" id="tel" class="text_value" value="{$user.tel}" reg="\S" msg="联系电话不能为空" />
+        </td>
+        <td align="right">负责人手机号码：</td>
+        <td>
+            <input name="mob" type="text" id="mob" class="text_value" value="{$user.mob}" reg="\S" msg="手机号码不能为空" />
+        </td>
+      </tr>
+      <tr>
+        <td align="right">联系地址：</td>
+        <td>
+            <input name="address" type="text" id="address" class="text_value" value="{$user.address}" reg="\S" msg="联系地址不能为空" />
+        </td>
+        <td align="right">负责人电子邮箱：</td>
+        <td>
+            <input name="email" type="text" id="email" class="text_value" value="{$user.email}" reg="\S" msg="电子邮箱不能为空" />
+        </td>
+      </tr>
+      <tr>
+        <td align="right">所在团队：</td>
+        <td>
+        <select name="oid"  reg="." id="oid" msg="所在团队未选择">
+          <option value="">======选择所在团队======</option>
+          <option value="0"<?php if($user['oid']==0) echo ' selected="selected"'?>>{$config.organization}</option>
+          <!--foreach:{$team $vo}-->
+          <option value="{$vo['id']}"<?php if($user['oid']==$vo['id']) echo ' selected="selected"'?>>{$vo['title']}</option>
+          <!--{/foreach}-->
+        </select>
+        </td>
+        <td align="right">所在区域</td>
+        <td>
+        <select name="area"  reg="." id="area" msg="所在区域未选择">
+          <option value="">======选择所在区域======</option>
+          <!--foreach:{$area $vo}-->
+          <option value="{$vo['id']}"<?php if($user['area']==$vo['id']) echo ' selected="selected"'?>>{$vo['cname']}</option>
+          <!--{/foreach}-->
+        </select>
+        </td>
+      </tr>
+      <tr>
+        <td align="right">会 员 组：</td>
+        <td>
+        <select name="gid"  reg="." id="gid" msg="所在团队未选择">
+          <option value="">===选择会员组===</option>
+          <!--foreach:{$group $vo}-->
+          <option value="{$vo['id']}"<?php if($user['gid']==$vo['id']) echo ' selected="selected"'?>>{$vo['name']}</option>
+          <!--{/foreach}-->
+        </select>        
+        </td>
+        <td align="right">用户状态：</td>
+        <td>
+            <input name="status" type="radio" value="1" <!--if:{$user['status']==1}-->checked="checked"<!--{/if}-->  />启用
+            <input name="status" type="radio" value="0" <!--if:{$user['status']==0}-->checked="checked"<!--{/if}-->  />禁用
+		</td>
+      </tr>
+      <tr>
+        <td align="right">初始时数：</td>
+        <td>
+            <input name="btime" type="text" id="btime" class="text_value" value="{$user.btime}" reg="\S" msg="初始时数不能为空" style="width:80px"/>小时，用于志愿者历史服务时数记录
+        </td>
+        <td align="right">当前累计时数：</td>
+        <td>{$user.vtime} 小时</td>
+      </tr>
+      <tr>
+        <td align="right">注册时间：</td>
+        <td>{$php(echo date('Y-m-d H:i:s',$user['dtime']))}</td>
+        <td align="right">注册IP：</td>
+        <td>{$user.ip}</td>
+      </tr>
+      <tr>
+        <td align="right">登录次数：</td>
+        <td>{$user.loginnum}</td>
+        <td align="right">最后次登录时间：</td>
+        <td>{$php(echo date('Y-m-d H:i:s',$user['logintime']))}</td>
+      </tr>
+
+	</table>
+</div>
+<div class="page_table form_table" id="tab2">
+  <table width="100%" border="0" cellspacing="0" cellpadding="0">
+      <tr>
+        <td width="150" align="right">主管单位名称：</td>
+        <td><input name="info[orgboss]" type="text" class="text_value" id="work" value="{$info.orgboss}" reg="\S" msg="主管单位名称不能为空" /></td>
+        <td width="150" align="right">组织机构代码证：</td>
+        <td><input name="info[zcode]" id="zcode" class="text_value" type="text" value="{$info.zcode}" reg="\S" msg="组织机构代码证不能为空" /></td>
+      </tr>
+      <tr>
+        <td align="right">注册成立日期：</td>
+        <td><input name="info[rtime]"  id="rtime" type="text" class="text_value" value="{$info['rtime']}" reg="\S" msg="注册成立日期不能为空" readonly/></td>
+        <td align="right">组织机构代码证扫描件：</td>
+        <td>
+        	<?php echo module('editor')->get_image_upload('zcodeimg', 'zcodeimg', false, NULL, true, true);?>
+          	<input name="info[zcodeimg]" type="text" class="text_value" id="zcodeimg" value="{$info.zcodeimg}"/>
+		</td>
+      </tr>
+      <tr>
+        <td align="right">法人代表姓名：</td>
+        <td><input name="info[faren]" type="text" class="text_value" id="faren" value="{$info.faren}" reg="\S" msg="法人代表姓名不能为空"/></td>
+        <td align="right">单位类型：</td>
+        <td>
+            <input name="info[type]" type="radio" value="1" <!--if:{$info['type']==1}-->checked="checked"<!--{/if}-->  />非营利性 
+            <input name="info[type]" type="radio" value="0" <!--if:{$info['type']==0}-->checked="checked"<!--{/if}-->  />营利性
+		</td>
+      </tr>
+      <tr>
+        <td align="right">法人代表联系电话：</td>
+        <td><input name="info[farentel]" type="text" class="text_value" id="farentel" value="{$info.farentel}" /></td>
+        <td align="right">是否开展过志愿活动：</td>
+        <td>
+            <input name="info[record]" type="radio" value="1" <!--if:{$info['record']==1}-->checked="checked"<!--{/if}-->  />是
+            <input name="info[record]" type="radio" value="0" <!--if:{$info['record']==0}-->checked="checked"<!--{/if}-->  />否
+		</td>
+      </tr>
+      <tr>
+        <td align="right">志愿者人数：</td>
+        <td><input name="info[zyzrs]" type="text" class="text_value" id="zyzrs" value="{$info.zyzrs}" reg="\S" msg="志愿者人数不能为空,若暂未开展志愿登记工作请填0"/></td>
+        <td align="right">是否开通网上志愿团队：</td>
+        <td>
+            <input name="info[myorg]" type="radio" value="1" <!--if:{$info['myorg']==1}-->checked="checked"<!--{/if}-->  />是
+            <input name="info[myorg]" type="radio" value="0" <!--if:{$info['myorg']==0}-->checked="checked"<!--{/if}-->  />否
+		</td>
+      </tr>
+
+      <tr>
+        <td align="right">服务对象：</td>
+        <td colspan="3"><div class="checkboxl"><?php echo model('badu')->get_checkbox('target',$info['target']);?></div><div  class="checkboxr">（可多选，请在相应的位置打“√”）</div></td>
+      </tr>
+      <tr>
+        <td align="right">有兴趣参加的服务：</td>
+        <td colspan="3"><div class="checkboxl"><?php echo model('badu')->get_checkbox('service',$info['service']);?></div><div  class="checkboxr">（可多选，请在相应的位置打“√”）</div></td>
+      </tr>
+      <tr>
+        <td align="right">单位简介：</td>
+        <td colspan="3">
+        <textarea name="info[bz]" rows="5" style="width:90%" class="text_textarea" id="bz">{$info.bz}</textarea></td>
+      </tr>
+
+  </table>
+  </div><!--普通提交-->
+
+  <div class="form_submit">
+    <input name="id" type="hidden" value="{$user.id}" />
+    <input name="uid" type="hidden" value="{$info.id}" />
+    <button type="submit" class="button">保存</button>
+  </div>
+</form>
+</div>
+<style>
+.checkboxl{float:left; padding:10px;width:70%}
+.checkboxr{float:right; padding:10px;width:20%}
+
+</style>
+<script type="text/javascript">
+//tab菜单
+$("#tab").idTabs();
+$('#rtime').calendar({ id:'#rtime',format:'yyyy-MM-dd'});
+
+//提交表单
+savelistform({addurl:"__URL__/edit_team/id-{$user.id}",listurl:"__URL__/edit_team/id-{$user.id}"});
+</script>  

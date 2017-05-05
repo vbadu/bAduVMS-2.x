@@ -1,0 +1,73 @@
+<div class="page_function">
+  <div class="info">
+    <h3>{$action_name}管理</h3>
+    <small>使用以下功能进行{$action_name}管理操作</small> </div>
+  <div class="exercise"> 
+   <a href="javascript:menuload('__URL__/team')">{$action_name}列表</a>
+   <?php if(model('user_group')->model_power('user','add')){ ?>
+   <a href="javascript:menuload('__URL__/edit_team')">添加{$action_name}</a>
+   <?php } ?>
+   </div>
+</div>
+<div class="page_main">
+  <div class="page_table table_list">
+    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+      <tr>
+        <th width="20%"><center>登录帐号</center></th>
+        <th width="20%"><center>团体单位全程</center></th>
+        <th width="20%"><center>法人</center></th>
+        <th width="20%"><center>会员组</center></th>
+        <th width="10%"><center>状态</center></th>
+        <th width="20%"><center>操作</center></th>
+      </tr>
+      <!--foreach:{$list $vo}-->
+      <tr>
+        <td><center>{$vo.user}</center></td>
+        <td><center>{$vo.name}</center></td>
+        <td><center>{$vo.nicename}</center></td>
+        <td><center>{$vo.gname}</center></td>
+        <td><center><a href="javascript:void(0);"<!--if:{$vo['status']==1}--> onclick="set('{$vo.id}',2)" title="设为禁用">启用<!--{else}--> onclick="set('{$vo.id}',1)" title="设为启用">禁用<!--{/if}--> [切换]</a></center></td>
+        <td><center>
+        <?php if(model('user_group')->model_power('user','edit')){ ?>
+        <a href="__URL__/edit_team/id-{$vo.id}">修改</a>
+        <?php } ?>
+        <?php if(model('user_group')->model_power('user','del')){ ?>
+        &nbsp;&nbsp;<a href="javascript:void(0);" onclick="del('{$vo.id}',this)">删除</a>
+        <?php } ?>
+        </center></td>
+      </tr>
+      <!--{/foreach}-->
+    </table>
+  </div>
+</div>
+
+<div class="page_tool">
+  <div class="page">{$page}</div>
+</div>
+<script>
+//删除
+function del(id,obj) {
+	var obj;
+	ajaxpost({
+		name:'确定要删除此会员吗？',
+		url:"__URL__/set",
+		data:{id: id,zt:0},
+		tip:1,
+		success:function(){
+			$(obj).parent().parent().parent().remove();
+		}
+	});
+}
+function set(id,zt) {
+	var zt;
+	ajaxpost({
+		name:'确定要修改此状态吗？',
+		url:"__URL__/set",
+		data:{id: id,zt :zt},
+		tip:1,
+		success:function(){
+			window.location.reload();
+		}
+	});
+}
+</script>

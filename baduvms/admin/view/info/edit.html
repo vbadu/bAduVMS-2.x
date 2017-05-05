@@ -1,0 +1,41 @@
+<div class="page_function">
+  <div class="info">
+    <h3>{$action_name}{$model_name}</h3>
+    <small>进行{$action_name}{$model_name}操作</small> </div>
+</div>
+<div class="tab" id="tab"> 
+<a class="selected" href="#tab1">填写内容</a> 
+<a href="javascript:history.go(-1)">返回上级</a></div>
+<div class="page_form">
+  <form action="__URL__/save/time-<?php echo time(); ?>-ajax-true" method="post" id="form" autocomplete="off">
+    <div class="page_table form_table" id="tab1">
+      <table width="100%" border="0" cellspacing="0" cellpadding="0">
+          <tr>
+	          <td width="100" align="right">标题</td>
+	          <td><input name="name" type="text" class="text_value" id="name" style="float:left; width:360px;" value="{$info.name}" reg="\S" msg="标题不能为空" /></td>
+          </tr>
+	      <tr>
+	        <td width="100" align="right">内容</td>
+	        <td>
+	          <?php echo module('editor')->get_editor('content'); ?>
+	          <textarea name="content" style="width:100%; height:350px;" id="content">{$info.content html}</textarea>
+	          <?php echo module('editor')->get_editor_upload('editor_upload','editor_content') ?>
+	          <input type="button" id="editor_upload" class="button_small" style="margin-top:10px;" value="上传图片和文件到编辑器" />
+	          <!--hook-->
+	        	<?php module('common')->plus_hook('content','tools',$info);  ?>
+	      	  <!--hook end-->
+	          </td>
+	      </tr>
+      </table>
+    </div>
+    <!--普通提交-->
+    <div class="form_submit">
+    	<input name="do" type="hidden" value="{$action}" />
+      	<input name="id" type="hidden" value="{$info.id}" />
+      	<input name="file_id" id="file_id" type="hidden" value="{$file_id}" />
+      	<button type="submit" class="button">保存</button>
+    </div>
+  </form>
+</div>
+</div>
+{include file="info/common"}

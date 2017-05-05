@@ -1,0 +1,143 @@
+<script type="text/javascript">  
+function selectall(){
+   var a = document.getElementsByTagName("input");
+   for (var i=0; i<a.length; i++)
+      if (a[i].type == "checkbox") a[i].checked =true;
+}
+function selectclear(){
+   var a = document.getElementsByTagName("input");
+   for (var i=0; i<a.length; i++)
+      if (a[i].type == "checkbox") a[i].checked =false;
+}
+function selectalls(name) {
+	var flag=$("input[id='"+name+"']");//.attr('checked');
+	flag.each(function() {
+		if (this.checked==true){
+			this.checked=false;
+		}else{
+			this.checked=true;
+		};
+	});
+	
+}
+        $(function() {
+           $('.source input').click(function() {
+                $('input[name="subBox"]').attr("checked",this.checked); 
+            });
+            var $subBox = $("input[name='subBox']");
+            $subBox.click(function(){
+                $("#checkAll").attr("checked",$subBox.length == $("input[name='subBox']:checked").length ? true : false);
+            });
+        });
+		
+</script> 
+<div class="page_function">
+  <div class="info">
+    <h3>{$info.name}{$action_name}</h3>
+    <small>使用以下功能进行管理组{$action_name}操作</small> 
+  </div>
+</div>
+<div class="tab" id="tab"> 
+<a class="selected">基本信息</a>
+<?php if(model('user_group')->model_power('user_group','visit')){ ?>
+ <a  href="javascript:menuload('__URL__')">返回管理组列表</a>
+ <?php } ?>
+ </div>
+<div class="page_form">
+<form action="__URL__/{$action}_save/time-<?php echo time() ?>-ajax-true" method="post" id="form">
+<div class="page_table form_table" id="tab1">
+    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+      <tr>
+          <td width="100" align="right">管理组名称</td>
+          <td width="300"><input name="name" type="text" class="text_value" id="name" value="{$info.name}" reg="\S" msg="管理组名称不能为空" /></td>
+          <td><!--if:{$info['keep']==1}-->保留用户组不受权限控制<!--{/if}--></td>
+        </tr>
+        <!--if:{$user['grade']==1}-->
+        <tr>
+          <td width="100" align="right">管理等级</td>
+          <td width="300">
+          <select name="grade" id="grade">
+          	<option value="1" <!--if:{$info['grade']==1}--> selected="selected" <!--{/if}--> >一级管理组</option>
+            <option value="2" <!--if:{$info['grade']==2}--> selected="selected" <!--{/if}--> >二级管理组</option>
+            <option value="3" <!--if:{$info['grade']==3}--> selected="selected" <!--{/if}--> >三级管理组</option>
+          </select>
+          </td>
+          <td>低级别将看不到高级别的管理组与所属用户(只有级别等于一级的用户才可设置级别，默认三级用户)</td>
+        </tr>
+        <!--{/if}-->
+        <tr>
+          <td width="100" align="right">主菜单访问权限</td>
+          <td colspan="2">
+          <fieldset class="source">
+          <legend onclick="selectalls('menu_power[]')" >选择授权访问菜单</legend>
+              <!--foreach:{$menu_list $vo}-->
+              <input name="menu_power[]" id="menu_power[]" type="checkbox" value="{$vo['id']}"  <!--if:{!empty($menu_power)&&in_array($vo['id'],$menu_power)}--> checked="checked" <!--{/if}-->  /> {$vo.name}&nbsp;&nbsp;
+              <!--{/foreach}-->
+          </fieldset>
+          </td>
+        </tr>
+        <!--foreach:{$menu_list $vo}-->
+        <tr>
+          <td width="100" class="rule_check" align="right">{$vo.name}子项权限</td>
+          <td colspan="2">
+          <div class="rule_check">
+          <fieldset class="source">
+          <legend onclick="selectalls('model_power[{$vo['id']}][]')"><input type="checkbox"> 全选</legend>
+          <?php $list=model('menu')->menu_list($vo['id']);?>
+          <!--foreach:{$list $val}-->
+			<input class="sub" name="model_power[]" id="model_power[{$vo['id']}][]" type="checkbox" value="{$val['id']}"  <!--if:{in_array($val['id'],(array)$model_power)}--> checked="checked" <!--{/if}-->  /> {$val.name}&nbsp;&nbsp;
+		  <!--{/foreach}-->
+          </fieldset>
+          </div>
+          </td>
+        </tr>  
+        <!--{/foreach}-->
+        <tr>
+          <td width="100" align="right">内容栏目权限</td>
+          <td colspan="2">
+           <fieldset class="source">
+              <legend onclick="selectalls('class_power[]')"><input type="checkbox"> 全选</legend>
+              {$content_cat}             
+          </fieldset>
+          </td>
+        </tr> 
+        <tr>
+          <td width="100" align="right">活动类目权限</td>
+          <td colspan="2">
+           <fieldset class="source">
+              <legend onclick="selectalls('event_power[]')"><input type="checkbox"> 全选</legend>
+              {$event_cat}             
+          </fieldset>
+          </td>
+        </tr> 
+
+        <tr>
+          <td width="100" align="right">表单管理权限</td>
+          <td colspan="2">
+          
+           <fieldset class="source">
+              <legend onclick="selectalls('form_power[]')"><input type="checkbox"> 全选</legend>
+              <!--foreach:{$form_list $vo}-->
+              <input class="sub" name="form_power[]" id="form_power[]" type="checkbox" value="{$vo['id']}"  <!--if:{!empty($form_power)&&in_array($vo['id'],(array)$form_power)}--> checked="checked" <!--{/if}-->  /> {$vo.name}&nbsp;&nbsp;
+              <!--{/foreach}-->              
+          </fieldset>
+          
+          </td>
+        </tr>
+    </table>
+</div>
+<!--普通提交-->
+<div class="form_submit">
+<input name="id" type="hidden" value="{$info.id}" />
+<button type="button" class="button" onclick="javascript:selectall()">全选</button>
+<button type="button" class="button" onclick="javascript:selectclear()">清空全选</button>
+<button type="submit" class="button">保存</button> 
+</div>
+</form>
+</div>
+</div>
+<script type="text/javascript">
+//tab菜单
+//提交表单
+savelistform({addurl:"__URL__/add",listurl:"__URL__"});
+</script>

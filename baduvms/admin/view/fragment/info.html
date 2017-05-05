@@ -1,0 +1,58 @@
+<div class="page_function">
+  <div class="info">
+    <h3>自定义变量{$action_name}</h3>
+    <small>使用以下功能进行自定义变量{$action_name}操作</small> 
+  </div>
+</div>
+<div class="tab" id="tab"> <a class="selected" href="#">{$action_name}变量</a> 
+<?php if(model('user_group')->model_power('fragment','visit')){ ?>
+<a  href="javascript:menuload('__URL__')">变量列表</a>
+<?php } ?>
+</div>
+<div class="page_form">
+<form action="__URL__/{$action}_save/time-<?php echo time(); ?>-ajax-true" method="post" id="form">
+<div class="page_table form_table">
+    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+      
+      <tr>
+        <td width="100" align="right">描述</td>
+        <td width="300">
+        <input name="title" type="text" class="text_value" id="title" value="{$info.title}" reg="\S" msg="描述不能为空" />
+        </td>
+        <td></td>
+      </tr>
+      <tr>
+        <td width="100" align="right">标识</td>
+        <td>
+        <input name="sign" type="text" class="text_value" id="sign" reg="[a-zA-Z_]" msg="标识只能为英文和下划线" value="{$info.sign}" />
+        </td>
+        <td></td>
+      </tr>
+      <tr>
+        <td width="100" align="right">内容</td>
+        <td colspan="2">
+        <?php echo module('editor')->get_editor('content'); ?>
+         <textarea name="content" style="width:100%; height:350px;" id="content">{$info.content html}</textarea>
+        <?php echo module('editor')->get_editor_upload('editor_upload','editor_content') ?>
+        <input type="button" id="editor_upload" class="button_small" style="margin-top:10px;" value="上传图片和文件到编辑器" />
+        
+        </td>
+      </tr>
+      
+    </table>
+</div>
+<!--普通提交-->
+<div class="form_submit">
+<?php if(model('user_group')->model_power('fragment','add')||model('user_group')->model_power('fragment','edit')){ ?>
+<input name="id" type="hidden" value="{$info.id}" />
+<input name="file_id" id="file_id" type="hidden" value="{$file_id}" />
+<button type="submit" class="button">保存</button> 
+<?php } ?>
+</div>
+</form>
+</div>
+</div>
+<script type="text/javascript">
+//提交表单
+savelistform({addurl:"__URL__/add",listurl:"__URL__"});
+</script>

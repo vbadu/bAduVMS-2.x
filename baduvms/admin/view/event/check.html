@@ -1,0 +1,64 @@
+<div class="page_function">
+  <div class="info">
+    <h3>{$action_name}</h3>
+    <small>这里的奖惩时数是分配参与者时数(即默认时数{$info.vtime}小时，奖励1小时，则参与者此次实际得到的是1小时，而不是{$info.vtime}+1=<?php echo $info['vtime']+1?>小时)。奖惩时数不能超过活动默认服务时数。</small> </div>
+  <div class="exercise"> 
+	<a href="__URL__/check/id-{$info.id}">刷新列表</a>
+	<a href="javascript:history.go(-1)">返回上页</a></div>
+   </div>
+</div>
+<div class="page_main">
+<form action="__URL__/batch" method="post" name="check">
+  <div class="page_table table_list">
+    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+      <tr><th><center>操作</center></th><th><center>编号</center></th><th><center>姓名（昵称）</center></th><th><center>电话</center></th><th><center>状态</center></th><th><center>默认服务时数</center></th><th><center>实际服务时数</center></th></tr>	
+
+      <!--foreach:{$list $vo}-->
+      <tr>
+        <td><center><input name="id[]" value="{$vo.id}" type="checkbox"<?php if ($vo['vzt']==1) echo ' disabled'?> /></center></td>
+        <td><center><a href="javascript:;" onclick="openart('__APP__/member/id-{$vo.uid}','查看{$vo.uname}资料')">{$vo.vcard}</a></center></td>
+        <td><center><a href="javascript:;" onclick="openart('__APP__/member/id-{$vo.uid}','查看{$vo.uname}资料')">{$vo.uname}</a></center></td>
+        <td><center>{$vo.tel}</center></td>
+        <td><center>
+        <!--if:{$vo['status']==0}--><font color="blge">待审批</font><!--{/if}--> 
+        <!--if:{$vo['status']==1}--><font color="blue">已通过</font><!--{/if}--> 
+        <!--if:{$vo['status']==2}--><font color="red">未通过</font><!--{/if}--> 
+        <!--if:{$vo['status']==3}--><font color="gree">已请假</font><!--{/if}--> 
+        <!--if:{$vo['status']==4}--><font color="#CC9933">已缺席</font><!--{/if}--> 
+        </center></td>
+        <td><center>{$vo.vtime}小时</center></td>
+        <td><center>
+        <?php if ($vo['vzt']==1) {
+        		echo '<strong style="color:blue">'.$vo['vtime'].'</strong>';
+              }else{?><select name="by[{$vo.id}]">
+          <option value="+">奖励</option>
+          <option value="-">惩罚</option>
+        </select><input name="userid_{$vo.id}" value="{$vo.uid}" type="hidden"/><input name="vtime[{$vo.id}]" value="{$info.vtime}" class="text_value" style="width:50px"/>
+        <?php } ?> 小时</center></td>
+      </tr>
+      <!--{/foreach}-->
+    </table>
+  </div>
+<div class="page_tool">
+  <div class="function">
+  <input type="button" onclick="javascript:selectall('id[]');" class="button_small" value="全选" />
+  <input type="hidden" name="status" value="5" />
+  <input type="hidden" name="evt" value="{$info.vtime}" />
+  <input type="submit" class="button_small" value="执行操作" />
+  </div>
+  <div class="page" >{$page}</div>
+</div>
+</form>
+</div>
+<script type="text/javascript">
+//选择
+function selectall(name){   
+    $("[name='"+name+"']").each(function(){//反选   
+    if($(this).attr("checked")){   
+          $(this).removeAttr("checked");   
+    }else{   
+          $(this).attr("checked",'true');   
+    }   
+    })  
+}
+</script>

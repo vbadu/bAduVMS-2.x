@@ -1,0 +1,93 @@
+<div class="page_function">
+  <div class="info">
+    <h3>TAG分组管理</h3>
+    <small>管理TAG所属分类</small> </div>
+  <div class="exercise"> 
+  <?php if(model('user_group')->model_power('tags','visit')){ ?>
+   <a href="javascript:menuload('__URL__/index')">TAG列表</a> 
+   <?php } ?>
+  <?php if(model('user_group')->model_power('tags','class_config')){ ?>
+  <a href="javascript:menuload('__URL__/category')">TAG分组管理</a>
+  <a  href="javascript:;" onclick="add()">添加TAG组</a> 
+  <?php } ?>
+   </div>
+</div>
+<div class="page_main">
+  <div class="page_table table_list">
+    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+      <tr>
+        <th width="100">CID</th>
+        <th>名称</th>
+        <th width="150"><center>操作</center></th>
+      </tr>
+      <!--foreach:{$list $vo}-->
+      <tr>
+        <td>{$vo.cid}</td>
+        <td>{$vo.name}</td>
+        <td><center>
+          <a  href="javascript:;" onclick="edit({$vo.cid})">编辑</a>&nbsp;&nbsp;<a  href="javascript:;" onclick="del({$vo.cid},this)">删除</a>
+        </center></td>
+      </tr>
+      <!--{/foreach}-->
+    </table>
+  </div>
+</div>
+
+
+<script>
+function add() {
+	urldialog({
+	title:'添加TAG组',
+	url:'__URL__/category_add'
+	});
+};
+//修改
+function edit(cid) {
+	urldialog({
+	title:'字段编辑',
+	url:'__URL__/category_edit/cid-'+cid
+	});
+};
+//删除
+function del(cid,obj) {
+	var obj;
+	ajaxpost({
+		name:'删除此分组将会把此分组下的TAG归类到无分组！ ',
+		url:"__URL__/category_del",
+		data:{cid: cid},
+		tip:1,
+		success:function(){
+			$(obj).parent().parent().parent().remove();
+		}
+	});
+}
+//选择
+function selectall(name){   
+    $("[name='"+name+"']").each(function(){//反选   
+    if($(this).attr("checked")){   
+          $(this).removeAttr("checked");   
+    }else{   
+          $(this).attr("checked",'true');   
+    }   
+    })  
+}
+//批量操作
+function delall(){
+	var str="";
+	$("[name='id[]']").each(function(){//反选   
+    if($(this).attr("checked")){
+		  str+=$(this).val()+","; 
+    }
+    })
+	
+	ajaxpost({
+		name:'您确认要继续进行操作吗？操作将无法撤销！',
+		url:"__URL__/del",
+		data:{id:str},
+		tip:1,
+		success:function(){
+			window.location.reload();	
+		}
+	});
+}
+</script>

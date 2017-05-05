@@ -1,0 +1,74 @@
+<div class="page_function">
+  <div class="info">
+    <h3>{$action_name}列表</h3>
+    <small>使用以下功能进行{$action_name}操作</small> </div>
+  <div class="exercise"> 
+   <a href="javascript:menuload('__URL__/index/type-{$type}')">列表</a>
+   <a href="javascript:menuload('__URL__/edt/type-{$type}')">创建{$action_name}</a>
+   </div>
+</div>
+<div class="page_main">
+  <div class="page_menu">
+  {include file="event/index_search"}
+  </div>
+
+  <div class="table_list">
+    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+      <tr><th><center>活动名称</center></th><th><center>招募/报名人数</center></th><th><center>发布团队</center></th><th><center>招募状态</center></th><th><center>操作</center></th></tr>	
+      <!--foreach:{$list $vo}-->
+      <tr>
+        <td><a href="__URL__/edt/id-{$vo.id}" title="编辑{$vo.title}">{$vo.title}</a></td>
+        <td><center>{$vo.zmrs}人/{$vo.bmrs}人</center></td>
+        <td><center>{$vo.bname}</center></td>
+        <td><center><a href="javascript:void(0);"<!--if:{$vo['status']==1}--> onclick="set('{$vo.id}',2)" title="切为结束招募">招募中<!--{else}--> onclick="set('{$vo.id}',1)" title="切为开通招募">已结束<!--{/if}--> [切换]</a></center></td>
+        <td><center>
+        <a href="__URL__/team/id-{$vo.id}" title="管理该活动报名申请">报名管理</a> 
+        <a href="__URL__/check/id-{$vo.id}" title="管理该活动人员(服务时数)考勤">考勤管理</a> 
+        <a href="__URL__/edt/id-{$vo.id}" title="编辑{$vo.title}">编辑</a> 
+        <a href="javascript:void(0);" onclick="del('{$vo.id}',this)">删除</a>
+        </center></td>
+      </tr>
+      <!--{/foreach}-->
+    </table>
+  </div>
+	<div class="page_tool"><div class="page">{$page}</div></div>
+</div>
+<script>
+$('#stime').calendar({ id:'#stime',format:'yyyyMMdd'});
+$('#etime').calendar({ id:'#etime',format:'yyyyMMdd'});
+
+function openart(url,title){
+	urldialog({
+	title:title,
+	url:url,
+	width:450,
+	height:450
+	});
+}
+//删除
+function del(id,obj) {
+	var obj;
+	ajaxpost({
+		name:'确认要删除吗?删除无法恢复！',
+		url:"__URL__/set",
+		data:{status: 0,id: id},
+		tip:1,
+		success:function(){
+			$(obj).parent().parent().parent().remove();
+		}
+	});
+}
+function set(id,zt) {
+	var zt;
+	ajaxpost({
+		name:'确定要修改此活动状态吗？',
+		url:"__URL__/set",
+		data:{id: id,zt :zt},
+		tip:1,
+		success:function(){
+			window.location.reload();
+		}
+	});
+}
+
+</script>

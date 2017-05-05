@@ -1,0 +1,95 @@
+<div class="page_function">
+  <div class="info">
+    <h3>{$class_info.name} - 内容管理</h3>
+    <small>[发布]按钮即将内容发布到网站（手机触屏）版页面中，网友可以浏览访问。[归档]将旧的内容归档到库中。[下架]内容暂时下架。[归档]和[下架]在网站(手机触屏)版页面中不可见。</small> </div>
+  <div class="exercise"> 
+   <a href="#">内容列表</a>
+   <a href="__URL__/add/cid-{$class_info.cid}">添加内容</a>
+   </div>
+</div>
+<div class="page_main">
+  <div class="page_menu">
+  {include file="content/index_search"}
+  </div>
+
+  <div class="page_table table_list">
+    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+      <tr>
+      <th width="40"><center>选择</center></th>
+        <th width="80"><center>编辑</center></th>
+        <th width="">标题</th>
+        <th width="40"><center>上架</center></th>
+        <th width="50"><center>访问量</center></th>
+        <th width="130"><center>更新时间</center></th>
+        
+        <th width="80"><center>操作</center></th>
+      </tr>
+      <!--foreach:{$list $vo}-->
+      <tr id="del_{$vo['aid']}">
+        <td><center><input name="id[]" type="checkbox" id="id[]" value="{$vo['aid']}" ></td>
+        <td><center>{$vo.editor}</center></td>
+        <td><span><a href="<?php echo ROOTAPP ?>/label/admin_aurl/aid-{$vo['aid']}.html" target="_blank">{$vo.title}</a>
+        <!--if:{$vo['image']<>''}-->
+        <a href="javascript:void(0);" rel="{$vo.image}" class="class_pic"><img align="AbsMiddle" src="__PUBLICURL__/images/ico/pic.png" width="14" height="14" alt="" /></a>
+        <!--{/if}-->
+        </span>
+         <?php 
+        if(!empty($vo['position'])){
+        	$str_list=model('position')->content_list($vo['position']);
+        	foreach ($str_list as $value) {
+            	echo ' <span class="tags_span">['.$value['name'].']</span>';
+        	}
+        }
+         ?>
+        <?php if($edit_power){ ?>
+        &nbsp;&nbsp;<a class="quickeditor" style=" display:none" href="javascript:;" onclick="quickeditor('__APP__/content_index/edit/id-{$vo.aid}')">[快速编辑]</a>
+        <?php } ?>
+        </td>
+        <td><center>
+        <!--if:{$vo['status']<>0}-->
+        <font color=green><b>√</b></font>
+        <!--{else}-->
+        <font color=red><b>×</b></font>
+        <!--{/if}-->
+        </center></td>
+        <td><center>{$vo.views}</center></td>
+        <td><center>
+        {$php(echo date('Y-m-d H:i:s',$vo['updatetime']))}
+        </center></td>
+        
+        <td><center>
+        <a href="__URL__/edit/id-{$vo.aid}">修改</a>
+        &nbsp;&nbsp;<a href="javascript:void(0);" onclick="del('{$vo.aid}',this)">删除</a>
+        </center></td>
+      </tr>
+      <!--{/foreach}-->
+    </table>
+  </div>
+</div>
+
+<div class="page_tool">
+  <div class="function">
+  <input type="button" onclick="javascript:selectall('id[]');" class="button_small" value="全选" />
+  <input type="button" onclick="javascript:audit(1);"  class="button_small" value="发布" />
+  <input type="button" onclick="javascript:audit(5);"  class="button_small" value="归档" />
+  <input type="button" onclick="javascript:audit(2);" class="button_small" value="下架" />
+  <input type="button" onclick="javascript:audit(3);" class="button_small" value="删除" />
+  <input type="button" onclick="javascript:$('#mobile').toggle();" class="button_small" value="移动" />
+  <input type="hidden" value="{$class_info.cid}" id="class_id"/>
+  <span id="mobile" style="display:none">
+  			<select name="cid"  id="cid" >
+              <option value="">======选择栏目======</option>
+              <!--foreach:{$category_list $vo}--> 
+              <option value="{$vo['cid']}"
+                  <?php if($vo['type']==0 || $vo['mid']<>$model_info['mid'] || !model('user_group')->class_power($vo['cid'])){ ?>style="background-color:#ccc"  disabled="disabled" <?php } ?> 
+              >
+                  {$vo['cname']}
+              </option>
+              <!--{/foreach}-->
+            </select>
+            <input type="button" onclick="javascript:audit(4);" class="button_small" value="确认" />
+  </span>
+  </div>
+  <div class="page" >{$page}</div>
+</div>
+{include file="content/index_common"}

@@ -1,0 +1,83 @@
+<div class="page_function">
+  <div class="info">
+    <h3>友情连接管理</h3>
+    <small>管理站点的友情连接</small> </div>
+  <div class="exercise"> 
+   <a href="javascript:menuload('__URL__/index')">友情连接列表</a>
+   <a href="javascript:add();">添加友情连接</a>
+   </div>
+</div>
+<div class="page_main"> 
+  <div class="page_table table_list">
+    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+      <tr>
+        <th width="10%"><center>ID</center></th>
+		<th width="10%"><center>顺序</center></th>
+        <th width="10%">网站分类</th>
+        <th width="15%">网站名称</th>
+        <th width="25%">网站地址</th>
+        <th width="15%">logo</th>
+        <th width="15%"><center>操作</center></th>
+      </tr>
+      <!--foreach:{$list $vo}-->
+      <tr>
+        <td><center>{$vo.id}</center></td>
+		<td><center>
+        <?php if(model('user_group')->model_power('flinks','edit')){ ?>
+        <input type="text" value="{$vo.sequence}" class="sequence" onblur="sequence({$vo['id']},$(this).val())" />
+        <?php }else{ ?>
+        {$vo.sequence}
+        <?php } ?>
+        </center></td>
+        <td><?php echo model('flinks')->text_type($vo['cid'])?></td>
+       <td>{$vo.name}</td>
+        <td>{$vo.url}</td>
+        <td><!--if:{$vo['logo']}--><img src="{$vo.logo}" /> <!--{/if}--></td>
+        <td><center>
+		<?php if($edit_power){ ?>
+        <a href="javascript:void(0);" onclick="edit('__URL__/edit/id-{$vo.id}')">编辑</a> | 
+        <?php } ?>
+        <?php if($del_power){ ?>
+        <a href="javascript:void(0);" onclick="del('{$vo.id}',this)">删除</a></center></td>
+        <?php } ?>
+      </tr>
+      <!--{/foreach}-->
+    </table>
+  </div>
+</div>
+
+<div class="page_tool">
+  <div class="page">{$page}</div>
+</div>
+<script>
+//添加
+function add() {
+	urldialog('添加友情连接','__URL__/add')
+};
+
+//添加
+function edit(url) {
+	urldialog('编辑友情连击',url)
+};
+//删除
+function del(id,obj) {
+	var obj;
+	ajaxpost(
+		'确定要删除此连接？',
+		"__URL__/del",
+		{id: id},
+		1,
+		function(){
+			$(obj).parent().parent().parent().remove();
+		}
+	);
+}
+//排序
+function sequence(id,sid){
+	ajaxpost_w({
+		url:'__URL__/sequence',
+		data:{ id:id, sequence:sid },
+		tip:1
+	});
+}
+</script>

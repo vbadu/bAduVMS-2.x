@@ -1,0 +1,86 @@
+<div class="page_function">
+  <div class="info">
+    <h3>{$action_name}管理</h3>
+    <small>使用以下功能进行{$action_name}管理操作</small> </div>
+  <div class="exercise"> 
+   <a href="javascript:menuload('__URL__')">{$action_name}列表</a>
+   <a href="javascript:recount()">重新统计正式义工会员时数</a>
+   <?php if(model('user_group')->model_power('user','add')){ ?>
+   <a href="javascript:menuload('__URL__/edit')">添加{$action_name}</a>
+   <?php } ?>
+   </div>
+</div>
+<div class="page_main">
+  <div class="page_table table_list">
+    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+      <tr>
+        <th width="10%"><center>会员编号</center></th>
+        <th width="20%"><center>登录帐号</center></th>
+        <th width="20%"><center>姓名</center></th>
+        <th width="20%"><center>昵称</center></th>
+        <th width="20%"><center>会员组</center></th>
+        <th width="10%"><center>状态</center></th>
+        <th width="20%"><center>操作</center></th>
+      </tr>
+      <!--foreach:{$list $vo}-->
+      <tr>
+        <td><center>{$vo.vcard}</center></td>
+        <td><center>{$vo.user}</center></td>
+        <td><center>{$vo.realname}</center></td>
+        <td><center>{$vo.nicename}</center></td>
+        <td><center>{$vo.gname}</center></td>
+        <td><center><a href="javascript:void(0);"<!--if:{$vo['status']==1}--> onclick="set('{$vo.id}',2,'{$vo.vcard}')" title="设为待审">通过<!--{else}--> onclick="set('{$vo.id}',1,'{$vo.vcard}')" title="设为通过">待审<!--{/if}--> [切换]</a></center></td>
+        <td><center>
+        <?php if(model('user_group')->model_power('user','edit')){ ?>
+        <a href="__URL__/edit/id-{$vo.id}">修改</a>
+        <?php } ?>
+        <?php if(model('user_group')->model_power('user','del')){ ?>
+        &nbsp;&nbsp;<a href="javascript:void(0);" onclick="del('{$vo.id}',this)">删除</a>
+        <?php } ?>
+        </center></td>
+      </tr>
+      <!--{/foreach}-->
+    </table>
+  </div>
+</div>
+
+<div class="page_tool">
+  <div class="page">{$page}</div>
+</div>
+<script>
+//删除
+function del(id,obj) {
+	var obj;
+	ajaxpost({
+		name:'确定要删除此会员吗？',
+		url:"__URL__/set",
+		data:{id: id,zt:0},
+		tip:1,
+		success:function(){
+			$(obj).parent().parent().parent().remove();
+		}
+	});
+}
+function recount() {
+	art.dialog.open(
+		'__URL__/recount',
+		{
+			title:'重新统计正式义工会员服务时数',
+			width:600,
+			height:200
+		}
+	);
+}
+function set(id,zt,vcard) {
+	var zt;
+	ajaxpost({
+		name:'确定要修改此状态吗？',
+		url:"__URL__/set",
+		data:{id: id,zt :zt,vcard:vcard},
+		tip:1,
+		success:function(){
+			window.location.reload();
+		}
+	});
+}
+</script>
