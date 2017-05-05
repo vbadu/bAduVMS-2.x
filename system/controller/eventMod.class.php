@@ -2,10 +2,6 @@
 class eventMod extends commonMod{
 	public function __construct(){
         parent::__construct();
-        if(!model('user_group')->menu_power('event',true)){
-        	$this->msg('对不起，您没有该模块的操作权限！',0);
-        }
-
 		$this->category_left=model('badu')->category(2);
     }
     //公共列表信息
