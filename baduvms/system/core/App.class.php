@@ -7,8 +7,8 @@ class App {
     public function __construct( $config=array() ) {
 		
 		define('bAdu_VER', '2.0.2012.1203');//框架版本号,后两段表示发布日期
-		define('CORE_PATH', dirname(__FILE__) );//当前文件所在的目录
-		define('bAdu_PATH', dirname(CORE_PATH)); 
+		if (!defined('CORE_PATH')) define('CORE_PATH', dirname(__FILE__));
+		if (!defined('bAdu_PATH')) define('bAdu_PATH', dirname(CORE_PATH));
         require( CORE_PATH . '/Config.class.php' );//加载默认配置		
 		$this->appConfig = array_merge(Config::get('APP'), $config);//参数配置
 		Config::set('APP', $this->appConfig );
@@ -156,8 +156,8 @@ class App {
     private function _define() {
 		$root = $this->appConfig['URL_HTTP_HOST'] . str_replace(basename($_SERVER["SCRIPT_NAME"]), '', $_SERVER["SCRIPT_NAME"]);		
 		//__ROOT__和__PUBLIC__常用于图片，css，js定位，__APP__和__URL__常用于网址定位
-		define('__ROOT__', substr($root, 0, -1));//当前入口所在的目录，后面不带 "/"
-		define('__PUBLIC__', __ROOT__ . '/' . 'public');
+		if (!defined('__ROOT__')) define('__ROOT__', substr($root, 0, -1));
+		if (!defined('__PUBLIC__')) define('__PUBLIC__', __ROOT__ . '/' . 'public');
 		//后增加的
 		if (!defined('SITE_PATH')) define('SITE_PATH', dirname(dirname(CORE_PATH)));
 		if (!defined('APPS_PATH')) define('APPS_PATH', SITE_PATH.DIRECTORY_SEPARATOR.'system'.DIRECTORY_SEPARATOR);
@@ -169,9 +169,10 @@ class App {
 		//如果开启了重写，则网址不包含入口文件名，如index.php
 		if ( $this->appConfig['URL_REWRITE_ON'] ) {
 			define('__APP__', __ROOT__);
+			if (!defined('__APP__')) define('__APP__', __ROOT__ );
 		} else {
-			define('__APP__', __ROOT__ . '/' . basename($_SERVER["SCRIPT_NAME"]));//当前入口文件
-		}		
+			if (!defined('__APP__')) define('__APP__', __ROOT__.'/' . basename($_SERVER["SCRIPT_NAME"]));
+		}
 		define('__URL__', __APP__ . '/' . self::$module);//当前模块
 		define('PHP_TIME', time());
 	}

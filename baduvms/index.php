@@ -1,4 +1,5 @@
 <?php
+error_reporting(0);//如果您的主机不乱报错，可以把这个删除了
 header("content-type:text/html; charset=utf-8");
 @date_default_timezone_set('PRC');
 if(file_exists(dirname(__FILE__).'/data/closed.lock')) exit("系统升级中，请稍后访问...");

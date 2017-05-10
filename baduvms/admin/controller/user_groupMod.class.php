@@ -29,6 +29,7 @@ class user_groupMod extends commonMod {
 	}
 
     public function data_save($data) {
+		$data=in($data);
 		if (is_array($data['menu_power'])) $data['menu_power']=implode(',',$data['menu_power']);
 		if (is_array($data['class_power'])) {
 			$temp=array();
@@ -43,12 +44,17 @@ class user_groupMod extends commonMod {
 			}
 			unset($data['event_power']);
 			$data['class_power']=(is_array($_temp) && is_array($temp))?array_merge($_temp,$temp):$_temp;
-			
+		}else{
+			$data['class_power']=$temp;
 		}
 		if (is_array($data['class_power'])) $data['class_power']=implode(',',$data['class_power']);
 		if (is_array($data['form_power'])) $data['form_power']=implode(',',$data['form_power']);
 		if (is_array($data['model_power'])) $data['model_power']=implode(',',$data['model_power']);
  		//if (is_array($data['model_power'])) $data['model_power']=serialize($data['model_power']);
+		$data['class_power']=empty($data['class_power'])?'':$data['class_power'];
+		$data['form_power']=empty($data['class_power'])?'':$data['form_power'];
+		$data['model_power']=empty($data['class_power'])?'':$data['model_power'];
+		$data['menu_power']=empty($data['class_power'])?'':$data['menu_power'];
         return $data;
     }
 
