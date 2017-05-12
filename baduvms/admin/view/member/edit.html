@@ -1,0 +1,158 @@
+<div class="page_function">
+<div class="info">
+  <h3>{$action_name}</h3><small>使用以下功能进行{$action_name}操作</small>
+</div>
+</div>
+<div class="tab" id="tab"> 
+    <a class="selected" href="#tab1">基本资料</a>
+    <a href="javascript:history.go(-1)">返回上页</a>
+</div>
+<div class="page_form">
+    <form action="__URL__/edit/time-<?php echo time();?>-ajax-true" method="post" id="form">
+    <div class="page_table form_table" id="tab1">
+    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+      <tr>
+        <td width="100" rowspan="4" align="right">会员头像：</td>
+        <td rowspan="4"><img id="image" src="{$php(model('badu')->get_photo($info['id']))}"/></td>
+        <td align="right">注册时间：</td>
+        <td>{$php(echo time_format($info['dtime']))}</td>
+        </tr>
+      <tr>
+        <td align="right">注册IP：</td>
+        <td>{$info.ip}</td>
+        </tr>
+      <tr>
+        <td align="right">登录次数：</td>
+        <td>{$info.loginnum}</td>
+        </tr>
+      <tr>
+        <td align="right">最后次登录时间：</td>
+        <td>{$php(echo time_format($info['logintime']))}</td>
+        </tr>
+      <tr>
+        <td align="right">网络昵称：</td>
+        <td><input name="info[nicename]" id="nicename" class="text_value" type="text" value="{$info.nicename}"/></td>
+        <td align="right">初始时数：</td>
+        <td><input name="info[btime]" type="text" id="btime" class="text_value" value="{$info.btime}" reg="\S" msg="初始时数不能为空" style="width:80px"/>
+          小时，用于志愿者历史服务时数记录 </td>
+        </tr>
+      <tr>
+        <td align="right">真实姓名：</td>
+        <td><input name="info[realname]" type="text" id="name" class="text_value" value="{$info.realname}" reg="\S" msg="真实姓名不能为空" /></td>
+        <td align="right">当前累计时数：</td>
+        <td>{$info.vtime} 小时</td>
+        </tr>
+      <tr>
+        <td align="right">性别：</td>
+        <td>
+          <input name="info[sex]" type="radio" value="1" <!--if:{$info['sex']==1}--> checked<!--{/if}-->/>男 
+          <input name="info[sex]" type="radio" value="0" <!--if:{$info['sex']==0}--> checked<!--{/if}-->/>女
+        </td>
+        <td align="right">民&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;族：</td>
+        <td><?php echo model('badu')->get_ethnic('data[nation]',$info['nation']);?></td>
+        </tr>
+      <tr>
+        <td align="right">身份证号码：</td>
+        <td>
+          <input name="data[idcard]" id="idcard" class="text_value" type="text" value="{$info.idcard}" reg="\S" msg="身份证号码不能为空" />
+        </td>
+        <td align="right">政治面貌：</td>
+        <td><?php echo model('badu')->get_political('data[politics]',$info['politics']);?></td>
+        </tr>
+      <tr>
+        <td align="right">QQ号码：</td>
+        <td><input name="data[qq]" type="text" id="tel" class="text_value" value="{$info.qq}" reg="\S" msg="QQ号码不能为空" /></td>
+        <td align="right">学历专业：</td>
+        <td><?php echo model('badu')->get_degree('data[eduback]',$info['eduback']);?>
+          <input name="data[major]" type="text" class="text_value" id="major" value="{$info.major}" style="width:100px" /></td>
+        </tr>
+      <tr>
+        <td align="right">微信号码：</td>
+        <td><input name="data[weixin]" type="text" id="tel" class="text_value" value="{$info.weixin}" reg="\S" msg="微信号码不能为空" /></td>
+        <td align="right">所在单位：</td>
+        <td><input name="data[organization]" type="text" class="text_value" id="work" value="{$info.organization}" reg="\S" msg="单位不能为空" /></td>
+        </tr>
+      <tr>
+        <td align="right">联系电话：</td>
+        <td><input name="data[tel]" type="text" id="tel" class="text_value" value="{$info.tel}" reg="\S" msg="联系电话不能为空" /></td>
+        <td align="right">工作职务：</td>
+        <td><input name="data[job]" id="job" class="text_value" type="text" value="{$info.job}" reg="\S" msg="工作职务不能为空" /></td>
+        </tr>
+      <tr>
+        <td align="right">手机号码：</td>
+        <td><input name="info[mob]" type="text" id="mobile" class="text_value" value="{$info.mobile}" reg="\S" msg="手机号码不能为空" /></td>
+        <td align="right">休息时间：</td>
+        <td><?php echo model('badu')->get_freetime('data[bspace]',$info['bspace']);?></td>
+        </tr>
+      <tr>
+        <td align="right">电子邮箱：</td>
+        <td><input name="info[email]" type="text" id="email" class="text_value" value="{$info.email}" reg="\S" msg="电子邮箱不能为空" /></td>
+        <td align="right">志愿经历：</td>
+        <td>
+          <input name="data[experience]" type="radio" value="1" <!--if:{$info['experience']==1}--> checked<!--{/if}-->/>以前参与过 
+          <input name="data[experience]" type="radio" value="2" <!--if:{$info['experience']==2}--> checked<!--{/if}-->/>以前没有参与过
+        </td>
+        </tr>
+      <tr>
+        <td align="right">联系地址：</td>
+        <td><input name="data[address]" type="text" id="address" class="text_value" value="{$info.address}" reg="\S" msg="联系地址不能为空" /></td>
+        <td align="right">组织能力：</td>
+        <td>
+          <input name="data[ability]" type="radio" value="1" <!--if:{$info['ability']==1}--> checked<!--{/if}-->/>没有经验 
+          <input name="data[ability]" type="radio" value="2" <!--if:{$info['ability']==2}--> checked<!--{/if}-->/>有协助经验
+          <input name="data[ability]" type="radio" value="3" <!--if:{$info['ability']==3}--> checked<!--{/if}-->/>有组织经验
+        </td>
+        </tr>
+      <tr>
+        <td align="right">会员编号：</td>
+        <td><input name="info[vcard]" type="text" class="text_value" id="vcard" value="{$php(echo model('member')->vcard($info['vcard'],$info['mid']))}" /></td>
+        <td rowspan="5" align="right">备注：</td>
+        <td rowspan="5"><textarea name="data[about]" rows="5" style="width:90%;height:200px" class="text_textarea" id="bz">{$info.about}</textarea></td>
+      </tr>
+      <tr>
+        <td width="100" align="right">会 员 组：</td>
+        <td>
+        <?php if (3>$info['gid']){?>
+        <select name="info[gid]" id="gid">
+          <option value="">===选择会员组===</option>
+          <!--foreach:{$group $vo}-->
+          <option value="{$vo['id']}"<?php if($info['gid']==$vo['id']) echo ' selected="selected"'?>>{$vo['name']}</option>
+          <!--{/foreach}-->
+        </select>
+        <?php }else{ 
+        echo "自动会员组";
+        }?>
+        
+        </td>
+        </tr>
+      <tr>
+        <td align="right">账号状态：</td>
+        <td>
+          <input name="info[status]" type="radio" value="1" <!--if:{$info['status']==1}--> checked<!--{/if}-->/>通过 
+          <input name="info[status]" type="radio" value="2" <!--if:{$info['status']==0}--> checked<!--{/if}-->/>待审
+        </td>
+        </tr>
+      <tr>
+        <td align="right">登录帐号：</td>
+        <td><input name="info[user]" type="text" class="text_value" id="user" value="{$info.user}" reg="\S" msg="登录帐号不能为空" /></td>
+        </tr>
+      <tr>
+        <td align="right">登录密码：</td>
+        <td><input name="info[password]" id="password" class="text_value" type="password"/>
+          （不修改留空）</td>
+        </tr>
+
+    </table>
+  </div><!--普通提交-->
+
+  <div class="form_submit">
+    <input name="did" type="hidden" value="{$info.id}" />
+    <input name="uid" type="hidden" value="{$info.mid}" />
+    <button type="submit" class="button">保存</button>
+  </div>
+</form>
+</div>
+<script type="text/javascript">
+//提交表单
+savelistform({addurl:"__URL__/edit/id-{$info.mid}",listurl:"__URL__/edit/id-{$info.mid}"});
+</script> 
