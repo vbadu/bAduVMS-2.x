@@ -21,9 +21,6 @@ class settingMod extends commonMod
 
     // 修改系统设置
     public function save(){
-        if(!model('user_group')->model_power($this->model_url,'config')){
-        	$this->msg('对不起，您没有该模块('.$this->model_url.')的操作权限！',0);
-        }
         $config = $_POST; //接收表单数据
         //对密码进行加密处理
         $pwdtype=in($config['sms_pwd_type']);

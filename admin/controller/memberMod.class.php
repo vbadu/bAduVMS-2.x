@@ -23,22 +23,6 @@ class memberMod extends commonMod {
         $this->assign('page', $this->page($url, $count, $listRows));
 		$this->show();  
 	}
-	//团体会员
-	public function team() {
-		$this->check_app_power('member',true);
-		$this->action_name='团体会员';
-        $url = __URL__ . '/team/page-{page}';
-    	$listRows = 30;
-        $page = new Page();
-        $cur_page = $page->getCurPage($url);
-        $limit_start = ($cur_page - 1) * $listRows;
-        $limit = $limit_start . ',' . $listRows;
-		$where['type']=2;
-        $this->list=model('member')->get_list($table,$where,$limit);
-        $count=model('member')->get_count($table,$where);
-        $this->assign('page', $this->page($url, $count, $listRows));
-		$this->show();  
-	}
 	public function getAreaJson(){
 		$uri= in($_SERVER["REQUEST_URI"]);
 		$uri =explode('&amp;',$uri);
@@ -91,9 +75,11 @@ class memberMod extends commonMod {
 			if (strlen($post['password'])>5){
 				$info['password']=md5(in($post['password']).$info['email']);
 			}
-			$info['gid']=intval($post['gid']);
-			$group=model('member')->info('id='.$info['gid'],'_group');
-			$info['gname']=$group['name'];
+			if (intval($post['gid'])>0){
+				$info['gid']=intval($post['gid']);
+				$group=model('member')->info('id='.$info['gid'],'_group');
+				$info['gname']=$group['name'];
+			}
 			unset($post);
 			$post=in($_POST['data']);
 			$data['idcard']=in($post['idcard']);
@@ -173,69 +159,6 @@ class memberMod extends commonMod {
 		$this->group=model('member')->get_list('_group','type!=1');
 		$this->show();
     }
-    //用户修改
-    public function edit_team() {
-		$this->check_app_power('member',true);
-        $this->action_name='资料修改';
-		if (!empty($_POST) && is_array($_POST)){
-			$id=intval(in($_POST['id']));
-			$data['user']=in($_POST['user']);
-			$data['vcard']=in($_POST['vcard']);
-			$data['nicename']=in($_POST['nicename']);
-			$data['name']=in($_POST['name']);
-			$data['image']=in($_POST['image']);
-			$data['idcard']=in($_POST['idcard']);
-			$data['sex']=intval(in($_POST['sex']));
-			$data['tel']=in($_POST['tel']);
-			$data['mob']=in($_POST['mob']);
-			$data['email']=in($_POST['email']);
-			$data['address']=in($_POST['address']);
-			$data['oid']=intval(in($_POST['oid']));
-			$data['area']=intval(in($_POST['area']));
-			$data['gid']=intval(in($_POST['gid']));
-			$data['status']=intval(in($_POST['status']));
-			$data['btime']=intval(in($_POST['btime']));
-			$data['password']=md5($_POST['password'].$data['email']);
-			$datas['about']=serialize(in($_POST['info']));
-			$group=model('member')->info('id='.$data['gid'],'_group');
-			$data['gname']=$group['name'];
-			if (empty($id)==true) {
-				$data['dtime']=$data['logintime']=time();
-				$data['loginnum']=$data['keep']=0;
-				$data['ip']=get_client_ip();
-				$data['type']=2;
-				$datas['mid']=model('member')->add($data);
-				model('member')->add($datas,'_data');
-			}else{
-				model('member')->edit($data,'id='.$id);
-				model('member')->edit($datas,'mid='.$id,'_data');
-			}
-			$this->msg('保存成功!');
-		}
-    	$id=intval(in($_GET['id']));
-		if (empty($id)==true) {
-			$this->action_name='添加团体会员';
-				$user['dtime']=$user['logintime']=time();
-				$user['loginnum']=$user['btime']=$user['vtime']=0;
-				$user['ip']=get_client_ip();
-		}else{
-	        $this->alert_str($id,'int');
-			$this->action_name='编辑团体会员';
-			$user = model('member')->info('id='.$id);
-			if (empty($user)) $this->alert('参数传递错误！',0);
-			$info = model('member')->info('mid='.$id,'_data');
-			$data['mid']=$id;
-			if (empty($info)) model('member')->add($data,'_data');;
-		}
-		$this->user=$user;
-		$this->group=model('member')->get_list('_group','type!=1');
-		$this->team=model('team')->tree_list();
-		$this->area = model('badu')->get_area();
-        $this->info=unserialize($info['about']);
-        //dump($this->info);
-		$this->show();
-    }
-
 	//会员组管理
     public function group(){
 		$this->check_app_power('member/group',true);
@@ -269,6 +192,7 @@ class memberMod extends commonMod {
 				$datas['gname']=$data['name'];
 				model('member')->edit($datas,'gid='.$id);
 			}
+			$this->groupconfig();
 			$this->msg('保存成功!');
 		}
     	$id=intval(in($_GET['id']));
@@ -327,6 +251,7 @@ class memberMod extends commonMod {
 		@header("Content-type: text/html; charset=utf-8");
 		$next=intval($_GET['next']);
         $url = __URL__ . '/recount/';
+		$config_file= bAdu_PATH.'config/group.php';
 		if ($next>0){
 			$listRows = 1000;
 			$limit_start = ($next - 1) * $listRows;
@@ -378,7 +303,18 @@ class memberMod extends commonMod {
         $this->assign('url', $url);
         $this->assign('html', $html);
 		$this->show();  
-		
 	}
-
+    public function groupconfig(){
+		$config_file= bAdu_PATH.'config/group.php';
+		if (!is_file($config_file)){
+			$cFile = fopen ( $config_file, 'w' );
+			if ( !is_writable($config_file) ){
+				$this->msg("文件:" .$config_file. "不可写，请检查！",0);
+			}
+			fclose($cFile);	
+		}
+		$config = model('member')->get_list('_group','`type`=1 and `credit`>0','','credit desc,id desc','id,credit,name');
+		model('setting')->save($config,$config_file,false);
+        return $config;
+    }
 }

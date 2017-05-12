@@ -111,12 +111,19 @@
       </tr>
       <tr>
         <td width="100" align="right">会 员 组：</td>
-        <td><select name="info[gid]"  reg="." id="gid" msg="所在团队未选择">
+        <td>
+        <?php if (3>$info['gid']){?>
+        <select name="info[gid]" id="gid">
           <option value="">===选择会员组===</option>
           <!--foreach:{$group $vo}-->
           <option value="{$vo['id']}"<?php if($info['gid']==$vo['id']) echo ' selected="selected"'?>>{$vo['name']}</option>
           <!--{/foreach}-->
-        </select></td>
+        </select>
+        <?php }else{ 
+        echo "自动会员组";
+        }?>
+        
+        </td>
         </tr>
       <tr>
         <td align="right">账号状态：</td>

@@ -119,7 +119,7 @@ class memberModel extends commonModel{
 
 		if (!function_exists('gd_info')) return(array(0=>0,1=>'无法生成证书，请联系管理员开启GD库'));
 		if (3>strlen($data['vcard'])) return(array(0=>0,1=>'无法生成证书，您查询的志愿者尚未注册或未认证。'));
-		if (!vipstar($data['vtime'],1)) return(array(0=>0,1=>'无法生成证书，'.$data['realname'].'还处于见习期。'));
+		if (10>$data['vtime'] || 3>$data['gid']) return(array(0=>0,1=>'无法生成证书，'.$data['realname'].'还处于见习期。'));
 		if (is_file($UPD_Path.'cert_'.$filename) && !$reset) return $UPD_URL.'/cert_'.$filename;
 
 		if (!is_file($Pub_Path.'certificate.png')) return(array(0=>0,1=>'无法生成证书，证书模版不存在。'));
@@ -238,15 +238,23 @@ class memberModel extends commonModel{
 	public function auto_group($vtime=0){
 		$vtime=@number_format($vtime);
 		if (1>$vtime) return 0;
-		$group=$this->get_list('`type`=1 and `credit`>0','_group','','id desc,credit desc');
+		$config_file= bAdu_PATH.'config/group.php';
+		if (is_file($config_file)){
+			$group=require $config_file;
+			if (!is_array($group)) $group=module('member')->groupconfig();
+		}else{
+			$config=model('member')->get_list('`type`=1 and `credit`>0','_group','','credit desc,id desc','id,credit,name');
+		}
 		foreach ($group as $k=>$v){
 			$credit=@number_format($v['credit']);
 			if (isset($credit)  && $vtime>=$credit ){
 				$data['gid']=$v['id'];
 				$data['gname']=$v['name'];
+				$data['user_time']=$vtime;
+				$data['group_time']=$credit;
+				return $data;
 			}
 		}
-		return $data;
 	}
 
 }

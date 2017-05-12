@@ -103,7 +103,7 @@ class memberModel extends commonModel{
 	public function new_vcard(){
 		$config = $this->config;
 		if (empty($config['VIP_AUTO']) || empty($config['VIP_CARD_TPL']) || empty($config['VIP_CARD_IDS'])) {
-			$this->alert("会员规则没有设置，请先进入【系统】设置会员相关默认配置项。");	
+			exit("会员规则没有设置，请先进入【系统】设置会员相关默认配置项。");	
 		}
 		if (isset($config['VIP_AUTO']) && !$config['VIP_AUTO']) {
 			return false;
@@ -156,7 +156,7 @@ class memberModel extends commonModel{
 		$config = $this->config;
 		$id=intval($id);
 		if (empty($config['VIP_AUTO']) || empty($config['VIP_CARD_TPL']) || empty($config['VIP_CARD_IDS'])) {
-			$this->alert("会员规则没有设置，请先进入【系统】设置会员相关默认配置项。");	
+			return "会员规则没有设置，请先进入【系统】设置会员相关默认配置项。";	
 		}
 		if (empty($vcard) && empty($id)){
 			$vcard=$this->new_vcard();
@@ -216,15 +216,21 @@ class memberModel extends commonModel{
 	public function auto_group($vtime=0){
 		$vtime=@number_format($vtime);
 		if (1>$vtime) return 0;
-		$group=$this->get_list('_group','`type`=1 and `credit`>0','','id desc','id,credit');
+		$config_file= bAdu_PATH.'config/group.php';
+		if (is_file($config_file)){
+			$group=require $config_file;
+			if (!is_array($group)) $group=module('member')->groupconfig();
+		}
 		foreach ($group as $k=>$v){
 			$credit=@number_format($v['credit']);
 			if (isset($credit)  && $vtime>=$credit ){
 				$data['gid']=$v['id'];
 				$data['gname']=$v['name'];
+				$data['user_time']=$vtime;
+				$data['group_time']=$credit;
+				return $data;
 			}
 		}
-		return $data;
 	}
 	
 }?>

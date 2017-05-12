@@ -75,9 +75,6 @@ class upload_fileMod extends commonMod {
 
     //上传删除
     public function del() {
-         if(!model('user_group')->model_power($this->model_url,'del')){
-        	$this->msg('对不起，您没有该模块('.$this->model_url.')的操作权限！',0);
-        }
         $id=intval($_POST['id']);
         $this->alert_str($id,'int',true);
         /*hook*/

@@ -741,5 +741,4 @@ class memberMod extends commonMod {
 		setcookie($member['id']."_member_update_".date('Y-m-d'),$member['id'],time()+24*3600);
 		return true;
 	}
-
 }
